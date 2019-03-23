@@ -56,12 +56,13 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .card {
     background-color: #fff8f5;
     padding: 30px;
-    background: url('~assets/goods/coupon.png') no-repeat;
+    background: url("~assets/goods/coupon.png") no-repeat;
     background-size: 100% 100%;
-    color: #cdb49b;
+    color: @color4;
     margin-bottom: 30px;
     .col1 {
       .price {

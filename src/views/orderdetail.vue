@@ -38,7 +38,7 @@
         <div class="itemtitle">
           <div class="titleleft">
             <img src="~assets/mypage/icon_shop.png" alt="">
-            <span>CC卡美珠宝</span>
+            <span>{{appName}}</span>
           </div>
           <div class="listright">{{typename(order.status)}}</div>
         </div>
@@ -195,6 +195,11 @@
         } else {
           return false;
         }
+      },
+      computed: {
+        appName() {
+          return window.htp.appName;
+        }
       }
     },
     methods: {
@@ -302,6 +307,7 @@
   };
 </script>
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .txt-center {
     padding: 30px 0;
   }
@@ -398,7 +404,7 @@
         }
         .listright {
           font-size: 24px;
-          color: #cdb498;
+          color: @color4;
         }
       }
       .itemcontent {
@@ -472,7 +478,7 @@
           font-size: 24px;
           color: #333333;
           .paymoney {
-            color: #faa0a0;
+            color: @color2;
           }
         }
       }
@@ -499,8 +505,8 @@
           color: #666666;
         }
         .btnpink {
-          background: #ffb4b4;
-          border: 2px solid #ffb4b4;
+          background: @color5;
+          border: 2px solid @color5;
           color: #ffffff;
         }
       }

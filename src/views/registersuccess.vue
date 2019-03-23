@@ -41,6 +41,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .content {
     background-color: #fff;
   }
@@ -61,9 +62,9 @@
       font-size: 24px;
       height: 68px;
       width: 540px;
-      border: 1px solid #faa0a0; /*no*/
+      border: 1px solid @color2; /*no*/
       background-color: #fff;
-      color: #faa0a0;
+      color: @color2;
     }
   }
 </style>

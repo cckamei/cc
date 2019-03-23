@@ -128,6 +128,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .addChoice {
     display: flex;
     flex-flow: row nowrap;
@@ -145,7 +146,7 @@
         left: 0;
         bottom: 0;
         height: 4px;
-        background: #faa0a0;
+        background: @color2;
         min-width: 92px;
         width: 100%;
       }
@@ -162,7 +163,7 @@
       color: #666;
     }
     .actived {
-      color: #faa0a0;
+      color: @color2;
     }
   }
 </style>

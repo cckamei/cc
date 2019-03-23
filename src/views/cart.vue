@@ -203,6 +203,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .cart-list {
     position: relative;
     margin: 20px;
@@ -216,16 +217,16 @@
       .checkbox {
         width: 36px;
         height: 36px;
-        background: url('~assets/payment/button_select_off.png') no-repeat;
+        background: url("~assets/payment/button_select_off.png") no-repeat;
         background-size: 100% 100%;
         flex-shrink: 0;
         align-self: center;
         &.active {
-          background: url('~assets/payment/button_select_on.png') no-repeat;
+          background: url("~assets/payment/button_select_on.png") no-repeat;
           background-size: 100% 100%;
         }
         &.disabled {
-          background: url('~assets/payment/button_select_una.png') no-repeat;
+          background: url("~assets/payment/button_select_una.png") no-repeat;
           background-size: 100% 100%;
           background-color: #fff !important;
         }
@@ -233,8 +234,8 @@
       .img {
         width: 200px;
         height: 240px;
-        padding-top:20px;
-        padding-bottom:20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
         margin-left: 20px;
         margin-right: 30px;
         flex-shrink: 0;
@@ -259,7 +260,7 @@
         }
         .kezi {
           font-size: 20px;
-          color: #cdb49b;
+          color: @color4;
           padding-top: 24px;
         }
         .line3 {
@@ -271,7 +272,7 @@
           justify-content: space-between;
           .price {
             font-size: 30px;
-            color: #cdb49b;
+            color: @color4;
             span {
               font-size: 20px;
             }
@@ -286,8 +287,8 @@
             border-radius: 20px;
             background-color: #fff;
             font-size: 20px;
-            color: #faa0a0;
-            border: 1px solid #faa0a0; /*no*/
+            color: @color2;
+            border: 1px solid @color2; /*no*/
           }
           .add-minus {
             color: #666;
@@ -300,18 +301,18 @@
               width: 32px;
               height: 32px;
               &.plus {
-                background: url('~assets/goods/button_plus_l.png') no-repeat;
+                background: url("~assets/goods/button_plus_l.png") no-repeat;
                 background-size: 100%;
                 &.active {
-                  background: url('~assets/goods/button_plus_d.png') no-repeat;
+                  background: url("~assets/goods/button_plus_d.png") no-repeat;
                   background-size: 100%;
                 }
               }
               &.minus {
-                background: url('~assets/goods/button_minus_l.png') no-repeat;
+                background: url("~assets/goods/button_minus_l.png") no-repeat;
                 background-size: 100%;
                 &.active {
-                  background: url('~assets/goods/button_minus_d.png') no-repeat;
+                  background: url("~assets/goods/button_minus_d.png") no-repeat;
                   background-size: 100%;
                 }
               }
@@ -341,7 +342,7 @@
           width: 120px;
           height: 120px;
           color: #fff;
-          background-color: #faa0a0;
+          background-color: @color2;
           text-align: center;
           line-height: 120px;
           font-size: 24px;
@@ -360,16 +361,16 @@
       width: 36px;
       height: 36px;
       margin-right: 20px;
-      background: url('~assets/payment/button_select_off.png') no-repeat;
+      background: url("~assets/payment/button_select_off.png") no-repeat;
       background-size: 100% 100%;
       flex-shrink: 0;
       align-self: center;
       &.active {
-        background: url('~assets/payment/button_select_on.png') no-repeat;
+        background: url("~assets/payment/button_select_on.png") no-repeat;
         background-size: 100% 100%;
       }
       &.disabled {
-        background: url('~assets/payment/button_select_una.png') no-repeat;
+        background: url("~assets/payment/button_select_una.png") no-repeat;
         background-size: 100% 100%;
         background-color: #fff !important;
       }
@@ -386,14 +387,14 @@
     .price {
       font-size: 30px;
       font-weight: bold;
-      color: #cdb49b;
+      color: @color4;
     }
     .settlement {
       margin-left: auto;
       width: 220px;
       height: 68px;
       color: #fff;
-      background-color: #ffb4b4;
+      background-color: @color5;
       border-radius: 34px;
     }
   }
@@ -411,7 +412,7 @@
           margin-right: 30px;
         }
         .price {
-          color: #cdb49b;
+          color: @color4;
           font-size: 42px;
         }
         .code {
@@ -427,18 +428,18 @@
           width: 40px;
           height: 40px;
           &.plus {
-            background: url('~assets/goods/button_plus_l.png') no-repeat;
+            background: url("~assets/goods/button_plus_l.png") no-repeat;
             background-size: 100%;
             &.active {
-              background: url('~assets/goods/button_plus_d.png') no-repeat;
+              background: url("~assets/goods/button_plus_d.png") no-repeat;
               background-size: 100%;
             }
           }
           &.minus {
-            background: url('~assets/goods/button_minus_l.png') no-repeat;
+            background: url("~assets/goods/button_minus_l.png") no-repeat;
             background-size: 100%;
             &.active {
-              background: url('~assets/goods/button_minus_d.png') no-repeat;
+              background: url("~assets/goods/button_minus_d.png") no-repeat;
               background-size: 100%;
             }
           }

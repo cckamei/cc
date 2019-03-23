@@ -84,6 +84,7 @@
 
 
 <style lang="less" >
+  @import "~@/style/vars.less";
   .bespeak {
     .header {
       box-shadow: 0 0 0 0 rgba(170, 170, 170, 0.5) !important;
@@ -91,7 +92,7 @@
   }
   .add-btn {
     font-size: 28px;
-    color: #faa0a0;
+    color: @color2;
   }
   .bespeak-warp {
     position: absolute;

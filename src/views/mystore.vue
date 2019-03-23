@@ -169,6 +169,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .pt {
     .header {
       box-shadow: none;
@@ -205,7 +206,7 @@
         .arrow-down {
           width: 24px;
           height: 24px;
-          background: url('~assets/goods/icon_arrow_d.png') no-repeat;
+          background: url("~assets/goods/icon_arrow_d.png") no-repeat;
           background-size: 100%;
           transition: all 0.2s;
           margin-left: 16px;
@@ -256,7 +257,7 @@
           justify-content: space-between;
           .price {
             font-size: 30px;
-            color: #cdb49b;
+            color: @color4;
             span {
               font-size: 20px;
             }
@@ -264,7 +265,7 @@
           .cart {
             width: 40px;
             height: 40px;
-            background: url('~assets/goods/icon_cart.png') no-repeat;
+            background: url("~assets/goods/icon_cart.png") no-repeat;
             background-size: 100%;
           }
         }
@@ -283,7 +284,7 @@
           width: 120px;
           height: 120px;
           color: #fff;
-          background-color: #faa0a0;
+          background-color: @color2;
           text-align: center;
           line-height: 120px;
           font-size: 24px;

@@ -61,6 +61,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   ul {
     flex-wrap: wrap;
     margin-left: -15px;
@@ -76,9 +77,9 @@
         padding: 0 30px;
         height: 50px;
         &.active {
-          background-color: #fff0f0;
-          color: #faa0a0;
-          border: 1px solid #faa0a0; /*no*/
+          background-color: @color3;
+          color: @color2;
+          border: 1px solid @color2; /*no*/
         }
         &.disabled {
           color: #999 !important;

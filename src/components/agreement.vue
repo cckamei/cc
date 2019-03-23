@@ -21,17 +21,18 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .agreement {
     font-size: 24px;
     padding: 36px 40px;
     .checkbox {
       width: 35px;
       height: 35px;
-      background: url('~assets/home/button_a_g.png');
+      background: url("~assets/home/button_a_g.png");
       background-size: 100% 100%;
       margin-right: 20px;
       &.active {
-        background: url('~assets/home/button_a.png') no-repeat;
+        background: url("~assets/home/button_a.png") no-repeat;
         background-size: 100% 100%;
       }
     }
@@ -39,7 +40,7 @@
       color: #666;
     }
     .protocol {
-      color: #faa0a0;
+      color: @color2;
       font-weight: bold;
     }
   }

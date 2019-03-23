@@ -89,6 +89,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .list {
     position: absolute;
     top: 96px;
@@ -169,7 +170,7 @@
         line-height: 80px;
         text-align: right;
         .pick {
-          color: #faa0a0;
+          color: @color2;
           font-size: 28px;
         }
       }

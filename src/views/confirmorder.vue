@@ -303,6 +303,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .sections {
     position: relative;
     margin: 20px;
@@ -371,7 +372,7 @@
             }
             .kezi {
               font-size: 20px;
-              color: #cdb49b;
+              color: @color4;
               padding-top: 24px;
             }
             .line3 {
@@ -383,7 +384,7 @@
               justify-content: space-between;
               .price {
                 font-size: 30px;
-                color: #cdb49b;
+                color: @color4;
                 span {
                   font-size: 20px;
                 }
@@ -411,12 +412,12 @@
           }
           .select {
             margin-left: 6px;
-            background: url('~assets/payment/button_select_off.png') no-repeat;
+            background: url("~assets/payment/button_select_off.png") no-repeat;
             background-size: 100% 100%;
             width: 24px;
             height: 24px;
             &.active {
-              background: url('~assets/payment/button_select_on.png') no-repeat;
+              background: url("~assets/payment/button_select_on.png") no-repeat;
               background-size: 100% 100%;
             }
           }
@@ -446,14 +447,14 @@
     .price {
       font-size: 30px;
       font-weight: bold;
-      color: #cdb49b;
+      color: @color4;
     }
     .settlement {
       margin-left: auto;
       width: 220px;
       height: 68px;
       color: #fff;
-      background-color: #ffb4b4;
+      background-color: @color5;
       border-radius: 34px;
     }
   }

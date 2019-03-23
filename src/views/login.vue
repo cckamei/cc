@@ -157,49 +157,50 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .content {
-      background-color: #fff;
+    background-color: #fff;
   }
 
   .logo {
-      padding: 100px 0 90px 0;
-      img {
-          width: 360px;
-          height: 170px;
-          display: block;
-          margin: 0 auto;
-      }
+    padding: 100px 0 90px 0;
+    img {
+      width: 360px;
+      height: 170px;
+      display: block;
+      margin: 0 auto;
+    }
   }
 
   .form {
-      padding: 0 30px;
-      li {
-          border-bottom: 1px solid #ccc; /*no*/
-          height: 100px;
-          padding: 0 10px;
-          .input {
-              height: 100%;
-          }
+    padding: 0 30px;
+    li {
+      border-bottom: 1px solid #ccc; /*no*/
+      height: 100px;
+      padding: 0 10px;
+      .input {
+        height: 100%;
       }
+    }
   }
 
   .btns {
-      padding: 30px 40px;
-      .btn {
-          font-size: 36px;
-          margin-top: 30px;
-          &.login.active {
-              background: ~"url('~assets/home/button_login.png') no-repeat center center/100%";
-          }
-          &.wechat {
-              background: ~"url('~assets/home/button_login_w.png') no-repeat center center/100%";
-          }
+    padding: 30px 40px;
+    .btn {
+      font-size: 36px;
+      margin-top: 30px;
+      &.login.active {
+        background: ~"url('~assets/home/button_login.png') no-repeat center center/100%";
       }
+      &.wechat {
+        background: ~"url('~assets/home/button_login_w.png') no-repeat center center/100%";
+      }
+    }
   }
 
   .links {
-      color: #cdb49b;
-      font-size: 28px;
-      padding: 0 40px;
+    color: @color4;
+    font-size: 28px;
+    padding: 0 40px;
   }
 </style>

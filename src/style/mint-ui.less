@@ -1,3 +1,5 @@
+@import './vars.less';
+
 .mint-header {
   height: 80px;
   width: 100%;
@@ -14,8 +16,8 @@
 }
 
 .mint-switch-input:checked + .mint-switch-core {
-  border-color: #acd598;
-  background-color: #acd598;
+  border-color: @color1;
+  background-color: @color1;
 }
 .mint-switch-core {
   display: inline-block;
@@ -39,11 +41,11 @@
   height: 32px;
   margin-left: 2px;
   background-color: #dcdcdc;
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   background-color: #ffffff;
 }
 .mint-switch-input:checked + .mint-switch-core::after {
   -webkit-transform: translateX(45px);
-    transform: translateX(45px);
+  transform: translateX(45px);
 }

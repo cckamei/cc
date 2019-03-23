@@ -66,6 +66,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .popup {
     overflow: hidden;
     transition: height 0.3s linear;
@@ -74,7 +75,7 @@
       height: 70px;
       justify-content: center;
       text-align: center;
-      color: #cdb49b;
+      color: @color4;
       border-bottom: 1px solid #f0f0f0; /*no*/
       position: relative;
       background-color: #fff;

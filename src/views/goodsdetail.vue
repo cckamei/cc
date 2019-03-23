@@ -3,8 +3,8 @@
     <v-header-goods back v-show="top <= 10">
       <div slot="menus" class="menus">
         <div @click="$router.push({name: 'cart'})" class="menu"><img src="~assets/goods/button_cart_r.png" alt=""></div>
-        <div class="menu" @click.stop="menusVisible = !menusVisible"><img src="~assets/goods/button_option.png" alt=""></div>
-      </div>
+          <div class="menu" @click.stop="menusVisible = !menusVisible"><img src="~assets/goods/button_option.png" alt=""></div>
+          </div>
     </v-header-goods>
     <v-header-menus back shadow v-show="top > 10">
       <span class="sub-title" :class="{active: top < offsetTops[1]}" @click="setTop(0)">商品</span>
@@ -12,8 +12,8 @@
       <span class="sub-title" :class="{active: top >= offsetTops[2]}" @click="setTop(2)">推荐</span>
       <div slot="menus" class="menus">
         <div @click="goCart" class="menu"><img src="~assets/goods/button_cart_g.png" alt=""></div>
-        <div class="menu" @click.stop="menusVisible = !menusVisible"><img src="~assets/goods/button_option_g.png" alt=""></div>
-      </div>
+          <div class="menu" @click.stop="menusVisible = !menusVisible"><img src="~assets/goods/button_option_g.png" alt=""></div>
+          </div>
     </v-header-menus>
     <div class="content" @scroll="scroll">
       <mt-swipe :auto="4000" class="banner">
@@ -26,206 +26,199 @@
           <i>￥</i>{{(sku.price || res.price) | currency}}
           <img v-if="0" @click="clickShare" class="right" src="~assets/goods/button_share.png" alt="">
         </div>
-        <div class="flex tag" v-if="res.tag">
-          <button class="tag-btn" v-for="item in res.tag.split(',')">{{item}}</button>
-        </div>
-        <div class="name">{{res.goods_title}}</div>
-        <div class="desc">{{res.sub_title}}</div>
-        <ul class="mark flex">
-          <li class="flex" v-if="res.is_new"><img src="~assets/goods/icon_hook_mini.png" alt=""><span>新款上架</span></li>
-          <li class="flex" v-if="res.is_shop_same"><img src="~assets/goods/icon_hook_mini.png" alt=""><span>专柜同款</span></li>
-        </ul>
-        <div class="courier">
-          <span>快递:{{res.logitics.price | currency}}元</span>
-          <span class="right">{{res.cangku}}</span>
-        </div>
-      </div>
-      <template v-if="benifit.length">
-        <div class="gap"></div>
-        <div class="row">
-          <v-form-slide-up label="领取优惠" title="领取优惠">
-            <template slot="value">
-              <button v-for="card in benifit" v-if="card.use" class="benifit-btn">满{{card.all_money}}减{{card.discount_money}}</button>
-            </template>
-            <ul>
-              <li v-for="(card, index) in benifit">
-                <v-card :card="card"></v-card>
-              </li>
-            </ul>
-          </v-form-slide-up>
-        </div>
-      </template>
-      <template v-if="activity.length">
-        <div class="row">
-          <v-form-slide-up label="促销活动" title="促销活动">
-            <template slot="value">
-              <button class="activity-btn">{{activity[0].title}}</button>{{activity[0].desc}}
-            </template>
-            <ul class="activity">
-              <li class="flex" v-for="(item, index) in activity">
-                <button class="activity-btn">{{item.title}}</button>{{item.desc}}
-              </li>
-            </ul>
-          </v-form-slide-up>
-        </div>
-        <div class="row activity" v-if="activity.length > 1">
-          <div class="flex" v-for="(item, index) in activity" v-if="index > 0">
-            <button class="activity-btn">{{item.title}}</button>{{item.desc}}
+          <div class="flex tag" v-if="res.tag">
+            <button class="tag-btn" v-for="item in res.tag.split(',')">{{item}}</button>
+          </div>
+          <div class="name">{{res.goods_title}}</div>
+          <div class="desc">{{res.sub_title}}</div>
+          <ul class="mark flex">
+            <li class="flex" v-if="res.is_new"><img src="~assets/goods/icon_hook_mini.png" alt=""><span>新款上架</span></li>
+            <li class="flex" v-if="res.is_shop_same"><img src="~assets/goods/icon_hook_mini.png" alt=""><span>专柜同款</span></li>
+          </ul>
+          <div class="courier">
+            <span>快递:{{res.logitics.price | currency}}元</span>
+            <span class="right">{{res.cangku}}</span>
           </div>
         </div>
-      </template>
-      <div class="gap"></div>
-      <div class="row">
-        <v-form-slide-up :open.sync="autoOpenSKU" label="商品规格" v-model="sku.selectedSku" :placeholder="`选择 ${isZuan ? '主钻分数；钻石净度；' : '主石名称；主石评级；'}颜色；规格；数量`">
-          <ul class="sku">
-            <li class="sku-icon flex">
-              <img class="icon" :src="res.img" alt="">
-              <div>
-                <div class="price"><span>￥</span>{{sku.price || sku.defaultPrice | currency}}</div>
-                <span class="code">商品编号：{{sku.merchantCode || sku.defaultMerchantCode}} &nbsp;&nbsp;&nbsp; 库存：{{sku.stock}}</span>
-              </div>
-            </li>
-            <li>
-              <div class="title">{{isZuan ? '主钻分数' : '主石名称'}}</div>
-              <v-button-radio v-model="skuIndex.scoreIndex" :list="sku.skuScore" :cancel="true"></v-button-radio>
-            </li>
-            <li>
-              <div class="title">{{isZuan ? '钻石净度' : '主石评级'}}</div>
-              <v-button-radio v-model="skuIndex.clarityIndex" :list="sku.skuClarity" :cancel="true"></v-button-radio>
-            </li>
-            <li>
-              <div class="title">颜色</div>
-              <v-button-radio v-model="skuIndex.colorIndex" :list="sku.skuColor" :cancel="true"></v-button-radio>
-            </li>
-            <li>
-              <div class="title">规格</div>
-              <v-button-radio v-model="skuIndex.specIndex" :list="sku.skuSpec" :cancel="true"></v-button-radio>
-            </li>
-            <li class="count flex">
-              <span>数量</span>
-              <div class="flex">
-                <div @click="sku.count > 1 && sku.count--" class="btn minus" :class="{active: sku.count > 1}"></div>
-                <input v-model="sku.count" type="text" readonly>
-                <div @click="sku.count < sku.limit && sku.count++" class="btn plus" :class="{active: sku.count < sku.limit}"></div>
-              </div>
-            </li>
-          </ul>
-        </v-form-slide-up>
-      </div>
-      <div class="row">
-        <v-form-slide-up label="商品参数" title="商品参数" placeholder="套系；款式；钻石切工；主钻形状；副钻形状‘副钻分数；镶嵌材质；镶嵌方式">
-          <ul class="goods-param">
-            <li class="flex">
-              <span class="label">商品货号</span>
-              <span class="value">{{res.merchant_code}}</span>
-            </li>
-            <li class="flex">
-              <span class="label">套系</span>
-              <span class="value">{{res.series}}</span>
-            </li>
-            <li class="flex">
-              <span class="label">款式</span>
-              <span class="value">{{res.kuanshi}}</span>
-            </li>
-            <template v-if="isZuan">
+        <template v-if="benifit.length">
+          <div class="gap"></div>
+          <div class="row">
+            <v-form-slide-up label="领取优惠" title="领取优惠">
+              <template slot="value">
+                <button v-for="card in benifit" v-if="card.use" class="benifit-btn">满{{card.all_money}}减{{card.discount_money}}</button>
+              </template>
+              <ul>
+                <li v-for="(card, index) in benifit">
+                  <v-card :card="card"></v-card>
+                </li>
+              </ul>
+            </v-form-slide-up>
+          </div>
+        </template>
+        <template v-if="activity.length">
+          <div class="row">
+            <v-form-slide-up label="促销活动" title="促销活动">
+              <template slot="value">
+                <button class="activity-btn">{{activity[0].title}}</button>{{activity[0].desc}}
+              </template>
+              <ul class="activity">
+                <li class="flex" v-for="(item, index) in activity">
+                  <button class="activity-btn">{{item.title}}</button>{{item.desc}}
+                </li>
+              </ul>
+            </v-form-slide-up>
+          </div>
+          <div class="row activity" v-if="activity.length > 1">
+            <div class="flex" v-for="(item, index) in activity" v-if="index > 0">
+              <button class="activity-btn">{{item.title}}</button>{{item.desc}}
+            </div>
+          </div>
+        </template>
+        <div class="gap"></div>
+        <div class="row">
+          <v-form-slide-up :open.sync="autoOpenSKU" label="商品规格" v-model="sku.selectedSku" :placeholder="`选择 ${isZuan ? '主钻分数；钻石净度；' : '主石名称；主石评级；'}颜色；规格；数量`">
+            <ul class="sku">
+              <li class="sku-icon flex">
+                <img class="icon" :src="res.img" alt="">
+                <div>
+                  <div class="price"><span>￥</span>{{sku.price || sku.defaultPrice | currency}}</div>
+                  <span class="code">商品编号：{{sku.merchantCode || sku.defaultMerchantCode}} &nbsp;&nbsp;&nbsp; 库存：{{sku.stock}}</span>
+                </div>
+              </li>
+              <li>
+                <div class="title">{{isZuan ? '主钻分数' : '主石名称'}}</div>
+                <v-button-radio v-model="skuIndex.scoreIndex" :list="sku.skuScore" :cancel="true"></v-button-radio>
+              </li>
+              <li>
+                <div class="title">{{isZuan ? '钻石净度' : '主石评级'}}</div>
+                <v-button-radio v-model="skuIndex.clarityIndex" :list="sku.skuClarity" :cancel="true"></v-button-radio>
+              </li>
+              <li>
+                <div class="title">颜色</div>
+                <v-button-radio v-model="skuIndex.colorIndex" :list="sku.skuColor" :cancel="true"></v-button-radio>
+              </li>
+              <li>
+                <div class="title">规格</div>
+                <v-button-radio v-model="skuIndex.specIndex" :list="sku.skuSpec" :cancel="true"></v-button-radio>
+              </li>
+              <li class="count flex">
+                <span>数量</span>
+                <div class="flex">
+                  <div @click="sku.count > 1 && sku.count--" class="btn minus" :class="{active: sku.count > 1}"></div>
+                  <input v-model="sku.count" type="text" readonly>
+                  <div @click="sku.count < sku.limit && sku.count++" class="btn plus" :class="{active: sku.count < sku.limit}"></div>
+                </div>
+              </li>
+            </ul>
+          </v-form-slide-up>
+        </div>
+        <div class="row">
+          <v-form-slide-up label="商品参数" title="商品参数" placeholder="套系；款式；钻石切工；主钻形状；副钻形状‘副钻分数；镶嵌材质；镶嵌方式">
+            <ul class="goods-param">
               <li class="flex">
-                <span class="label">钻石切工</span>
-                <span class="value">{{res.zuanshiqiegong}}</span>
+                <span class="label">商品货号</span>
+                <span class="value">{{res.merchant_code}}</span>
               </li>
               <li class="flex">
-                <span class="label">主钻形状</span>
-                <span class="value">{{res.zhuzuanxingzhuang}}</span>
+                <span class="label">套系</span>
+                <span class="value">{{res.series}}</span>
               </li>
               <li class="flex">
-                <span class="label">副钻形状</span>
-                <span class="value">{{res.fuzuanxingzhuang || '无副钻'}}</span>
+                <span class="label">款式</span>
+                <span class="value">{{res.kuanshi}}</span>
+              </li>
+              <template v-if="isZuan">
+                <li class="flex">
+                  <span class="label">钻石切工</span>
+                  <span class="value">{{res.zuanshiqiegong}}</span>
+                </li>
+                <li class="flex">
+                  <span class="label">主钻形状</span>
+                  <span class="value">{{res.zhuzuanxingzhuang}}</span>
+                </li>
+                <li class="flex">
+                  <span class="label">副钻形状</span>
+                  <span class="value">{{res.fuzuanxingzhuang || '无副钻'}}</span>
+                </li>
+                <li class="flex">
+                  <span class="label">副钻分数</span>
+                  <span class="value">{{res.fuzuanfenshu || '无副钻'}}</span>
+                </li>
+              </template>
+              <li class="flex">
+                <span class="label">镶嵌材质</span>
+                <span class="value">{{res.xiangqiancaizhi}}</span>
               </li>
               <li class="flex">
-                <span class="label">副钻分数</span>
-                <span class="value">{{res.fuzuanfenshu || '无副钻'}}</span>
+                <span class="label">镶嵌方式</span>
+                <span class="value">{{res.xiangqianfangshi}}</span>
               </li>
-            </template>
-            <li class="flex">
-              <span class="label">镶嵌材质</span>
-              <span class="value">{{res.xiangqiancaizhi}}</span>
+            </ul>
+          </v-form-slide-up>
+        </div>
+        <div class="gap"></div>
+        <div class="row" v-if="res.service.length">
+          <v-form-slide-up label="基础服务" title="基础服务" :placeholder="res.service.map(i => i.name).join(';')">
+            <ul class="service">
+              <li v-for="item in res.service">
+                <div class="flex"><img src="~assets/goods/icon_hook_mini.png" alt=""><span>{{item.name}}</span></div>
+                <span class="note">{{item.desc}}</span>
+              </li>
+            </ul>
+          </v-form-slide-up>
+        </div>
+        <div class="row" v-if="res.has_kezi">
+          <v-form-slide-up label="刻字定制" title="刻字定制" placeholder="填写您的刻字信息" v-model="lettering.lettering">
+            <ul class="lettering">
+              <li class="lettering-enable">
+                <div class="title">是否刻字</div>
+                <v-button-radio v-model="lettering.disable" :list="['是', '否']"></v-button-radio>
+              </li>
+              <li>
+                <div class="title">刻字內容</div>
+                <input :disabled="!!lettering.disable" v-model="lettering.text" class="lettering-text" type="text" maxlength="50" placeholder="请填写您的刻字内容（详细描述不超过50个字）">
             </li>
-            <li class="flex">
-              <span class="label">镶嵌方式</span>
-              <span class="value">{{res.xiangqianfangshi}}</span>
+              <li>
+                <div class="title">要求</div>
+                <input :disabled="!!lettering.disable" v-model="lettering.remarks" class="lettering-text" type="text" maxlength="50" placeholder="请填写您的要求（不超过50个字）">
             </li>
-          </ul>
-        </v-form-slide-up>
+            </ul>
+          </v-form-slide-up>
+        </div>
+        <div class="gap"></div>
+        <div ref="image-text" class="section image-text">
+          <div class="title flex"><span>图文详情</span></div>
+          <div class="image-text-content" v-html="res.detail"></div>
+        </div>
+        <div class="gap"></div>
+        <v-recommend class="section" ref="recommend" title="为你推荐" :list="recommend"></v-recommend>
       </div>
-      <div class="gap"></div>
-      <div class="row" v-if="res.service.length">
-        <v-form-slide-up label="基础服务" title="基础服务" :placeholder="res.service.map(i => i.name).join(';')">
-          <ul class="service">
-            <li v-for="item in res.service">
-              <div class="flex"><img src="~assets/goods/icon_hook_mini.png" alt=""><span>{{item.name}}</span></div>
-              <span class="note">{{item.desc}}</span>
-            </li>
-          </ul>
-        </v-form-slide-up>
-      </div>
-      <div class="row" v-if="res.has_kezi">
-        <v-form-slide-up label="刻字定制" title="刻字定制" placeholder="填写您的刻字信息" v-model="lettering.lettering">
-          <ul class="lettering">
-            <li class="lettering-enable">
-              <div class="title">是否刻字</div>
-              <v-button-radio v-model="lettering.disable" :list="['是', '否']"></v-button-radio>
-            </li>
-            <li>
-              <div class="title">刻字內容</div>
-              <input :disabled="!!lettering.disable" v-model="lettering.text" class="lettering-text" type="text" maxlength="50" placeholder="请填写您的刻字内容（详细描述不超过50个字）">
-            </li>
-            <li>
-              <div class="title">要求</div>
-              <input :disabled="!!lettering.disable" v-model="lettering.remarks" class="lettering-text" type="text" maxlength="50" placeholder="请填写您的要求（不超过50个字）">
-            </li>
-          </ul>
-        </v-form-slide-up>
-      </div>
-      <div class="gap"></div>
-      <div ref="image-text" class="section image-text">
-        <div class="title flex"><span>图文详情</span></div>
-        <div class="image-text-content" v-html="res.detail">
-          <!-- <div class="image-text-content"> -->
-          <!-- <img src="~assets/goods/pic_dring.png" alt="">
-          <p>CC卡美婚嫁钻饰系列经悉心设计，力求象征中国从未消失一直存在的隽永感情。</p>
-          <p>灵感取材于美对爱侣分享的幸福时刻。CC卡美创作的婚戒系列钻饰，每款设计都尽显美钻的锋芒火彩，将你的爱意表露无遗。
-          </p> -->
-          <!-- <img src="~assets/goods/goods_detail.jpg" alt=""> -->
+      <div class="footer flex">
+        <div class="fun-btns" @click="serviceVisible = true">
+          <img src="~assets/goods/button_service.png" alt="">
+          <span>客服</span>
+        </div>
+        <div class="fun-btns" @click="collect">
+          <img src="~assets/goods/button_like.png" alt="">
+          <span>收藏</span>
+        </div>
+        <div class="btn-group flex">
+          <button class="btn cart" @click="addCart">加入购物车</button>
+          <button class="btn purchase" @click="buyNow">立即购买</button>
         </div>
       </div>
-      <div class="gap"></div>
-      <v-recommend class="section" ref="recommend" title="为你推荐" :list="recommend"></v-recommend>
-    </div>
-    <div class="footer flex">
-      <div class="fun-btns" @click="serviceVisible = true">
-        <img src="~assets/goods/button_service.png" alt="">
-        <span>客服</span>
-      </div>
-      <div class="fun-btns" @click="collect">
-        <img src="~assets/goods/button_like.png" alt="">
-        <span>收藏</span>
-      </div>
-      <div class="btn-group flex">
-        <button class="btn cart" @click="addCart">加入购物车</button>
-        <button class="btn purchase" @click="buyNow">立即购买</button>
-      </div>
-    </div>
 
-    <v-menus v-model="menusVisible" :menus="['home', 'search', 'collect']" name="goodsdetail"></v-menus>
-    <v-scroll-top ref="scroll-top" v-model="topVisible" @top="(t)=> top = t"></v-scroll-top>
-    <v-popup-confirm title="分享类型" v-model="shareVisible" @confirm="wxShare" :isConfirm="shareIndex !== -1">
-      <v-input-radio v-model="shareIndex" :list="['普通分享','员工分享']"></v-input-radio>
-    </v-popup-confirm>
-    <v-popup-confirm title="" v-model="serviceVisible" @confirm="goCustomService">
-      <div class="txt-center">
-        即将离开商城，接通您的专属客服。<br>您可以在公众号中回复“人工服务”与客服进行联系与沟通。
+      <v-menus v-model="menusVisible" :menus="['home', 'search', 'collect']" name="goodsdetail"></v-menus>
+      <v-scroll-top ref="scroll-top" v-model="topVisible" @top="(t)=> top = t"></v-scroll-top>
+      <v-popup-confirm title="分享类型" v-model="shareVisible" @confirm="wxShare" :isConfirm="shareIndex !== -1">
+        <v-input-radio v-model="shareIndex" :list="['普通分享','员工分享']"></v-input-radio>
+      </v-popup-confirm>
+      <v-popup-confirm title="" v-model="serviceVisible" @confirm="goCustomService">
+        <div class="txt-center">
+          即将离开商城，接通您的专属客服。<br>您可以在公众号中回复“人工服务”与客服进行联系与沟通。
       </div>
-    </v-popup-confirm>
-  </div>
+      </v-popup-confirm>
+    </div>
 </template>
 
 <script>
@@ -620,6 +613,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .header {
     background-color: transparent !important;
     &.shadow {
@@ -660,7 +654,7 @@
     padding: 30px;
     background-color: #fff;
     .price {
-      color: #cdb49b;
+      color: @color4;
       font-size: 42px;
       span {
         font-size: 30px;
@@ -676,7 +670,7 @@
       flex-wrap: wrap;
       .tag-btn {
         color: #fff;
-        background-color: #faa0a0;
+        background-color: @color2;
         border-radius: 20px;
         font-size: 16px;
         height: 30px;
@@ -700,7 +694,7 @@
       li {
         padding-right: 40px;
         font-size: 24px;
-        color: #cdb498;
+        color: @color4;
         img {
           width: 24px;
           height: 24px;
@@ -725,8 +719,8 @@
       font-size: 24px;
       padding: 0 14px;
       height: 36px;
-      color: #faa0a0;
-      border: 1px solid #faa0a0; /*no*/
+      color: @color2;
+      border: 1px solid @color2; /*no*/
       margin-left: 24px;
     }
 
@@ -755,7 +749,7 @@
           margin-right: 30px;
         }
         .price {
-          color: #cdb49b;
+          color: @color4;
           font-size: 42px;
         }
         .code {
@@ -771,18 +765,18 @@
           width: 40px;
           height: 40px;
           &.plus {
-            background: url('~assets/goods/button_plus_l.png') no-repeat;
+            background: url("~assets/goods/button_plus_l.png") no-repeat;
             background-size: 100%;
             &.active {
-              background: url('~assets/goods/button_plus_d.png') no-repeat;
+              background: url("~assets/goods/button_plus_d.png") no-repeat;
               background-size: 100%;
             }
           }
           &.minus {
-            background: url('~assets/goods/button_minus_l.png') no-repeat;
+            background: url("~assets/goods/button_minus_l.png") no-repeat;
             background-size: 100%;
             &.active {
-              background: url('~assets/goods/button_minus_d.png') no-repeat;
+              background: url("~assets/goods/button_minus_d.png") no-repeat;
               background-size: 100%;
             }
           }
@@ -823,7 +817,7 @@
       width: 100%;
       justify-content: center;
       &:after {
-        content: '';
+        content: "";
         left: 30px;
         right: 30px;
         height: 1px; /*no*/
@@ -865,11 +859,11 @@
         height: 100%;
         font-size: 30px;
         &.cart {
-          background: url('~assets/goods/button_cart.png') no-repeat;
+          background: url("~assets/goods/button_cart.png") no-repeat;
           background-size: 100% 100%;
         }
         &.purchase {
-          background: url('~assets/goods/button_buynow.png') no-repeat;
+          background: url("~assets/goods/button_buynow.png") no-repeat;
           background-size: 100% 100%;
         }
       }
@@ -878,14 +872,15 @@
 </style>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   /*popup内部的里面元素的样式直接放到该页面的根部 否则样式在手机上无效*/
   .activity-btn {
     border-radius: 12px;
     background-color: #fff;
     font-size: 16px;
     padding: 0 12px;
-    color: #cdb49b;
-    border: 1px solid #cdb49b; /*no*/
+    color: @color4;
+    border: 1px solid @color4; /*no*/
     margin-right: 8px;
   }
 
@@ -957,7 +952,6 @@
     }
   }
 </style>
-
 
 <style lang="less">
   .txt-center {

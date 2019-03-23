@@ -45,7 +45,7 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-start;
-    background: url('~assets/mypage/bg-img.png') no-repeat;
+    background: url("~assets/mypage/bg-img.png") no-repeat;
     background-size: 100% 100%;
     img {
       width: 120px;

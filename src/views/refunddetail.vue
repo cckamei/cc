@@ -132,6 +132,7 @@
   };
 </script>
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .applyrefundPage {
     overflow-y: auto;
     .pagecontent {
@@ -190,7 +191,7 @@
       }
       p {
         margin-top: 20px;
-        color: #cdb49b;
+        color: @color4;
         font-size: 20px;
         border-bottom: 2px solid #f0f0f0;
         padding-bottom: 30px;
@@ -249,7 +250,7 @@
           border-radius: 50%;
         }
         s.active {
-          background: #acd598;
+          background: @color1;
         }
         i {
           width: 217px;
@@ -257,7 +258,7 @@
           background: #dcdcdc;
         }
         i.active {
-          background: #acd598;
+          background: @color1;
         }
       }
       .lintext {

@@ -61,8 +61,8 @@
   };
 </script>
 
-
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .recommend-content {
     padding: 8px 15px;
     background-color: #f0f0f0;
@@ -85,7 +85,7 @@
             padding-top: 16px;
             .price {
               font-size: 30px;
-              color: #cdb49b;
+              color: @color4;
               span {
                 font-size: 24px;
               }
@@ -93,10 +93,10 @@
             .like {
               width: 40px;
               height: 40px;
-              background: url('~assets/goods/button_like.png') no-repeat;
+              background: url("~assets/goods/button_like.png") no-repeat;
               background-size: 100%;
               &.active {
-                background: url('~assets/goods/button_like_l.png') no-repeat;
+                background: url("~assets/goods/button_like_l.png") no-repeat;
                 background-size: 100%;
               }
             }
@@ -115,7 +115,7 @@
     justify-content: center;
     background-color: #fff;
     &:after {
-      content: '';
+      content: "";
       left: 30px;
       right: 30px;
       height: 1px; /*no*/

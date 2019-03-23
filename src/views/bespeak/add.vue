@@ -291,6 +291,7 @@
 
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .mt-15 {
     margin-top: 15px;
   }
@@ -355,7 +356,7 @@
       color: #fff;
       border-radius: 30px;
       &.active {
-        background-color: #ffb4b4;
+        background-color: @color5;
       }
     }
   }

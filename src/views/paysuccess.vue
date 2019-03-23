@@ -42,6 +42,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .section {
     background-color: #fff;
     margin-bottom: 20px;
@@ -61,7 +62,7 @@
         color: #666;
         font-size: 24px;
         span {
-          color: #cdb49b;
+          color: @color4;
         }
       }
     }
@@ -74,9 +75,9 @@
       font-size: 24px;
       height: 68px;
       width: 540px;
-      border: 1px solid #faa0a0; /*no*/
+      border: 1px solid @color2; /*no*/
       background-color: #fff;
-      color: #faa0a0;
+      color: @color2;
       margin-bottom: 20px;
     }
   }

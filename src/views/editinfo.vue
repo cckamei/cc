@@ -154,6 +154,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .section {
     margin-top: 16px;
     padding: 0 20px;
@@ -190,14 +191,14 @@
   .submitBtn {
     .btn {
       background: #ffffff;
-      color: #ffb4b4;
+      color: @color5;
     }
   }
   .more {
     height: 60px;
     line-height: 60px;
     font-size: 24px;
-    color: #cdb498;
+    color: @color4;
     text-align: center;
   }
 </style>
