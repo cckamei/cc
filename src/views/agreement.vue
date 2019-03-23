@@ -121,8 +121,8 @@
   .title {
     text-align: center;
     font-size: 30px;
-    color:#666;
-    padding: 60px 0
+    color: #666;
+    padding: 60px 0;
   }
 
   .section {
