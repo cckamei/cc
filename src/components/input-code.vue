@@ -86,6 +86,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .flex {
     width: 100%;
     input {
@@ -105,7 +106,7 @@
       background-color: #ccc;
       border: 0;
       &.active {
-        background-color: #e1c8af;
+        background-color: @color6;
       }
     }
   }

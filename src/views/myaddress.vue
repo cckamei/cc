@@ -75,6 +75,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import "~@/style/vars.less";
   .myaddress {
     overflow-y: auto;
     .addresslist {
@@ -107,7 +108,7 @@
           width: 72px;
           height: 30px;
           line-height: 30px;
-          background: #e1c8af;
+          background: @color6;
           font-size: 20px;
           color: #ffffff;
           border-radius: 15px;
