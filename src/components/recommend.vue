@@ -1,19 +1,15 @@
 <template>
   <div class="recommend">
-    <div class="title flex">
-      <span>{{ title }}</span>
-    </div>
+    <div class="title flex"><span>{{title}}</span></div>
     <div class="recommend-content">
       <ul class="flex">
-        <li v-for="(item, index) in list">
+        <li v-for="(item, index) in list" :key="index">
           <div class="recommend-item" @click="goGoodsDetail(item.goods_id)">
-            <img :src="item.img" alt="" />
-            <div class="name">{{ item.goods_title }}</div>
+            <img :src="item.img" alt="">
+            <div class="name">{{item.goods_title}}</div>
             <div class="flex">
-              <div class="price">
-                <span>￥</span>{{ item.price | currency }}
-              </div>
-              <div class="like" :class="{ active: item.like }" @click.stop="collect(item)"></div>
+              <div class="price"><span>￥</span>{{item.price | currency}}</div>
+              <div class="like" :class="{active: item.like}" @click.stop="collect(item)"></div>
             </div>
           </div>
         </li>
@@ -23,12 +19,12 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions, mapMutations } from "vuex";
+  import { mapGetters, mapActions, mapMutations } from 'vuex';
 
   export default {
     props: {
       title: {
-        default: "为你推荐",
+        default: '为你推荐',
         type: String
       },
       list: {
@@ -37,29 +33,29 @@
       }
     },
     computed: {
-      ...mapGetters(["token"])
+      ...mapGetters(['token'])
     },
     methods: {
-      ...mapMutations(["setCommon"]),
-      ...mapActions(["ajax"]),
+      ...mapMutations(['setCommon']),
+      ...mapActions(['ajax']),
       collect(item) {
         if(!this.token) {
-          this.$router.push({ name: "login", params: { name: this.name } });
+          this.$router.push({ name: 'login', params: { name: this.name } });
           return false;
         }
 
         this.ajax({
-          name: "addCollect",
+          name: 'addCollect',
           data: {
-            collect_id: item.default_sku
+            'collect_id': item.default_sku
           }
         }).then(res => {
-          this.toast("收藏成功！");
+          this.toast('收藏成功！');
         });
       },
       goGoodsDetail(goodsId) {
         this.setCommon({ goodsId });
-        this.$router.replace({ name: "redirect" });
+        this.$router.replace({ name: 'redirect' });
       }
     }
   };
@@ -135,3 +131,4 @@
     }
   }
 </style>
+

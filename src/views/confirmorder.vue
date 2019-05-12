@@ -17,7 +17,7 @@
         </li>
         <li class="section cart-list">
           <ul>
-            <li class="flex" v-for="(item, index) in cart">
+            <li class="flex" v-for="(item, index) in cart" :key="index">
               <div class="img">
                 <img :src="item.img" alt="">
               </div>
@@ -39,10 +39,10 @@
           <div class="row">
             <v-form-slide-up label="优惠券" title="选择优惠券" placeholder="选择优惠券">
               <template slot="value">
-                <div v-for="card in benifit" v-if="card.use" class="benifit-btn">已选 优惠{{card.discount_money}}元&nbsp;</div>
+                <div v-for="(card, index) in benifit" :key="index" v-if="card.use" class="benifit-btn">已选 优惠{{card.discount_money}}元&nbsp;</div>
               </template>
               <ul>
-                <li v-for="(card, index) in benifit">
+                <li v-for="(card, index) in benifit" :key="index">
                   <v-card :card="card" useText="已使用" unuseText="立即使用" :radio="true" @select="handleUse(index)"></v-card>
                 </li>
               </ul>
@@ -51,7 +51,7 @@
           <div class="row">
             <v-form-slide-up label="配送方式" title="配送方式" confirmText="完成">
               <template slot="value">
-                <div v-for="(item, index) in delivery" v-if="index === deliveryIndex" class="">{{item.name}} {{item.price}}元</div>
+                <div v-for="(item, index) in delivery" :key="index" v-if="index === deliveryIndex" class="">{{item.name}} {{item.price}}元</div>
               </template>
               <ul class="delivery">
                 <li class="flex" v-for="(item, index) in delivery" @click="deliveryIndex = index" :key="index">

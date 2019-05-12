@@ -3,7 +3,7 @@
     <v-header>购物车</v-header>
     <div class="content">
       <ul class="cart-list">
-        <li class="flex" v-for="(item, index) in cart" v-touch.press="handlePress" :data-index="index">
+        <li class="flex" v-for="(item, index) in cart" :key="index" v-touch.press="handlePress" :data-index="index">
           <div class="checkbox" :class="{active: item.checked, disabled: !item.limit}" @click="item.limit && (item.checked = !item.checked)"></div>
           <div class="img">
             <img :src="item.img" alt="">

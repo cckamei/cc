@@ -2,7 +2,7 @@
   <div class="pt">
     <v-header :mypage="true">订单列表</v-header>
     <div class="content">
-      <div class="listitem" v-for="(order,i) in orders">
+      <div class="listitem" v-for="(order,i) in orders" :key="i">
         <div class="itemtitle" @click="goDetail()">
           <div class="titleleft">
             <img src="@/assets/mypage/icon_shop.png" alt="">
@@ -10,7 +10,7 @@
           </div>
           <div class="listright">{{order.status===4?'退款中':(order.status === 8?'已取消':'已退款')}}</div>
         </div>
-        <div class="itemcontent" v-for="(good,j) in order.goods" @click="goDetail(order.order_id)">
+        <div class="itemcontent" v-for="(good,j) in order.goods" :key="j" @click="goDetail(order.order_id)">
           <div class="contentleft">
             <img :src="good.goods_img" alt="">
           </div>
@@ -132,8 +132,6 @@
       .titleleft {
         img {
           display: inline;
-          width: 24px;
-          height: 24px;
           margin-right: 12px;
         }
       }

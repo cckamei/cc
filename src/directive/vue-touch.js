@@ -1,4 +1,5 @@
 import Hammer from 'hammerjs';
+import $ from 'jquery';
 var gestures = ['tap', 'pan', 'pinch', 'press', 'rotate', 'swipe'];
 var directions = {
   tap: ['tap', 'doubletap'],

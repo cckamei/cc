@@ -1,6 +1,6 @@
 <template>
   <div class="order-list">
-    <div class="item" v-for="(order,i) in orders">
+    <div class="item" v-for="(order,i) in orders" :key="i">
       <div class="item-title" @click="goDetail(order.order_id)">
         <div class="titleleft">
           <img src="@/assets/mypage/icon_shop.png" alt="">
@@ -8,7 +8,7 @@
         </div>
         <div class="listright">{{typename(order.status)}}</div>
       </div>
-      <div class="item-content" v-for="(good,j) in order.goods" @click="goDetail(order.order_id)">
+      <div class="item-content" v-for="(good,j) in order.goods" :key="j" @click="goDetail(order.order_id)">
         <div class="contentleft">
           <img :src="good.goods_img" alt="">
         </div>

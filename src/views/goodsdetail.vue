@@ -27,7 +27,7 @@
           <img v-if="0" @click="clickShare" class="right" src="@/assets/goods/button_share.png" alt="">
         </div>
         <div class="flex tag" v-if="res.tag">
-          <button class="tag-btn" v-for="item in res.tag.split(',')">{{item}}</button>
+          <button class="tag-btn" v-for="(item, index) in res.tag.split(',')" :key="index">{{item}}</button>
         </div>
         <div class="name">{{res.goods_title}}</div>
         <div class="desc">{{res.sub_title}}</div>
@@ -45,10 +45,10 @@
         <div class="row">
           <v-form-slide-up label="领取优惠" title="领取优惠">
             <template slot="value">
-              <button v-for="card in benifit" v-if="card.use" class="benifit-btn">满{{card.all_money}}减{{card.discount_money}}</button>
+              <button v-for="(card, index) in benifit" :key="index" v-if="card.use" class="benifit-btn">满{{card.all_money}}减{{card.discount_money}}</button>
             </template>
             <ul>
-              <li v-for="(card, index) in benifit">
+              <li v-for="(card, index) in benifit" :key="index">
                 <v-card :card="card"></v-card>
               </li>
             </ul>
@@ -62,14 +62,14 @@
               <button class="activity-btn">{{activity[0].title}}</button>{{activity[0].desc}}
             </template>
             <ul class="activity">
-              <li class="flex" v-for="(item, index) in activity">
+              <li class="flex" v-for="(item, index) in activity" :key="index">
                 <button class="activity-btn">{{item.title}}</button>{{item.desc}}
               </li>
             </ul>
           </v-form-slide-up>
         </div>
         <div class="row activity" v-if="activity.length > 1">
-          <div class="flex" v-for="(item, index) in activity" v-if="index > 0">
+          <div class="flex" v-for="(item, index) in activity" :key="index" v-if="index > 0">
             <button class="activity-btn">{{item.title}}</button>{{item.desc}}
           </div>
         </div>
@@ -160,7 +160,7 @@
       <div class="row" v-if="res.service.length">
         <v-form-slide-up label="基础服务" title="基础服务" :placeholder="res.service.map(i => i.name).join(';')">
           <ul class="service">
-            <li v-for="item in res.service">
+            <li v-for="(item, index) in res.service" :key="index">
               <div class="flex"><img src="@/assets/goods/icon_hook_mini.png" alt=""><span>{{item.name}}</span></div>
               <span class="note">{{item.desc}}</span>
             </li>

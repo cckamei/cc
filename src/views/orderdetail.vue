@@ -42,7 +42,7 @@
           </div>
           <div class="listright">{{typename(order.status)}}</div>
         </div>
-        <div class="itemcontent" v-for="(good,i) in order.goods" @click="goGoodsDetail(good.goods_id)">
+        <div class="itemcontent" v-for="(good,i) in order.goods" :key="i" @click="goGoodsDetail(good.goods_id)">
           <div class="contentleft">
             <img :src="good.goods_img" alt="">
           </div>
@@ -348,8 +348,6 @@
       }
       img {
         display: inline;
-        width: 36px;
-        height: 36px;
         margin-right: 20px;
       }
       p {
@@ -397,8 +395,6 @@
         .titleleft {
           img {
             display: inline;
-            width: 24px;
-            height: 24px;
             margin-right: 12px;
           }
         }

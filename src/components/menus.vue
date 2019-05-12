@@ -2,20 +2,20 @@
   <ul class="menus" v-show="value">
     <li class="flex" v-for="(item, index) in menus" :key="index" @click="go(item)">
       <template v-if="item === 'home'">
-        <img src="@/assets/goods/icon_home.png" alt="" />首页
+        <img src="@/assets/goods/icon_home.png" alt="">首页
       </template>
       <template v-else-if="item === 'search'">
-        <img src="@/assets/goods/icon_search.png" alt="" />搜索
+        <img src="@/assets/goods/icon_search.png" alt="">搜索
       </template>
       <template v-else-if="item === 'collect'">
-        <img src="@/assets/goods/icon_mylike.png" alt="" />我的收藏
+        <img src="@/assets/goods/icon_mylike.png" alt="">我的收藏
       </template>
     </li>
   </ul>
 </template>
 
 <script>
-  import { mapActions, mapGetters, mapMutations } from "vuex";
+  import { mapActions, mapGetters, mapMutations } from 'vuex';
 
   export default {
     props: {
@@ -42,20 +42,20 @@
       }
     },
     computed: {
-      ...mapGetters(["token"])
+      ...mapGetters(['token'])
     },
     methods: {
       go(item) {
-        if(item === "home") {
-          this.$router.push({ name: "index" });
-        } else if(item === "search") {
-          this.$router.push({ name: "goodssearch" });
-        } else if(item === "collect") {
+        if(item === 'home') {
+          this.$router.push({ name: 'index' });
+        } else if(item === 'search') {
+          this.$router.push({ name: 'goodssearch' });
+        } else if(item === 'collect') {
           if(!this.token) {
-            this.$router.push({ name: "login", params: { name: this.name } });
+            this.$router.push({ name: 'login', params: { name: this.name } });
             return false;
           }
-          this.$router.push({ name: "mystore" });
+          this.$router.push({ name: 'mystore' });
         }
       }
     }
@@ -89,3 +89,5 @@
     }
   }
 </style>
+
+

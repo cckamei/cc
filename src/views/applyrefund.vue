@@ -6,7 +6,7 @@
         <li>
           <span>订单内容：</span>
           <p>
-            <i v-for="(good,i) in order.goods">{{good.goods_name}}<span>共{{good.goods_count}}件</span></i><br>
+            <i v-for="(good,i) in order.goods" :key="i">{{good.goods_name}}<span>共{{good.goods_count}}件</span></i><br>
           </p>
         </li>
         <li>
