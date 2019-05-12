@@ -2,7 +2,7 @@
   <div class="mymessage">
     <img class="head" :src="userInfo.avatar" alt="">
     <div class="usermessage">
-      <h2>{{userInfo.nick_name == null?'新用户':userInfo.nick_name}}</h2>
+      <div class="username">{{userInfo.nick_name == null?'新用户':userInfo.nick_name}}</div>
       <span class="card">VIP卡号：{{userInfo.vip_code}}</span><br>
       <span>积分：{{userInfo.score || 0}}</span>
     </div>
@@ -58,7 +58,7 @@
     }
     .usermessage {
       color: #ffffff;
-      h2 {
+      .username {
         font-size: 30px;
         margin: 60px 0 10px 0;
       }

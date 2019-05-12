@@ -70,7 +70,6 @@
         }).then(res => {
           this.pageInfo.totalPage = res.pages;
           this.commissions = this.commissions.concat(res.list);
-          console.log(this.commissions);
         });
 
         if(this.pageInfo.currentPage < this.pageInfo.totalPage) {

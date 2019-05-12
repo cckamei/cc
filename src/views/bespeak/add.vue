@@ -132,7 +132,6 @@
       if(this.getAppointment.edit == 0) {
         this.getAppointmentDetail();
       }
-      console.log(this.getUserInfo);
     },
     methods: {
       ...mapMutations(['setAppointment']),
@@ -211,7 +210,6 @@
             });
           });
           this.reqData.shop = -1;
-          console.log(this.reqData.shop);
         });
       },
       submit() {
@@ -224,7 +222,6 @@
 
       },
       addAppointment() {
-        console.log(this.reqData.type);
         this.ajax({
           name: 'addAppointment',
           data: {

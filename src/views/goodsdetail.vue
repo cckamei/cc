@@ -45,16 +45,17 @@
         <div class="row">
           <v-form-slide-up label="领取优惠" title="领取优惠">
             <template slot="value">
-              <button v-for="(card, index) in benifit" :key="index" v-if="card.use" class="benifit-btn">满{{card.all_money}}减{{card.discount_money}}</button>
+              <button v-for="(card, index) in benifit" :key="index" v-if="card.already" class="benifit-btn">满{{card.all_money}}减{{card.discount_money}}</button>
             </template>
-            <ul>
+            <ul class="benifit-list">
               <li v-for="(card, index) in benifit" :key="index">
-                <v-card :card="card"></v-card>
+                <v-coupon :card="card"></v-coupon>
               </li>
             </ul>
           </v-form-slide-up>
         </div>
       </template>
+      <template></template>
       <template v-if="activity.length">
         <div class="row">
           <v-form-slide-up label="促销活动" title="促销活动">
@@ -75,6 +76,14 @@
         </div>
       </template>
       <div class="gap"></div>
+      <div class="row">
+        <div class="list-item flex arrow" @click="goStoneCusMade">
+          <div class="label">主石定制</div>
+          <div class="input ellipsis flex">
+            <img class="star" src="@/assets/stone/icon_star.png" alt="">定制你的专属钻戒
+          </div>
+        </div>
+      </div>
       <div class="row">
         <v-form-slide-up :open.sync="autoOpenSKU" label="商品规格" v-model="sku.selectedSku" :placeholder="`选择 ${isZuan ? '主钻分数；钻石净度；' : '主石名称；主石评级；'}颜色；规格；数量`">
           <ul class="sku">
@@ -298,7 +307,7 @@
       }
 
       this.fetchGoodsDetail();
-      this.fetchGoodsRecommend();
+      this.getRecommend();
       this.fetchBenifit();
     },
     mounted() {
@@ -365,7 +374,7 @@
       }
     },
     methods: {
-      ...mapMutations(['setCart', 'clearPayOrder', 'setPayOrder', 'setCommon']),
+      ...mapMutations(['setCart', 'clearPayOrder', 'setPayOrder', 'setCommon', 'setStoneMade']),
       ...mapActions(['ajax']),
       fetchGoodsDetail() {
         this.ajax({
@@ -445,12 +454,12 @@
           this.wxShare();
         });
       },
-      fetchGoodsRecommend() {
+      getRecommend() {
         this.ajax({
-          name: 'goodsRecommend',
-          data: {
-            'goods_id': this.goodsId
-          }
+          name: 'getRecommend'
+          // data: {
+          //   'goods_id': this.goodsId
+          // }
         }).then(res => {
           this.recommend = res;
         });
@@ -463,9 +472,6 @@
           }
         }).then(res => {
           this.benifit = res;
-          this.benifit.forEach(item => {
-            this.$set(item, 'use', item.already);
-          });
         });
       },
       scroll() {
@@ -516,14 +522,15 @@
         });
       },
       getGoodsStock(skuId, cb) {
-        this.ajax({
-          name: 'goodsStock',
-          data: {
-            sku: skuId
-          }
-        }).then(res => {
-          cb(res.stock);
-        });
+        // this.ajax({
+        //   name: 'goodsStock',
+        //   data: {
+        //     sku: skuId
+        //   }
+        // }).then(res => {
+        //   cb(res.stock);
+        // });
+        cb(10);//#TODO
       },
       collect() {
         if(!this.token) {
@@ -607,6 +614,10 @@
       },
       goCustomService() {
         window.wx.closeWindow();
+      },
+      goStoneCusMade() {
+        this.setStoneMade({ gsmh: this.res.merchant_code });
+        this.$router.push({ name: 'cusstone' });
       }
     }
   };
@@ -734,6 +745,32 @@
         padding-bottom: 30px;
       }
     }
+  }
+
+  .list-item {
+    width: 100%;
+    height: 100%;
+    font-size: 30px;
+    .label {
+      flex-shrink: 0;
+      min-width: 30%;
+      color: #999;
+      font-size: 24px;
+    }
+    .input {
+      text-align: right;
+      width: 100%;
+      padding: 0 10px;
+      font-size: 24px;
+      color: #666;
+      justify-content: flex-end;
+    }
+  }
+
+  .star {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
   }
 
   .sku {
@@ -882,6 +919,14 @@
     color: @color4;
     border: 1px solid @color4; /*no*/
     margin-right: 8px;
+  }
+
+  .goods-detail {
+    .benifit-list {
+      li {
+        padding-bottom: 20px;
+      }
+    }
   }
 
   .goods-param {

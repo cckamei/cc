@@ -15,13 +15,18 @@ export default new Vuex.Store({
       goodsType: '',
       orderId: '',
       lastPage: 'index',
-      emp_id: ''
+      emp_id: '',
+      couponId: '',
+      cardId: ''
     },
     appointment: getSen('appointment') || {},
     userInfo: getSen('userInfo') || {},
     address: getSen('address') || {},
     cart: getSen('cart') || {},
-    payOrder: getSen('payOrder') || {}
+    payOrder: getSen('payOrder') || {},
+    stoneMade: getSen('stoneMade') || {
+      gsmh: ''
+    }
   },
   getters: {
     getCacheData: state => serialize(state.cacheData),
@@ -34,7 +39,8 @@ export default new Vuex.Store({
     getCart: state => state.cart,
     getOrderId: state => state.common.orderId,
     getPayOrder: state => serialize(state.payOrder),
-    getOrderType: state => state.ordertype
+    getOrderType: state => state.ordertype,
+    getStoneMade: state => serialize(state.stoneMade)
   },
   mutations: {
     setCacheData(state, data) {
@@ -75,6 +81,10 @@ export default new Vuex.Store({
     },
     setOrderType(state, data) {
       state.ordertype = data;
+    },
+    setStoneMade(state, data) {
+      state.stoneMade = { ...state.stoneMade, ...data };
+      setSen('stoneMade', state.stoneMade);
     }
   },
   actions: {

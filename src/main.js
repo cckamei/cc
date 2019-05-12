@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import MintUI from 'mint-ui';
+import { Slider } from 'ant-design-vue';
 import FastClick from 'fastclick';
 import VueI18n from 'vue-i18n';
+import VueClipboard from 'vue-clipboard2';
 import router from './router';
 import store from './store';
 import components from './components';
@@ -9,13 +11,18 @@ import filters from './filters';
 import directs from './directive';
 import App from './App';
 import { spread, browser } from './utils';
+import 'ant-design-vue/dist/antd.css';
 
 if (window.htp.mock) {
   require('./mock');
 }
 
+Vue.component(Slider.name, Slider);
+
 Vue.use(MintUI);
 Vue.use(VueI18n);
+Vue.use(VueClipboard);
+Vue.use(Slider);
 
 Vue.prototype.toast = MintUI.Toast;
 

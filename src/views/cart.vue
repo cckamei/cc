@@ -89,7 +89,7 @@
     },
     created() {
       this.fetchCart();
-      this.fetchRecommend();
+      this.getRecommend();
     },
     watch: {
       'cart': {
@@ -167,9 +167,9 @@
         this.clearPayOrder();
         this.$router.push({ name: 'confirmorder' });
       },
-      fetchRecommend() {
+      getRecommend() {
         this.ajax({
-          name: 'cartRecommend'
+          name: 'getRecommend'
         }).then(res => {
           this.recommend = res;
         });

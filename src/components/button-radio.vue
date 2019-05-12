@@ -1,7 +1,7 @@
 <template>
   <ul class="flex">
     <li v-for="(item, index) in list" @click="!disabled && switchBtn(item, index)" :key="index">
-      <button :class="{active: selectIndex === index, disabled: item.disabled}">{{typeof item === 'string' ? item : item[keyName]}}</button>
+      <button :class="{active: selectIndex === index, disabled: item.disabled}">{{typeof item === 'object' ? item[keyName] : item}}</button>
     </li>
   </ul>
 </template>
@@ -75,7 +75,7 @@
         color: #666;
         border: 1px solid #eee; /*no*/
         padding: 0 30px;
-        height: 50px;
+        height: 40px;
         &.active {
           background-color: @color3;
           color: @color2;

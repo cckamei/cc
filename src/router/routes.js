@@ -1,5 +1,4 @@
-const router = [
-  {
+const router = [{
     name: 'index',
     path: '/',
     component: () => import('@/views/home')
@@ -33,7 +32,8 @@ const router = [
   {
     name: 'confirmorder',
     path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder',
-    component: () => import('@/views/confirmorder')
+    component: () => import('@/views/confirmorder'),
+    meta: {}
   },
   {
     name: 'address',
@@ -49,6 +49,16 @@ const router = [
     name: 'paysuccess',
     path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder/pay/paysuccess',
     component: () => import('@/views/paysuccess')
+  },
+  {
+    name: 'cusstone',
+    path: '/goodslist/goodssearch/goodsdetail/cusstone',
+    component: () => import('@/views/cusstone/index')
+  },
+  {
+    name: 'selectstone',
+    path: '/goodslist/goodssearch/goodsdetail/cusstone/selectstone',
+    component: () => import('@/views/cusstone/selectstone')
   },
   {
     name: 'login',
@@ -214,6 +224,62 @@ const router = [
     name: 'redirect',
     path: '/redirect',
     component: () => import('@/views/redirect'),
+    meta: {
+      params: []
+    }
+  },
+  {
+    name: 'mycard',
+    path: '/card/mycard',
+    component: () => import('@/views/card/mycard'),
+    meta: {
+      params: []
+    }
+  },
+  {
+    name: 'cardmall',
+    path: '/card/mycard/cardmall',
+    component: () => import('@/views/card/cardmall'),
+    meta: {
+      params: []
+    }
+  },
+  {
+    name: 'carddetail',
+    path: '/card/mycard/cardmall/carddetail',
+    component: () => import('@/views/card/carddetail'),
+    meta: {
+      params: []
+    }
+  },
+  {
+    name: 'mycoupon',
+    path: '/coupon/mycoupon',
+    component: () => import('@/views/coupon/mycoupon'),
+    meta: {
+      params: []
+    }
+  },
+  {
+    name: 'couponmall',
+    path: '/coupon/mycoupon/couponmall',
+    component: () => import('@/views/coupon/couponmall'),
+    meta: {
+      params: []
+    }
+  },
+  {
+    name: 'coupondetail',
+    path: '/coupon/mycoupon/couponmall/coupondetail',
+    component: () => import('@/views/coupon/coupondetail'),
+    meta: {
+      params: []
+    }
+  },
+  {
+    name: 'memberbenefits',
+    path: '/coupon/memberbenefits',
+    component: () => import('@/views/coupon/memberbenefits'),
     meta: {
       params: []
     }

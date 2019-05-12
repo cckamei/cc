@@ -47,12 +47,10 @@
     },
     created() {
       let orderId = this.getOrderId;
-      console.log(orderId);
       this.ajax({
         name: 'getOrder',
         id: orderId
       }).then(res => {
-        console.log(res);
         if(res.logistics.info) {
           this.order = res;
         }

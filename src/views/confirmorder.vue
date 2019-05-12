@@ -36,14 +36,14 @@
           </ul>
         </li>
         <li class="option section">
-          <div class="row">
+          <div v-if="!this.getPayOrder.isCard" class="row">
             <v-form-slide-up label="优惠券" title="选择优惠券" placeholder="选择优惠券">
               <template slot="value">
-                <div v-for="(card, index) in benifit" :key="index" v-if="card.use" class="benifit-btn">已选 优惠{{card.discount_money}}元&nbsp;</div>
+                <div v-for="(card, index) in benifit" :key="index" v-if="card.already" class="benifit-btn">已选 优惠{{card.discount_money}}元&nbsp;</div>
               </template>
-              <ul>
+              <ul class="benifit-list">
                 <li v-for="(card, index) in benifit" :key="index">
-                  <v-card :card="card" useText="已使用" unuseText="立即使用" :radio="true" @select="handleUse(index)"></v-card>
+                  <v-coupon :card="card" useText="已使用" unuseText="立即使用" :radio="true" @select="handleUse(index)"></v-coupon>
                 </li>
               </ul>
             </v-form-slide-up>
@@ -160,7 +160,10 @@
         this.reqData.logitics_id = this.getPayOrder.logitics_id;
       }
 
-      this.fetchMyCoupons();
+      if(!this.getPayOrder.isCard) {
+        this.fetchMyCoupons();
+      }
+
       this.fetchLogitics();
     },
     computed: {
@@ -195,9 +198,15 @@
         });
       },
       fetchMyCoupons() {
-        this.ajax({ name: 'getCoupons' }).then(res => {
+        // this.ajax({ name: 'getMyCoupons' }).then(res => {
+        this.ajax({
+          name: 'getOrderCoupon',
+          data: {
+            skus: [this.getPayOrder.cart_id]
+          }
+        }).then(res => {
           res.forEach(item => {
-            item.use = false;
+            item.already = false;
           });
 
           if(this.getPayOrder.order_id) {
@@ -220,7 +229,7 @@
       },
       addOrder() {
         this.reqData.logitics_id = this.delivery[this.deliveryIndex].id;
-        this.reqData.selectCoupons = this.benifit.filter(item => item.use);
+        this.reqData.selectCoupons = this.benifit.filter(item => item.already);
 
         if(this.cart.filter(item => item.limit == 0).length) {
           this.toast('商品库存不足');
@@ -260,33 +269,50 @@
               this.setGoodsStock();
             });
           } else {
-            //立即购买
-            this.ajax({
-              name: 'buyNow',
-              data: {
-                coupon_id: this.reqData.coupon_id, //优惠券id
-                address_id: this.reqData.address_id, //地址id
-                yaoqiu: this.reqData.yaoqiu,
-                logitics_id: this.reqData.logitics_id, //快递id
-                sku: this.getPayOrder.cart_id,
-                num: this.getPayOrder.num,
-                kezi: this.getPayOrder.kezi,
-                kezi_yaoqiu: this.getPayOrder.kezi_yaoqiu,
-                emp_id: this.getPayOrder.emp_id
-              }
-            }).then(res => {
-              Object.assign(res, this.reqData);
-              this.setPayOrder(res);
-              this.$router.push({ name: 'pay' });
-            });
+            if(this.getPayOrder.isCard) {
+              //购买vipcard
+              this.ajax({
+                name: 'buyCard',
+                data: {
+                  vipcard_id: this.getPayOrder.cart_id, //会员卡id
+                  address_id: this.reqData.address_id, //地址id
+                  logitics_id: this.reqData.logitics_id, //快递id
+                  yaoqiu: this.reqData.yaoqiu
+                }
+              }).then(res => {
+                Object.assign(res, this.reqData);
+                this.setPayOrder(res);
+                this.$router.push({ name: 'pay' });
+              });
+            } else {
+              //立即购买
+              this.ajax({
+                name: 'buyNow',
+                data: {
+                  coupon_id: this.reqData.coupon_id, //优惠券id
+                  address_id: this.reqData.address_id, //地址id
+                  yaoqiu: this.reqData.yaoqiu,
+                  logitics_id: this.reqData.logitics_id, //快递id
+                  sku: this.getPayOrder.cart_id,
+                  num: this.getPayOrder.num,
+                  kezi: this.getPayOrder.kezi,
+                  kezi_yaoqiu: this.getPayOrder.kezi_yaoqiu,
+                  emp_id: this.getPayOrder.emp_id
+                }
+              }).then(res => {
+                Object.assign(res, this.reqData);
+                this.setPayOrder(res);
+                this.$router.push({ name: 'pay' });
+              });
+            }
           }
         }
       },
       handleUse(index) {
         this.benifit.forEach(item => {
-          item.use = false;
+          item.already = false;
         });
-        this.benifit[index].use = true;
+        this.benifit[index].already = true;
 
         let selectBenefit = this.benifit[index];
         this.benefitMoney = selectBenefit.discount_money;
@@ -520,6 +546,12 @@
 
 <style lang="less">
   .confirm-order {
+    .benifit-list {
+      li {
+        padding-bottom: 20px;
+      }
+    }
+
     .lettering-enable button {
       width: 272px;
     }

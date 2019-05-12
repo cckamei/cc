@@ -30,7 +30,6 @@
     z-index: 1;
   }
   .tabs {
-    position: absolute;
     left: 30px;
     right: 30px;
     height: 100%;
