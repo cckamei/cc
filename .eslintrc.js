@@ -48,7 +48,7 @@ module.exports = {
     'no-inner-declarations': [2, 'functions'], //禁止在块语句中使用声明（变量或函数）
     'no-invalid-regexp': 2, //禁止无效的正则表达式
     'no-invalid-this': 1, //禁止无效的this，只能用在构造器，类，对象字面量
-    'no-irregular-whitespace': 2, //不能有不规则的空格
+    'no-irregular-whitespace': 0, //不能有不规则的空格
     'no-iterator': 2, //禁止使用__iterator__ 属性
     'no-label-var': 2, //label名不能与var声明的变量名相同
     'no-labels': 0, //禁止标签声明
@@ -108,7 +108,9 @@ module.exports = {
     }], //不能有声明后未被使用的变量或参数
     'no-use-before-define': 2, //未定义前不能使用
     'vue/no-use-v-if-with-v-for': 0,
+    'vue/require-prop-type-constructor': 0,
     'no-useless-call': 2, //禁止不必要的call和apply
+    'no-useless-escape': 0,
     'no-void': 2, //禁用void操作符
     'no-var': 0, //禁用var，用let和const代替
     'no-warning-comments': [1, {

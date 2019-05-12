@@ -71,9 +71,6 @@
           </ul>
         </li>
       </ul>
-      <!-- <div class="btns">
-        
-      </div> -->
     </div>
     <div class="rightTopBtn" v-if="!isEdit" @click="edit()">编辑</div>
     <div v-if="isEdit" class="rightTopBtn submitBtn">

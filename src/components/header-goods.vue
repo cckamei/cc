@@ -34,7 +34,7 @@
             this.back();
           } else {
             if(this.$route.name === 'goodsdetail' && this.$route.query.goodsId) {
-              this.$router.push({name: 'goodslist'});
+              this.$router.push({ name: 'goodslist' });
             } else {
               this.$router.go(-1);
             }

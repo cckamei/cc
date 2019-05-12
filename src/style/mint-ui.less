@@ -15,10 +15,11 @@
   }
 }
 
-.mint-switch-input:checked + .mint-switch-core {
+.mint-switch-input:checked+.mint-switch-core {
   border-color: @color1;
   background-color: @color1;
 }
+
 .mint-switch-core {
   display: inline-block;
   position: relative;
@@ -36,6 +37,7 @@
   height: 32px;
   background-color: #ffffff;
 }
+
 .mint-switch-core::after {
   width: 32px;
   height: 32px;
@@ -45,7 +47,8 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   background-color: #ffffff;
 }
-.mint-switch-input:checked + .mint-switch-core::after {
+
+.mint-switch-input:checked+.mint-switch-core::after {
   -webkit-transform: translateX(45px);
   transform: translateX(45px);
 }

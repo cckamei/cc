@@ -16,7 +16,7 @@
       </div>
       <div class="logisticsLine" v-if="order.logistics.info.data.length">
         <ul>
-          <li v-for="(item,i) in order.logistics.info.data">
+          <li v-for="(item,i) in order.logistics.info.data" :key="i">
             <i class="point" :class="{colorpoint:i==0}"></i>
             <s></s>
             <div class="logictisLines">
