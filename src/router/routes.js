@@ -56,9 +56,27 @@ const router = [{
     component: () => import('@/views/cusstone/index')
   },
   {
+    name: 'cusstoneorder',
+    path: '/goodslist/goodssearch/goodsdetail/cusstone/order',
+    component: () => import('@/views/cusstone/confirmorder'),
+    meta: {
+      params: []
+    }
+  },
+  {
     name: 'selectstone',
     path: '/goodslist/goodssearch/goodsdetail/cusstone/selectstone',
     component: () => import('@/views/cusstone/selectstone')
+  },
+  {
+    name: 'advanced',
+    path: '/goodslist/goodssearch/goodsdetail/cusstone/selectstone/advanced',
+    component: () => import('@/views/cusstone/advanced')
+  },
+  {
+    name: 'success',
+    path: '/goodslist/goodssearch/goodsdetail/cusstone/selectstone/advanced/success',
+    component: () => import('@/views/cusstone/success')
   },
   {
     name: 'login',
@@ -246,8 +264,16 @@ const router = [{
   },
   {
     name: 'carddetail',
-    path: '/card/mycard/cardmall/carddetail',
+    path: '/card/mycard/cardmall/:id',
     component: () => import('@/views/card/carddetail'),
+    meta: {
+      params: []
+    }
+  },
+  {
+    name: 'cardorder',
+    path: '/card/mycard/cardmall/carddetail/order',
+    component: () => import('@/views/card/confirmorder'),
     meta: {
       params: []
     }
@@ -270,8 +296,16 @@ const router = [{
   },
   {
     name: 'coupondetail',
-    path: '/coupon/mycoupon/couponmall/coupondetail',
+    path: '/coupon/mycoupon/couponmall/:id',
     component: () => import('@/views/coupon/coupondetail'),
+    meta: {
+      params: []
+    }
+  },
+  {
+    name: 'sharecard',
+    path: '/sharecard',
+    component: () => import('@/views/coupon/share'),
     meta: {
       params: []
     }

@@ -17,6 +17,7 @@
     "jquery": "^3.3.1",
     "lib-flexible": "^0.3.2",
     "mint-ui": "^2.2.13",
+    "mockjs": "^1.0.1-beta3",
     "postcss-px2rem": "^0.3.0",
     "swiper": "^4.2.6",
     "vue": "^2.6.10",

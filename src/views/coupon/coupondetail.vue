@@ -1,6 +1,6 @@
 <template>
-  <div class="pt">
-    <v-header>分享优惠券</v-header>
+  <div :class="{pt: showHeader}">
+    <v-header v-if="showHeader">分享优惠券</v-header>
     <div class="content">
       <div class="card-section">
         <v-coupon :card="card" />
@@ -18,14 +18,23 @@
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
+    // beforeRouteEnter(to, from, next) {
+    //   console.log('to:', to);
+    //   console.log('from:', from, from.matched.length);
+
+    //   next(vm => {
+    //     if(!from.matched.length) {
+    //       vm.showHeader = false;l
+    //     }
+    //     // 通过 `vm` 访问组件实例
+    //   })
+    // },
     data() {
       return {
+        showHeader: true,
         card: {},
         recommend: [] //推荐商品
       };
-    },
-    computed: {
-      ...mapGetters(['getCommon'])
     },
     created() {
       this.getCoupon();
@@ -36,7 +45,7 @@
       getCoupon() {
         this.ajax({
           name: 'getCoupon',
-          id: this.getCommon.couponId
+          id: this.$route.params.id
         }).then(res => {
           this.card = res;
         });

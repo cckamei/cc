@@ -43,7 +43,7 @@
       getCardDetail() {
         this.ajax({
           name: 'cardDetail',
-          id: this.getCommon.cardId
+          id: this.$route.params.id
         }).then(res => {
           this.card = res;
         });

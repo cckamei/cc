@@ -45,7 +45,7 @@
 </script>
 
 <style lang="less" scoped>
-  @import "../style/tool.less";
+  @import "../style/vars.less";
   input {
     border-left: 1px solid #f0f0f0; /*no*/
     padding-left: 30px;

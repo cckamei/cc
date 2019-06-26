@@ -29,6 +29,7 @@
         <div class="flex tag" v-if="res.tag">
           <button class="tag-btn" v-for="(item, index) in res.tag.split(',')" :key="index">{{item}}</button>
         </div>
+        <div class="shoppig-card flex"><img src="@/assets/goods/icon_gift_p.png" alt="">您持有可优惠本商品的购物卡</div>
         <div class="name">{{res.goods_title}}</div>
         <div class="desc">{{res.sub_title}}</div>
         <ul class="mark flex">
@@ -58,20 +59,22 @@
       <template></template>
       <template v-if="activity.length">
         <div class="row">
-          <v-form-slide-up label="促销活动" title="促销活动">
+          <v-form-slide-up label="优惠活动" title="店铺优惠">
             <template slot="value">
-              <button class="activity-btn">{{activity[0].title}}</button>{{activity[0].desc}}
+              <button class="activity-btn">{{activity[0].active_type === '1' ? '满减优惠' : '限时折扣'}}</button>{{activity[0].name}}
             </template>
+            <div class="activity-notes">* 单笔订单只可参与一项优惠活动</div>
             <ul class="activity">
-              <li class="flex" v-for="(item, index) in activity" :key="index">
-                <button class="activity-btn">{{item.title}}</button>{{item.desc}}
+              <li v-for="(item, index) in activity" :key="index">
+                <div class="title">{{item.name}}</div>
+                <span class="desc">{{item.desc}}</span>
               </li>
             </ul>
           </v-form-slide-up>
         </div>
         <div class="row activity" v-if="activity.length > 1">
           <div class="flex" v-for="(item, index) in activity" :key="index" v-if="index > 0">
-            <button class="activity-btn">{{item.title}}</button>{{item.desc}}
+            <button class="activity-btn">{{item.active_type === '1' ? '满减优惠' : '限时折扣'}}</button>{{item.name}}
           </div>
         </div>
       </template>
@@ -233,7 +236,7 @@
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex';
   import $ from 'jquery';
-  import { getParams, browser } from '../utils';
+  import { getParams, browser, formatDate } from '../utils';
 
   export default {
     data() {
@@ -279,7 +282,7 @@
         },
         recommend: [], //推荐商品
         benifit: [], //优惠券
-        activity: [], //促销活动
+        activity: [], //优惠活动
         shareIndex: 0, //0普通分享 1员工分享
         shareVisible: false,
         autoOpenSKU: false,
@@ -309,6 +312,7 @@
       this.fetchGoodsDetail();
       this.getRecommend();
       this.fetchBenifit();
+      this.getActivity();
     },
     mounted() {
       setTimeout(() => {
@@ -474,6 +478,41 @@
           this.benifit = res;
         });
       },
+      getActivity() {
+        this.ajax({
+          name: 'getActivity',
+          data: {
+            'goods_id': this.goodsId
+          }
+        }).then(res => {
+          res.forEach(item => {
+            let desc = ['全店商品', '相关商品'][+item.use_kind];
+            if(item.active_type === '0') {
+              desc += `${item.discount}折`
+            } else {
+              desc += item.items.map(d => {
+                let text = '';
+                switch(item.discount_type) {
+                  case '0': text += `满${d.all}元`; break;
+                  case '1': text += `每满${d.all}元`; break;
+                  case '2': text += `满${d.all}件`; break;
+                  case '3': text += `每满${d.all}件`; break;
+                }
+
+                if(item.zengquan === '1') {
+                  text += `赠优惠券一张(满TODO减TODO，限XX套系)`;
+                } else {
+                  text += `减${d.discount_money}元`
+                }
+                return text
+              }).join('，');
+            }
+            desc += `，活动时间至${formatDate(item.end, 'yyyy-MM-dd')}`;
+            item.desc = desc;
+          });
+          this.activity = res;
+        });
+      },
       scroll() {
         this.$refs['scroll-top'].scroll();
       },
@@ -522,15 +561,14 @@
         });
       },
       getGoodsStock(skuId, cb) {
-        // this.ajax({
-        //   name: 'goodsStock',
-        //   data: {
-        //     sku: skuId
-        //   }
-        // }).then(res => {
-        //   cb(res.stock);
-        // });
-        cb(10);//#TODO
+        this.ajax({
+          name: 'goodsStock',
+          data: {
+            sku: skuId
+          }
+        }).then(res => {
+          cb(res.stock);
+        });
       },
       collect() {
         if(!this.token) {
@@ -616,7 +654,7 @@
         window.wx.closeWindow();
       },
       goStoneCusMade() {
-        this.setStoneMade({ gsmh: this.res.merchant_code });
+        this.setStoneMade({ gsmh: this.res.merchant_code, goods_title: this.res.goods_title, img: this.res.img });
         this.$router.push({ name: 'cusstone' });
       }
     }
@@ -691,6 +729,15 @@
         margin-top: 10px;
       }
     }
+    .shoppig-card {
+      color: @color2;
+      padding-top: 12px;
+      img {
+        width: 20px;
+        height: 20px;
+        margin-right: 12px;
+      }
+    }
     .name {
       padding-top: 30px;
       font-size: 32px;
@@ -702,6 +749,7 @@
     }
     .mark {
       padding-top: 30px;
+      margin-bottom: 0;
       li {
         padding-right: 40px;
         font-size: 24px;
@@ -921,6 +969,12 @@
     margin-right: 8px;
   }
 
+  .activity-notes {
+    color: @color4;
+    padding-left: 16px;
+    padding-bottom: 20px;
+  }
+
   .goods-detail {
     .benifit-list {
       li {
@@ -950,13 +1004,19 @@
 
   .activity {
     li {
-      height: 84px;
       font-size: 24px;
       color: #666;
-      padding: 0 20px;
+      padding: 30px 16px;
       border-bottom: 1px solid #f0f0f0; /*no*/
       &:last-child {
         border: none;
+      }
+      .title {
+        padding-bottom: 20px;
+        color: #333;
+      }
+      .desc {
+        font-size: 20px;
       }
     }
   }

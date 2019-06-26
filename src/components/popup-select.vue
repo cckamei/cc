@@ -1,6 +1,6 @@
 <template>
   <v-popup-confirm2 ref="popup-confirm" :title="title" :show.sync="visible" :is-confirm="selectIndex !== -1" @confirm="confirm">
-    <v-input-radio v-model="selectIndex" :list="list.map(res => res.name)" />
+    <v-input-radio v-model="selectIndex" :list="list" />
   </v-popup-confirm2>
 </template>
 

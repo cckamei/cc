@@ -1,6 +1,6 @@
 <template>
   <div class="pt">
-    <v-header>会员礼遇</v-header>
+    <v-header>品牌礼遇</v-header>
     <div class="content">
       <ul class="cards">
         <li class="card" v-for="(item, index) in cards" :key="index" @click="$router.push({name: 'coupondetail'})">

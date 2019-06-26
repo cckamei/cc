@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import { mapMutations, mapActions } from 'vuex';
+  import { mapActions } from 'vuex';
 
   export default {
     data() {
@@ -30,7 +30,6 @@
     },
     methods: {
       ...mapActions(['ajax']),
-      ...mapMutations(['setCommon']),
       getMyCoupons() {
         this.ajax({
           name: 'getMyCoupons'
@@ -42,8 +41,7 @@
         });
       },
       nextCouponDetail(id) {
-        this.setCommon({ couponId: id });
-        this.$router.push({ name: 'coupondetail' });
+        this.$router.push({ name: 'coupondetail', params: { id } });
       }
     }
   };

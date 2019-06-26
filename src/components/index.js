@@ -1,4 +1,5 @@
 import header from './header'; //普通页面头部
+import footer from './footer'; //首页底部导航
 import headerGoods from './header-goods'; //商品详情页面头部
 import headerMenus from './header-menus'; //右侧带按钮组的头部
 import agreement from './agreement'; //T&C
@@ -26,6 +27,7 @@ import range from './mint-ui/range/index';
 
 export default {
   header,
+  footer,
   headerGoods,
   headerMenus,
   agreement,

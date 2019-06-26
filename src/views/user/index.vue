@@ -8,7 +8,7 @@
       <card />
     </div>
     <div class="footer">
-      <user-footer></user-footer>
+      <v-footer></v-footer>
     </div>
   </div>
 </template>
@@ -17,7 +17,6 @@
   import { mapMutations, mapActions, mapGetters } from 'vuex';
   import userHeader from './components/header';
   import userTabs from './components/usertabs';
-  import userFooter from './components/footer';
   import orderMenu from './components/ordermenu';
   import commission from './components/commission';
   import mixin from './components/mixin';
@@ -26,7 +25,6 @@
   export default {
     components: {
       userHeader,
-      userFooter,
       userTabs,
       orderMenu,
       commission,

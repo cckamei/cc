@@ -166,33 +166,6 @@
   flex: auto;
 }
 
-@blue: #1b9af7;
-@green: #a5de37;
-@yellow: #feae1b;
-@red: #ff4351;
-@purple: #7b72e9;
-@btn-color: @color5;
-
-.blue {
-  background-color: @blue;
-}
-
-.green {
-  background-color: @green;
-}
-
-.yellow {
-  background-color: @yellow;
-}
-
-.red {
-  background-color: @red;
-}
-
-.purple {
-  background-color: @purple;
-}
-
 .arrow {
   position: relative;
   padding-right: 30px;
@@ -219,5 +192,41 @@
 
   span {
     margin-right: 20px;
+  }
+}
+
+.btns {
+  padding: 30px;
+
+  .btn {
+    height: 68px;
+    font-size: 32px;
+    width: 100%;
+    border: none;
+    color: #fff;
+    border-radius: 45px;
+    background-color: #ccc;
+
+    &.active {
+      background-color: @color5;
+    }
+  }
+}
+
+.btn-txt {
+  width: 156px;
+  height: 48px;
+  border-radius: 40px;
+  background-color: transparent;
+  color: @color2;
+  border: 1px solid @color2;
+  /*no*/
+
+  &-s {
+    height: 32px;
+    font-size: 24px;
+    padding: 0 16px;
+    line-height: 32px;
+    margin-left: 24px;
   }
 }

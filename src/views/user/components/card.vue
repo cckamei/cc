@@ -10,17 +10,18 @@
       </div>
       <div class="card-item" @click="$router.push({ name: 'mycoupon' })">
         <div class="count">{{res.coupon_count}}
-          <div class="dot"></div>
         </div>
         <span>我的优惠券</span>
       </div>
       <div class="card-item" @click="$router.push({ name: 'couponmall' })">
-        <div class="count">{{res.uncoupon_count}}</div>
+        <div class="count">{{res.uncoupon_count}}
+          <div v-if="dot" class="dot"></div>
+        </div>
         <span>待领优惠券</span>
       </div>
       <div class="card-item" @click="$router.push({ name: 'memberbenefits' })">
         <div class="count">0</div>
-        <span>会员礼遇</span>
+        <span>品牌礼遇</span>
       </div>
     </div>
   </div>
@@ -31,7 +32,8 @@
   export default {
     data() {
       return {
-        res: {}
+        res: {},
+        dot: false,
       };
     },
     created() {
@@ -44,6 +46,13 @@
           name: 'getCouponCount'
         }).then(res => {
           this.res = res;
+        });
+      },
+      getCoupons() {
+        this.ajax({
+          name: 'coupons'
+        }).then(res => {
+          this.dot = res.some(item => !item.already);
         });
       }
     }

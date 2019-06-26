@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import { mapMutations, mapActions } from 'vuex';
+  import { mapActions } from 'vuex';
   import card from './components/card';
 
   export default {
@@ -53,7 +53,6 @@
     },
     methods: {
       ...mapActions(['ajax']),
-      ...mapMutations(['setCommon']),
       getMyCard() {
         this.ajax({
           name: 'getMyCards'
@@ -62,8 +61,7 @@
         });
       },
       nextCardDetail(id) {
-        this.setCommon({ cardId: id });
-        this.$router.push({ name: 'carddetail' });
+        this.$router.push({ name: 'carddetail', params: { id } });
       }
     }
   };

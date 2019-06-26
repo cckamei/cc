@@ -4,13 +4,13 @@
     <div class="card-discount"><span>{{card.discount}}</span>&nbsp;&nbsp;&nbsp;折</div>
     <div class="card-scope">适用范围：{{scope}}</div>
     <div class="card-period">有效期 {{formatDate(card.starttime, 'yyyy-MM-dd')}} 至 {{formatDate(card.endtime, 'yyyy-MM-dd')}}</div>
-    <div class="share" v-if="card.status !== 1" @click.stop="copy(card.starttime)">分享</div>
+    <div class="share" v-if="card.status !== 1" @click.stop="share">分享</div>
   </div>
 </template>
 
 <script>
   import { formatDate } from '@/utils';
-  import { mapActions } from 'vuex';
+  import { mapMutations, mapActions } from 'vuex';
 
   export default {
     props: {
@@ -38,21 +38,14 @@
     },
     methods: {
       ...mapActions(['ajax']),
+      ...mapMutations(['setShareCard']),
       formatDate,
-      copy(txt) {
-        this.ajax({
-          name: 'cardShareURL',
-          data: {
-            url: '',
-            type: 1
-          }
-        }).then(res => {
-          this.$copyText(res.share_img_url).then(() => {
-            this.toast('已经复制到剪贴板');
-          }).catch(() => {
-            this.toast('复制失败');
-          });
+      share() {
+        this.setShareCard({
+          url: window.location.href.split('#')[0] + '#/card/mycard/cardmall/' + this.card.card_id,
+          type: 1
         });
+        this.$router.push({ name: 'sharecard' });
       }
     }
   };

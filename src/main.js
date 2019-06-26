@@ -1,3 +1,4 @@
+import 'ant-design-vue/dist/antd.css';
 import Vue from 'vue';
 import MintUI from 'mint-ui';
 import { Slider } from 'ant-design-vue';
@@ -11,7 +12,6 @@ import filters from './filters';
 import directs from './directive';
 import App from './App';
 import { spread, browser } from './utils';
-import 'ant-design-vue/dist/antd.css';
 
 if (window.htp.mock) {
   require('./mock');

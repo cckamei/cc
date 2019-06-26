@@ -4,7 +4,7 @@
       <div class="price"><span>￥</span>{{card.discount_money | currency}}</div>
       <div class="limit">购物满{{card.all_money}}元使用</div>
       <div class="expired">有效期 {{formatDate(card.starttime, 'yyyy-MM-dd')}} 至 {{formatDate(card.endtime, 'yyyy-MM-dd')}}</div>
-      <div class="share" v-if="card.status === 0" @click.stop="copy(card.starttime)">分享</div>
+      <div class="share" v-if="card.status === 0" @click.stop="share">分享</div>
     </div>
     <div v-if="card.already" class="col2" @click.stop>{{useText}}</div>
     <div v-else class="col2" @click.stop="addCoupons">{{unuseText}}</div>
@@ -13,7 +13,7 @@
 
 <script>
   import { formatDate } from '../utils';
-  import { mapActions } from 'vuex';
+  import { mapActions, mapMutations } from 'vuex';
 
   export default {
     props: {
@@ -35,6 +35,7 @@
       }
     },
     methods: {
+      ...mapMutations(['setShareCard']),
       ...mapActions(['ajax']),
       formatDate,
       addCoupons() {
@@ -52,12 +53,12 @@
           });
         }
       },
-      copy(txt) {
-        this.$copyText(txt).then(() => {
-          this.toast('已经复制到剪贴板');
-        }).catch(() => {
-          this.toast('复制失败');
+      share() {
+        this.setShareCard({
+          url: window.location.href.split('#')[0] + '#/coupon/mycoupon/couponmall/' + this.card.coupon_id,
+          type: 0
         });
+        this.$router.push({ name: 'sharecard' });
       }
     }
   };

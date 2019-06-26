@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import { mapMutations, mapActions } from 'vuex';
+  import { mapActions } from 'vuex';
   import card from './components/card';
   import cardBuy from './components/card-buy';
 
@@ -32,15 +32,13 @@
     },
     methods: {
       ...mapActions(['ajax']),
-      ...mapMutations(['setCommon']),
       getCards() {
         this.ajax({ name: 'cards' }).then(res => {
           this.cards = res;
         });
       },
       nextCardDetail(id) {
-        this.setCommon({ cardId: id });
-        this.$router.push({ name: 'carddetail' });
+        this.$router.push({ name: 'carddetail', params: { id } });
       }
     }
   };

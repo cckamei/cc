@@ -15,17 +15,18 @@ export default new Vuex.Store({
       goodsType: '',
       orderId: '',
       lastPage: 'index',
-      emp_id: '',
-      couponId: '',
-      cardId: ''
+      emp_id: ''
     },
     appointment: getSen('appointment') || {},
     userInfo: getSen('userInfo') || {},
     address: getSen('address') || {},
     cart: getSen('cart') || {},
     payOrder: getSen('payOrder') || {},
-    stoneMade: getSen('stoneMade') || {
-      gsmh: ''
+    card: getSen('card') || {},
+    stoneMade: getSen('stoneMade') || {},
+    shareCard: getSen('shareCard') || {
+      url: '',
+      type: 0
     }
   },
   getters: {
@@ -82,9 +83,17 @@ export default new Vuex.Store({
     setOrderType(state, data) {
       state.ordertype = data;
     },
+    setCard(state, data) {
+      state.card = data;
+      setSen('card', state.card);
+    },
     setStoneMade(state, data) {
       state.stoneMade = { ...state.stoneMade, ...data };
       setSen('stoneMade', state.stoneMade);
+    },
+    setShareCard(state, data) {
+      state.shareCard = data;
+      setSen('shareCard', state.shareCard);
     }
   },
   actions: {

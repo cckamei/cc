@@ -59,13 +59,15 @@
                 let data = res;
                 if(res.length) {
                   let index = res.findIndex(item => item.default);
-                  let address = res[index];
-                  this.setAddress({
-                    id: address.id,
-                    name: address.name,
-                    phone: address.phone,
-                    address: `${address.province}${address.city}${address.district}${address.street}`
-                  });
+                  if(index !== -1) {
+                    let address = res[index];
+                    this.setAddress({
+                      id: address.id,
+                      name: address.name,
+                      phone: address.phone,
+                      address: `${address.province}${address.city}${address.district}${address.street}`
+                    });
+                  }
                 }
                 this.ajax({
                   name: 'getUserInfo'

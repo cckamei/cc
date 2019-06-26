@@ -36,7 +36,15 @@
           </ul>
         </li>
         <li class="option section">
-          <div v-if="!this.getPayOrder.isCard" class="row">
+          <div class="row">
+            <v-form-input class="activity" label="优惠活动" :arrow="true" value="2个 可参与的活动">
+              <span>222</span>
+            </v-form-input>
+          </div>
+          <div class="row">
+            <v-form-input class="coupon" label="优惠券" :arrow="true" value="2张 可用的优惠券"></v-form-input>
+          </div>
+          <!-- <div class="row">
             <v-form-slide-up label="优惠券" title="选择优惠券" placeholder="选择优惠券">
               <template slot="value">
                 <div v-for="(card, index) in benifit" :key="index" v-if="card.already" class="benifit-btn">已选 优惠{{card.discount_money}}元&nbsp;</div>
@@ -47,11 +55,11 @@
                 </li>
               </ul>
             </v-form-slide-up>
-          </div>
+          </div> -->
           <div class="row">
             <v-form-slide-up label="配送方式" title="配送方式" confirmText="完成">
               <template slot="value">
-                <div v-for="(item, index) in delivery" :key="index" v-if="index === deliveryIndex" class="">{{item.name}} {{item.price}}元</div>
+                <div v-for="(item, index) in delivery" :key="index" v-if="index === deliveryIndex" class="">{{item.name}} ￥{{item.price}}</div>
               </template>
               <ul class="delivery">
                 <li class="flex" v-for="(item, index) in delivery" @click="deliveryIndex = index" :key="index">
@@ -77,10 +85,10 @@
         </li>
         <li class="summary section">
           <div class="row">
-            <v-form-input label="商品总额" v-model="shopMoney" :readonly="true"></v-form-input>
+            <v-form-input label="商品总额" :value="'￥' + shopMoney" :readonly="true"></v-form-input>
           </div>
           <div class="row" v-if="delivery.length">
-            <v-form-input label="运费" v-model="delivery[deliveryIndex].price" :readonly="true"></v-form-input>
+            <v-form-input class="freight" label="运费" v-model="'+￥' + delivery[deliveryIndex].price" :readonly="true"></v-form-input>
           </div>
           <!-- <div class="row">
             <v-form-input label="运费险" v-model="shopMoney" :readonly="true"></v-form-input>
@@ -160,10 +168,7 @@
         this.reqData.logitics_id = this.getPayOrder.logitics_id;
       }
 
-      if(!this.getPayOrder.isCard) {
-        this.fetchMyCoupons();
-      }
-
+      this.fetchMyCoupons();
       this.fetchLogitics();
     },
     computed: {
@@ -198,7 +203,6 @@
         });
       },
       fetchMyCoupons() {
-        // this.ajax({ name: 'getMyCoupons' }).then(res => {
         this.ajax({
           name: 'getOrderCoupon',
           data: {
@@ -269,42 +273,25 @@
               this.setGoodsStock();
             });
           } else {
-            if(this.getPayOrder.isCard) {
-              //购买vipcard
-              this.ajax({
-                name: 'buyCard',
-                data: {
-                  vipcard_id: this.getPayOrder.cart_id, //会员卡id
-                  address_id: this.reqData.address_id, //地址id
-                  logitics_id: this.reqData.logitics_id, //快递id
-                  yaoqiu: this.reqData.yaoqiu
-                }
-              }).then(res => {
-                Object.assign(res, this.reqData);
-                this.setPayOrder(res);
-                this.$router.push({ name: 'pay' });
-              });
-            } else {
-              //立即购买
-              this.ajax({
-                name: 'buyNow',
-                data: {
-                  coupon_id: this.reqData.coupon_id, //优惠券id
-                  address_id: this.reqData.address_id, //地址id
-                  yaoqiu: this.reqData.yaoqiu,
-                  logitics_id: this.reqData.logitics_id, //快递id
-                  sku: this.getPayOrder.cart_id,
-                  num: this.getPayOrder.num,
-                  kezi: this.getPayOrder.kezi,
-                  kezi_yaoqiu: this.getPayOrder.kezi_yaoqiu,
-                  emp_id: this.getPayOrder.emp_id
-                }
-              }).then(res => {
-                Object.assign(res, this.reqData);
-                this.setPayOrder(res);
-                this.$router.push({ name: 'pay' });
-              });
-            }
+            //立即购买
+            this.ajax({
+              name: 'buyNow',
+              data: {
+                coupon_id: this.reqData.coupon_id, //优惠券id
+                address_id: this.reqData.address_id, //地址id
+                yaoqiu: this.reqData.yaoqiu,
+                logitics_id: this.reqData.logitics_id, //快递id
+                sku: this.getPayOrder.cart_id,
+                num: this.getPayOrder.num,
+                kezi: this.getPayOrder.kezi,
+                kezi_yaoqiu: this.getPayOrder.kezi_yaoqiu,
+                emp_id: this.getPayOrder.emp_id
+              }
+            }).then(res => {
+              Object.assign(res, this.reqData);
+              this.setPayOrder(res);
+              this.$router.push({ name: 'pay' });
+            });
           }
         }
       },
@@ -545,6 +532,7 @@
 </style>
 
 <style lang="less">
+  @import "~@/style/vars.less";
   .confirm-order {
     .benifit-list {
       li {
@@ -561,6 +549,19 @@
     .summary .label,
     .remark .label {
       color: #999 !important;
+    }
+    .option {
+      .activity,
+      .coupon {
+        input {
+          color: @color2;
+        }
+      }
+    }
+    .freight {
+      input {
+        color: @color2;
+      }
     }
   }
 </style>

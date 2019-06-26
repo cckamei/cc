@@ -84,15 +84,7 @@
     }
 
     .btn-txt {
-      border-radius: 40px;
-      font-size: 24px;
-      color: @color2;
-      border: 1px solid @color2; /*no*/
-      padding: 0 16px;
-      height: 32px;
-      line-height: 32px;
       margin-left: 24px;
-      background-color: transparent;
     }
   }
 </style>

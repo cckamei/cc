@@ -18,11 +18,11 @@
         <li v-for="(item, index) in stoneList" :key="index" class="flex" @click="showStoneConfirm(index)" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="50" infinite-scroll-immediate-check="true">
           <div class="img"><img src="@/assets/stone/pic_dia.png" alt=""></div>
           <div class="detail flex-auto flex">
-            <span class="name">{{item.zhusz}}克拉; {{item.jd}}; {{item.ys}}; {{item.zslx}}证书 </span>
+            <span class="name">{{item.zhusz}}克拉; {{item.zhusjd}}; {{item.zhusys}}; {{item.zslx}}证书; {{item.zhusqg}}切工</span>
             <!-- <span class="desc">{{item.sub_title}}</span> -->
             <div class="line3 flex">
               <div class="price">￥{{item.shouj | currency}}</div>
-              <button class="label btn-txt">{{labels[+item.fhlx - 1]}}</button>
+              <button class="label btn-txt btn-txt-s">{{labels[+item.fhlx - 1]}}</button>
             </div>
             <div class="cart"></div>
           </div>
@@ -30,7 +30,11 @@
       </ul>
       <div v-else class="empty">
         <img src="@/assets/stone/icon_dia_n.png" alt=""><br/>
-        <span>暂无对应条件的主石</span>
+        <div class="label">没有找到符合您要求的钻石</div>
+        <div class="advanced">
+          <button class="btn-txt" @click="$router.push({name: 'advanced'})">立即前往</button>
+          <div class="tips">为您推荐<span>高级定制</span>功能，精心打造理想美钻</div>
+        </div>
       </div>
       <p v-if="pageInfo.currentPage < pageInfo.totalPage" v-show="loading" class="loading">
         <mt-spinner type="fading-circle"></mt-spinner>
@@ -67,6 +71,14 @@
           <div class="title">颜色</div>
           <v-button-radio v-model="colorIndex" :list="colors"></v-button-radio>
         </li>
+        <li>
+          <div class="title">切工</div>
+          <v-button-radio v-model="cutIndex" :list="cuts"></v-button-radio>
+        </li>
+        <li>
+          <div class="title">证书类型</div>
+          <v-button-radio v-model="certificateIndex" :list="certificates"></v-button-radio>
+        </li>
       </ul>
       <div class="filter-footer">
         <div class="btns">
@@ -90,15 +102,7 @@
         pageInfo: {},
         loading: false,
         stoneList: [],
-        sorts: [{
-          name: '价格从低到高'
-        }, {
-          name: '价格从高到低'
-        }, {
-          name: '主石重量从低到高'
-        }, {
-          name: '主石重量从高到低'
-        }],
+        sorts: ['价格从低到高', '价格从高到低', '主石重量从低到高', '主石重量从高到低'],
         priceStep: 100,
         priceMin: 0,
         priceMax: 0,
@@ -111,6 +115,10 @@
         cleaness: [],
         colorIndex: -1,
         colors: [],
+        cutIndex: -1,
+        cuts: [],
+        certificateIndex: -1,
+        certificates: [],
         labels: ['现货', '定制15天', '定制45天']
       };
     },
@@ -129,7 +137,7 @@
       ...mapActions(['ajax']),
       loadMore() {
         this.loading = true;
-        this.getStoneOptions();
+        this.getStoneList();
       },
       getStoneOptions() {
         return this.ajax({
@@ -146,35 +154,40 @@
           this.weight = [this.weightMin, this.weightMax];
           this.cleaness = res.zhus_jd;
           this.colors = res.zhus_color;
+          this.cuts = res.zhus_qg;
+          this.certificates = res.zslx;
         });
       },
       getStoneList() {
         const cleaness = this.cleanessIndex === -1 ? '' : this.cleaness[this.cleanessIndex];
         const color = this.colorIndex === -1 ? '' : this.colors[this.colorIndex];
+        const cut = this.cutIndex === -1 ? '' : this.cuts[this.cutIndex];
+        const certificate = this.certificateIndex === -1 ? '' : this.certificates[this.certificateIndex];
+
         this.ajax({
           name: 'getStoneList',
           data: {
             page: (this.pageInfo.currentPage || 0) + 1,
             gsmh: this.stoneMade.gsmh,
-            jinlx: '',//金类型
-            shouc: '',//手寸
+            jinlx: this.stoneMade.jinlx,//金类型
+            shouc: this.stoneMade.shouc,//手寸
             minPrice: this.price[0],//最小价格
             maxPrice: this.price[1],//最大价格
-            // minZhusz: this.weight[0],//最小主石重
-            // maxZhusz: this.weight[1],//最大主石重
+            minZhusz: this.weight[0],//最小主石重
+            maxZhusz: this.weight[1],//最大主石重
             zhusjd: cleaness,//主石净度
             shusys: color,//主石颜色
-            zhusqg: '',//主石切工
-            zslx: ''//证书类型
+            zhusqg: cut,//主石切工
+            zslx: certificate//证书类型
           }
         }).then(res => {
           this.pageInfo = {
             currentPage: res.page,
             totalPage: res.pages
           };
-          // if(this.pageInfo.currentPage == 1) {
-          this.stoneList = [];
-          // }
+          if(this.pageInfo.currentPage == 1) {
+            this.stoneList = [];
+          }
           this.stoneList = this.stoneList.concat(res.infos);
 
           if(this.pageInfo.currentPage < this.pageInfo.totalPage) {
@@ -205,6 +218,7 @@
   @import "~@/style/vars.less";
   .pt {
     padding-top: 192px;
+    background-color: #fff;
   }
 
   .selectstone .header {
@@ -301,6 +315,12 @@
         }
       }
     }
+    .btn-txt {
+      margin-left: 24px;
+      &-s {
+        width: auto;
+      }
+    }
   }
 
   .text {
@@ -317,9 +337,27 @@
       margin-top: 100px;
       margin-bottom: 40px;
     }
-    span {
+    .label {
       font-size: 30px;
       color: #999;
+    }
+    .advanced {
+      position: absolute;
+      width: 100%;
+      bottom: 90px;
+      text-align: center;
+      .btn-txt {
+        width: 220px;
+        height: 68px;
+        font-size: 30px;
+        margin-bottom: 40px;
+      }
+      .tips {
+        color: #999;
+        span {
+          color: @color2;
+        }
+      }
     }
   }
 
@@ -380,18 +418,6 @@
       }
       box-shadow: 0 -10px 50px 10px rgba(170, 170, 170, 0.5);
     }
-  }
-
-  .btn-txt {
-    border-radius: 40px;
-    font-size: 24px;
-    color: @color2;
-    border: 1px solid @color2; /*no*/
-    padding: 0 16px;
-    height: 32px;
-    line-height: 32px;
-    margin-left: 24px;
-    background-color: transparent;
   }
 </style>
 

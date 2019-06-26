@@ -1,6 +1,6 @@
 <template>
   <div class="pt">
-    <v-header back>验证手机</v-header>
+    <v-header>验证手机</v-header>
     <div class="content">
       <ul class="form">
         <li>

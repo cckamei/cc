@@ -46,20 +46,22 @@ let api = {
   buyNow: { url: 'api/v1/buy_now' }, //立即购买
   goodsStock: { url: 'api/v1/goods_stock', method: 'get' }, //获取某个sku的库存
   images: { url: 'api/v1/preset_png', method: 'get' }, //获取默认图
-  cards: { url: 'api/v1/vipcards', method: 'get' }, //获取会员卡列表
-  getMyCards: { url: 'api/v1/my/vipcards', method: 'get' }, //查看个人已有会员卡
-  cardDetail: { url: 'api/v1/vipcards/detail/:id', method: 'get' }, //获取会员卡详情
+  cards: { url: 'api/v1/vipcards', method: 'get' }, //获取购物卡列表
+  getMyCards: { url: 'api/v1/my/vipcards', method: 'get' }, //查看个人已有购物卡
+  cardDetail: { url: 'api/v1/vipcards/detail/:id', method: 'get' }, //获取购物卡详情
   coupons: { url: 'api/v1/coupons', method: 'get' }, //获取优惠券列表
   getMyCoupons: { url: 'api/v1/my/coupons', method: 'get' }, //查看个人优惠券
   addCoupons: { url: 'api/v1/my/coupons' }, //领取优惠券
   getCoupon: { url: 'api/v1/coupons/detail/:id', method: 'get' }, //获取优惠券详情
   getCouponCount: { url: 'api/v1/my/coupons/count', method: 'get' }, //获取个人中心卡券数量
   getOrderCoupon: { url: 'api/v1/order/coupons', method: 'post', isJson: true }, //获取下单时可用的优惠券
-  buyCard: { url: 'api/v1/buy_vipcard_now' }, //购买会员卡
-  cardShareURL: { url: 'api/v1/share/pic' }, //优惠券会员卡生成分享图片地址
+  buyCard: { url: 'api/v1/buy_vipcard_now' }, //购买购物卡
+  cardShareURL: { url: 'api/v1/share/pic' }, //优惠券购物卡生成分享图片地址
   getEmptyRing: { url: 'api/v1/kt/info', method: 'get' }, //主石定制空托列表
   getStoneList: { url: 'api/v1/zhus/info', method: 'get' }, //获取钻石列表
-  getStoneOptions: { url: 'api/v1/zhus/options', method: 'get' } //获取钻石选项
+  getStoneOptions: { url: 'api/v1/zhus/options', method: 'get' }, //获取钻石选项
+  addDIYStoneOrder: { url: 'api/v1/buy_diyproduct_now', method: 'post' }, //提交托石分离订单
+  getActivity: { url: 'api/v1/active/list', method: 'get' }, //获取优惠活动列表
 };
 
 for (var k in api) {
