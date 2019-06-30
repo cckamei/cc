@@ -49,11 +49,11 @@
           return {
             // ring1: thisMaterial.shouc_lady.map(val => val + '号'),
             // ring2: thisMaterial.shouc_man.map(val => val + '号')
-            ring: thisMaterial.shouc.map(val => val + '号'),
+            ring: thisMaterial.shouc.map(val => val + '号')
           };
         } else {
           // return { ring1: [], ring2: [] };
-          return { ring: [] }
+          return { ring: [] };
         }
       }
     },
@@ -92,7 +92,7 @@
             gsmh: this.stoneMade.gsmh
           }
         }).then(res => {
-          this.materialList = res;
+          this.materialList = res.list;
           if(readback) {
             this.materialIndex = this.stoneMade.materialIndex;
             // this.selectedSizeIndex1 = this.stoneMade.selectedSizeIndex1;
@@ -104,8 +104,8 @@
       selectStone() {
         if(this.checkJieTuo()) {
           this.setStoneMade({
-            jinlx: this.materialItem[this.materialIndex],
-            shouc: this.sizes.ring[this.selectedSizeIndex]
+            jinys: this.materialList[this.materialIndex].kt_caizhi_color,
+            shouc: this.sizes.ring[this.selectedSizeIndex].replace('号', '#')
           });
           this.$router.push({ name: 'selectstone', params: {} });
         }

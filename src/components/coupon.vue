@@ -3,11 +3,16 @@
     <div class="col1 flex-auto">
       <div class="price"><span>￥</span>{{card.discount_money | currency}}</div>
       <div class="limit">购物满{{card.all_money}}元使用</div>
+      <div class="card-scope">适用范围：{{scope}}</div>
       <div class="expired">有效期 {{formatDate(card.starttime, 'yyyy-MM-dd')}} 至 {{formatDate(card.endtime, 'yyyy-MM-dd')}}</div>
-      <div class="share" v-if="card.status === 0" @click.stop="share">分享</div>
+      <div class="share" v-if="isShare && card.status === 0" @click.stop="share">分享</div>
     </div>
-    <div v-if="card.already" class="col2" @click.stop>{{useText}}</div>
-    <div v-else class="col2" @click.stop="addCoupons">{{unuseText}}</div>
+    <div v-if="card.already" class="col2" @click.stop>
+      <div>{{useText}}</div>
+    </div>
+    <div v-else class="col2" @click.stop="addCoupons">
+      <div>{{unuseText}}</div>
+    </div>
   </div>
 </template>
 
@@ -32,6 +37,28 @@
       radio: {
         default: false,
         type: Boolean
+      },
+      isShare: {
+        default: true,
+        type: Boolean
+      }
+    },
+    computed: {
+      scope() {
+        if(this.card.use_type_range) {
+          let text = this.card.use_type_range.join('、');
+
+          switch(this.card.use_type) {
+            case 0: text = '全部商品'; break;
+            case 1: text += '套系'; break;
+            case 2: text += '款式'; break;
+            case 3: text += '镶嵌方式'; break;
+            default: text = '';
+          }
+          return text;
+        } else {
+          return '';
+        }
       }
     },
     methods: {
@@ -69,6 +96,7 @@
   .card {
     background-color: #fff1f1;
     padding: 30px;
+    padding-right: 0;
     background: url("~@/assets/coupon/coupon.png") no-repeat;
     background-size: 100% 100%;
     color: #fa7878;
@@ -86,9 +114,18 @@
       }
     }
     .col2 {
-      width: 170px;
+      width: 80px;
       flex-shrink: 0;
       text-align: center;
+      div {
+        width: 0;
+        left: 50%;
+        margin-left: 40%;
+      }
+    }
+    .card-scope {
+      font-size: 20px;
+      padding-bottom: 10px;
     }
     .share {
       position: absolute;

@@ -1,5 +1,5 @@
 import card from './card';
-import custone from './custone';
+import cusstone from './cusstone';
 import goods from './goods';
 var Mock = require('mockjs');
 
@@ -8,16 +8,25 @@ function json(data) {
     "data": data,
     "status": 0,
     "msg": ""
-  }
+  };
 }
 
-const list = [].concat(card, custone, goods);
+const list = [].concat(card, cusstone, goods);
 
-list.forEach(({ path, active, method = 'get', data }) => {
+list.forEach(({ path, type, active, method = 'get', data }) => {
   if (active) {
     if (typeof path === 'string') {
       path = '/proxy' + path;
     }
-    Mock.mock(path, method, json(data));
+    if (type !== undefined) {
+      Mock.mock(path, method, ({ body }) => {
+        if (typeof body === 'string') {
+          body = JSON.parse(body);
+        }
+        return json(data[body[type]]);
+      });
+    } else {
+      Mock.mock(path, method, json(data));
+    }
   }
 });

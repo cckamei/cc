@@ -77,11 +77,12 @@
         deliveryIndex: 0,
         delivery: [], //快递
         reqData: {
+          goods_id: '', //商品id
           address_id: '', //地址id
           logitics_id: '', //快递id
           yaoqiu: '',
           gsmh: '', // 公司模号 必填
-          jinlx: '', // 金类型
+          jinys: '', // 金类型
           shouc: '', // 手寸
           zhusz: '', // 主石重
           zhusjd: '', // 主石净度
@@ -102,6 +103,7 @@
       }
 
       this.goodsMoney = +this.stoneMade.stone.shouj;
+      this.reqData.goods_id = this.stoneMade.goods_id;
       this.fetchLogitics();
     },
     computed: {

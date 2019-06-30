@@ -37,25 +37,15 @@
         </li>
         <li class="option section">
           <div class="row">
-            <v-form-input class="activity" label="优惠活动" :arrow="true" value="2个 可参与的活动">
-              <span>222</span>
-            </v-form-input>
+            <v-form-input v-if="payOrder.activity" class="activity" label="优惠活动" :arrow="true" :value="'已选 优惠' + activityMoney" @input-click="$router.push({name: 'selectactivity'})"></v-form-input>
+            <v-form-input v-else-if="activityLength" class="activity" label="优惠活动" :arrow="true" :value="activityLength + '个 可参与的活动'" @input-click="$router.push({name: 'selectactivity'})"></v-form-input>
+            <v-form-input v-else label="优惠活动" class="activity" :arrow="true" value="没有可参与的活动" @input-click="$router.push({name: 'selectactivity'})"></v-form-input>
           </div>
           <div class="row">
-            <v-form-input class="coupon" label="优惠券" :arrow="true" value="2张 可用的优惠券"></v-form-input>
+            <v-form-input v-if="payOrder.coupon" class="coupon" label="优惠券" :arrow="true" :value="'已选 优惠' + couponMoney" @input-click="$router.push({name: 'selectcoupon'})"></v-form-input>
+            <v-form-input v-else-if="couponLength" class="coupon" label="优惠券" :arrow="true" :value="couponLength + '张 可用的优惠券'" @input-click="$router.push({name: 'selectcoupon'})"></v-form-input>
+            <v-form-input v-else label="优惠券" class="coupon" :arrow="true" value="没有可用的优惠券" @input-click="$router.push({name: 'selectcoupon'})"></v-form-input>
           </div>
-          <!-- <div class="row">
-            <v-form-slide-up label="优惠券" title="选择优惠券" placeholder="选择优惠券">
-              <template slot="value">
-                <div v-for="(card, index) in benifit" :key="index" v-if="card.already" class="benifit-btn">已选 优惠{{card.discount_money}}元&nbsp;</div>
-              </template>
-              <ul class="benifit-list">
-                <li v-for="(card, index) in benifit" :key="index">
-                  <v-coupon :card="card" useText="已使用" unuseText="立即使用" :radio="true" @select="handleUse(index)"></v-coupon>
-                </li>
-              </ul>
-            </v-form-slide-up>
-          </div> -->
           <div class="row">
             <v-form-slide-up label="配送方式" title="配送方式" confirmText="完成">
               <template slot="value">
@@ -88,13 +78,16 @@
             <v-form-input label="商品总额" :value="'￥' + shopMoney" :readonly="true"></v-form-input>
           </div>
           <div class="row" v-if="delivery.length">
-            <v-form-input class="freight" label="运费" v-model="'+￥' + delivery[deliveryIndex].price" :readonly="true"></v-form-input>
+            <v-form-input class="freight" label="运费" :value="'+￥' + delivery[deliveryIndex].price" :readonly="true"></v-form-input>
           </div>
           <!-- <div class="row">
             <v-form-input label="运费险" v-model="shopMoney" :readonly="true"></v-form-input>
           </div> -->
           <div class="row">
-            <v-form-input label="优惠券" v-model="benefitMoney" :readonly="true"></v-form-input>
+            <v-form-input class="freight" label="优惠活动" :value="'-￥' + activityMoney" :readonly="true"></v-form-input>
+          </div>
+          <div class="row">
+            <v-form-input class="freight" label="优惠券" :value="'-￥' + couponMoney" :readonly="true"></v-form-input>
           </div>
         </li>
       </ul>
@@ -124,15 +117,15 @@
 </template>
 
 <script>
-  import { mapActions, mapGetters, mapMutations } from 'vuex';
+  import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
 
   export default {
     data() {
       return {
         shopMoney: 0, //商品总额
-        benefitMoney: 0, //优惠券
+        couponMoney: 0, //优惠券
+        activityMoney: 0, //优惠活动
         cart: [],
-        benifit: [], //优惠
         deliveryIndex: 0,
         delivery: [], //快递
         lettering: { //刻字
@@ -149,7 +142,9 @@
           address_id: '', //地址id
           yaoqiu: '',
           logitics_id: '' //快递id
-        }
+        },
+        activityLength: 0,
+        couponLength: 0
       };
     },
     created() {
@@ -162,16 +157,31 @@
         this.reqData.address_id = this.getAddress.id;
       }
 
+      //从支付页面返回时，回填数据
       if(this.getPayOrder.order_id) {
-        this.reqData.coupon_id = this.getPayOrder.coupon_id;
+        // this.reqData.coupon_id = this.getPayOrder.coupon_id;
         this.reqData.yaoqiu = this.getPayOrder.yaoqiu;
         this.reqData.logitics_id = this.getPayOrder.logitics_id;
       }
 
-      this.fetchMyCoupons();
+      //优惠活动
+      if(this.payOrder.activity) {
+        this.activityMoney = this.payOrder.activity.discount_money;
+      }
+
+      //优惠券
+      if(this.payOrder.coupon) {
+        this.couponMoney = this.payOrder.coupon.discount_money;
+        this.reqData.coupon_id = this.payOrder.coupon.coupon_id;
+      }
+
       this.fetchLogitics();
+      this.getOrderActivity('0');
+      this.getOrderActivity('1');
+      this.getOrderCoupons();
     },
     computed: {
+      ...mapState(['common', 'payOrder']),
       ...mapGetters(['getAddress', 'getCart', 'getPayOrder']),
       totalMoney() {
         let deliveryMoney = 0;
@@ -179,7 +189,7 @@
           deliveryMoney = this.delivery[this.deliveryIndex].price;
         }
 
-        return this.shopMoney + deliveryMoney - this.benefitMoney;
+        return this.shopMoney + deliveryMoney - this.couponMoney - this.activityMoney;
       }
     },
     methods: {
@@ -202,26 +212,6 @@
           });
         });
       },
-      fetchMyCoupons() {
-        this.ajax({
-          name: 'getOrderCoupon',
-          data: {
-            skus: [this.getPayOrder.cart_id]
-          }
-        }).then(res => {
-          res.forEach(item => {
-            item.already = false;
-          });
-
-          if(this.getPayOrder.order_id) {
-            res = res.concat(this.getPayOrder.selectCoupons);
-          }
-          this.benifit = res;
-          if(res.length && this.getPayOrder.order_id) {
-            this.handleUse(res.length - 1);
-          }
-        });
-      },
       fetchLogitics() {
         this.ajax({ name: 'getLogitics' }).then(res => {
           this.delivery = res;
@@ -231,9 +221,23 @@
           }
         });
       },
+      getOrderActivity(kind) {
+        this.ajax({ name: 'getOrderActivity', data: { "skus": this.cart.map(item => item.cart_id), "kind": kind } }).then(res => {
+          if(kind === '0') {
+            this.activityLength += res.list.length ? 1 : 0;
+          } else {
+            this.activityLength += res.length;
+          }
+        });
+      },
+      getOrderCoupons() {
+        this.ajax({ name: 'getOrderCoupon', data: { "skus": this.cart.map(item => item.cart_id) } }).then(res => {
+          this.couponLength = res.filter(item => item.can_use).length;
+        });
+      },
       addOrder() {
         this.reqData.logitics_id = this.delivery[this.deliveryIndex].id;
-        this.reqData.selectCoupons = this.benifit.filter(item => item.already);
+        // this.reqData.selectCoupons = this.benifit.filter(item => item.already);
 
         if(this.cart.filter(item => item.limit == 0).length) {
           this.toast('商品库存不足');
@@ -294,16 +298,6 @@
             });
           }
         }
-      },
-      handleUse(index) {
-        this.benifit.forEach(item => {
-          item.already = false;
-        });
-        this.benifit[index].already = true;
-
-        let selectBenefit = this.benifit[index];
-        this.benefitMoney = selectBenefit.discount_money;
-        this.reqData.coupon_id = selectBenefit.coupon_id;
       },
       openKezi(val) {
         this.lettering.keziVisible = true;

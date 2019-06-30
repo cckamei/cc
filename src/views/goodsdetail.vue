@@ -79,7 +79,7 @@
         </div>
       </template>
       <div class="gap"></div>
-      <div class="row">
+      <div class="row" v-if="res.has_dingzhi">
         <div class="list-item flex arrow" @click="goStoneCusMade">
           <div class="label">主石定制</div>
           <div class="input ellipsis flex">
@@ -488,7 +488,7 @@
           res.forEach(item => {
             let desc = ['全店商品', '相关商品'][+item.use_kind];
             if(item.active_type === '0') {
-              desc += `${item.discount}折`
+              desc += `${item.discount}折`;
             } else {
               desc += item.items.map(d => {
                 let text = '';
@@ -497,14 +497,16 @@
                   case '1': text += `每满${d.all}元`; break;
                   case '2': text += `满${d.all}件`; break;
                   case '3': text += `每满${d.all}件`; break;
+                  default:
                 }
 
                 if(item.zengquan === '1') {
-                  text += `赠优惠券一张(满TODO减TODO，限XX套系)`;
+                  // text += `赠优惠券一张(满TODO减TODO，限XX套系)`;
+                  text += `赠优惠券一张`;
                 } else {
-                  text += `减${d.discount_money}元`
+                  text += `减${d.discount_money}元`;
                 }
-                return text
+                return text;
               }).join('，');
             }
             desc += `，活动时间至${formatDate(item.end, 'yyyy-MM-dd')}`;
@@ -654,7 +656,7 @@
         window.wx.closeWindow();
       },
       goStoneCusMade() {
-        this.setStoneMade({ gsmh: this.res.merchant_code, goods_title: this.res.goods_title, img: this.res.img });
+        this.setStoneMade({ gsmh: this.res.merchant_code, goods_id: this.res.goods_id, goods_title: this.res.goods_title, img: this.res.img });
         this.$router.push({ name: 'cusstone' });
       }
     }

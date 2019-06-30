@@ -33,7 +33,7 @@
     data() {
       return {
         res: {},
-        dot: false,
+        dot: false
       };
     },
     created() {

@@ -51,10 +51,10 @@
         </li>
         <li class="summary section">
           <div class="row">
-            <v-form-input label="商品总额" v-model="goodsMoney" :readonly="true"></v-form-input>
+            <v-form-input class="freight" label="商品总额" :value="'￥' + goodsMoney" :readonly="true"></v-form-input>
           </div>
           <div class="row" v-if="delivery.length">
-            <v-form-input label="运费" v-model="delivery[deliveryIndex].price" :readonly="true"></v-form-input>
+            <v-form-input class="freight" label="运费" :value="'+￥' + delivery[deliveryIndex].price" :readonly="true"></v-form-input>
           </div>
         </li>
       </ul>

@@ -4,7 +4,7 @@
     // apihost: 'http://shop.cc-jewel.com/', //接口地址2
     apihost: 'http://47.105.53.172/', //接口地址2
     designWidth: 750,
-    mock: true,
+    mock: false,
     wxproxy: 'http://shop.cc-jewel.com/wx.proxy.html',
     iswxproxy: true,
     wxconfig: ['hideOptionMenu', 'showOptionMenu', 'checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'openLocation', 'getLocation', 'chooseWXPay', 'addCard', 'chooseCard', 'openCard', 'scanQRCode'],

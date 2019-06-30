@@ -36,6 +36,18 @@ const router = [{
     meta: {}
   },
   {
+    name: 'selectcoupon',
+    path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder/selectcoupon',
+    component: () => import('@/views/coupon/selectcoupon'),
+    meta: {}
+  },
+  {
+    name: 'selectactivity',
+    path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder/selectactivity',
+    component: () => import('@/views/card/selectactivity'),
+    meta: {}
+  },
+  {
     name: 'address',
     path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder/address',
     component: () => import('@/views/address')

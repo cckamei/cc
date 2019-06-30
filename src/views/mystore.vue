@@ -113,17 +113,19 @@
           if(this.pageInfo.currentPage == 1) {
             this.goodsList = [];
           }
-          this.goodsList = this.goodsList.concat(res.list);
+          setTimeout(() => {
+            this.goodsList = this.goodsList.concat(res.list);
 
-          this.goodsList.forEach(item => {
-            this.$set(item, 'deleteVisible', false);
-          });
+            this.goodsList.forEach(item => {
+              this.$set(item, 'deleteVisible', false);
+            });
 
-          if(this.pageInfo.currentPage < this.pageInfo.totalPage) {
-            this.loading = false;
-          } else if(this.pageInfo.currentPage != 1) {
-            this.toast('没有更多数据了');
-          }
+            if(this.pageInfo.currentPage < this.pageInfo.totalPage) {
+              this.loading = false;
+            } else if(this.pageInfo.currentPage != 1) {
+              this.toast('没有更多数据了');
+            }
+          }, 0);
         });
       },
       handlePress(eventName, e, hammer) {

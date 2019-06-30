@@ -161,7 +161,7 @@
         this.colorIndex = this.selectedColorIndex;
       },
       handlePurchase() {
-        //TODO获取到高级定制的价格
+        //#TODO获取到高级定制的价格
         this.setStoneMade({
           stone: Object.assign(this.stoneMade.stone, { ddlx: 'S' })
         });

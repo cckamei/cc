@@ -54,14 +54,16 @@ let api = {
   addCoupons: { url: 'api/v1/my/coupons' }, //领取优惠券
   getCoupon: { url: 'api/v1/coupons/detail/:id', method: 'get' }, //获取优惠券详情
   getCouponCount: { url: 'api/v1/my/coupons/count', method: 'get' }, //获取个人中心卡券数量
-  getOrderCoupon: { url: 'api/v1/order/coupons', method: 'post', isJson: true }, //获取下单时可用的优惠券
   buyCard: { url: 'api/v1/buy_vipcard_now' }, //购买购物卡
   cardShareURL: { url: 'api/v1/share/pic' }, //优惠券购物卡生成分享图片地址
   getEmptyRing: { url: 'api/v1/kt/info', method: 'get' }, //主石定制空托列表
   getStoneList: { url: 'api/v1/zhus/info', method: 'get' }, //获取钻石列表
   getStoneOptions: { url: 'api/v1/zhus/options', method: 'get' }, //获取钻石选项
   addDIYStoneOrder: { url: 'api/v1/buy_diyproduct_now', method: 'post' }, //提交托石分离订单
-  getActivity: { url: 'api/v1/active/list', method: 'get' }, //获取优惠活动列表
+  getActivity: { url: 'api/v1/active/list', method: 'get' }, //获取商品详情优惠活动列表
+  getBrandGift: { url: 'api/v1/order/liquan', method: 'get' }, //获取品牌礼遇列表
+  getOrderCoupon: { url: 'api/v1/order/coupons', method: 'post', isJson: true }, //获取下单时可用的优惠券
+  getOrderActivity: { url: 'api/v1/order/actives', method: 'post', isJson: true } //获取下单时优惠活动列表
 };
 
 for (var k in api) {

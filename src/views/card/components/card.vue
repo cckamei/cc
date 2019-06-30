@@ -4,7 +4,7 @@
     <div class="card-discount"><span>{{card.discount}}</span>&nbsp;&nbsp;&nbsp;折</div>
     <div class="card-scope">适用范围：{{scope}}</div>
     <div class="card-period">有效期 {{formatDate(card.starttime, 'yyyy-MM-dd')}} 至 {{formatDate(card.endtime, 'yyyy-MM-dd')}}</div>
-    <div class="share" v-if="card.status !== 1" @click.stop="share">分享</div>
+    <div class="share" v-if="isShare && card.status !== 1" @click.stop="share">分享</div>
   </div>
 </template>
 
@@ -16,6 +16,10 @@
     props: {
       card: {
         type: Object
+      },
+      isShare: {
+        default: true,
+        type: Boolean
       }
     },
     computed: {

@@ -12,7 +12,7 @@
             <span class="name">{{item.goods_title}}</span>
             <span class="desc">{{item.skuLabel}}</span>
             <div class="kezi">
-              <span v-if="has_kezi" @click="openKezi(item)">刻字&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span>库存：{{item.limit}}</span>
+              <span v-if="item.has_kezi" @click="openKezi(item)">刻字&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span>库存：{{item.limit}}</span>
             </div>
             <template v-if="item.limit">
               <div class="line3">

@@ -38,6 +38,7 @@
       },
       confirm() {
         this.$emit('input', this.selectIndex);
+        this.$emit('confirm', this.selectIndex);
       }
     }
   };

@@ -1,39 +1,241 @@
 export default [{
-    // 获取空托列表
-    path: /api\/v1\/kt\/info/,
+    //库存
+    path: '/api/v1/goods_stock',
+    // active: true,
+    data: { "stock": 99 }
+  },
+  {
+    // 个人中心卡券数量
+    path: '/api/v1/my/coupons/count',
+    // active: true,
+    data: { "vipcard_count": 1, "coupon_count": 1, "uncoupon_count": 2 }
+  },
+  {
+    // 我的优惠券
+    path: '/api/v1/my/coupons',
+    // active: true,
+    data: [{
+      "name": "test1",
+      "status": 0, // 0：可使用  1：已过期  2：已作废
+      "discount_money": 150,
+      "endtime": "2018-10-10 00:00:00",
+      "all_money": 1000,
+      "starttime": "2018-09-10 00:00:00",
+      "coupon_id": "5baddef1467b621adb48d922",
+      "comment": "xxxx"
+    }]
+  },
+  {
+    // 待领优惠券
+    path: '/api/v1/coupons',
     active: true,
     data: [{
-        "kt_caizhi": "18K", //空托材质
-        "kt_caizhi_color": "W", // W: 白色， Y：黄色， R：玫瑰金
-        "shouc": [11, 12, 13, 14], //男士手寸
+        "coupon_id": "5baddef1467b621adb48d922", //优惠券id
+        "endtime": "2018-10-10 00:00:00", //截止时间
+        "name": "test1", //优惠券名称
+        "discount_money": 150, //优惠金钱
+        "already": true, //是否领取过
+        "starttime": "2018-09-10 00:00:00", //开始时间
+        "all_money": 1000, //达到满减要求的金额
+        "comment": "xxx" //购买注意事项
       },
       {
-        "kt_caizhi": "19K", //空托材质
-        "kt_caizhi_color": "W", // W: 白色， Y：黄色， R：玫瑰金
-        "shouc": [11, 12, 13, 16], //男士手寸
-        "shouc": [11, 12, 13, 19] //女士手寸
+        "coupon_id": "5baddffb38f7564a6a5ca31d",
+        "endtime": "2018-10-20 00:00:00",
+        "name": "test3",
+        "discount_money": 500,
+        "starttime": "2018-09-11 00:00:00",
+        "already": false,
+        "all_money": 2000,
+        "comment": "xxx"
       }
     ]
   },
   {
-    // 获取钻石列表
-    path: /api\/v1\/zhus\/info/,
+    // 优惠券详情
+    path: /api\/v1\/coupons\/detail/,
+    // active: true,
     data: {
-      "infos": [{
-        "fhlx": "2", // 发货类型  1：现货， 2：15天， 3：45天
-        "jinlx": "18K白", // 金类型
-        "gsmh": "DRGC01070", // 公司模号
-        "zhusjd": "VS2", //净度
-        "shouj": "8140", // 售价
-        "shouc": "13", // 手寸
-        "zslx": "GIA/IGI/HRD", //证书类型
-        "zhusqg": "3VG", //切工
-        "zhusys": "I", // 颜色
-        "zhusz": "0.33", // 主石重
-        "zhuspg": "", // 主石抛工
-        "zhusdc": "" // 主石对称
-      }, ],
-      "pageIndex": 1
+      "name": "test1",
+      "status": 0, //0：可使用  1：已过期  2：已作废
+      "discount_money": 150,
+      "endtime": "2018-10-10 00:00:00",
+      "all_money": 1000,
+      "starttime": "2018-09-10 00:00:00",
+      "coupon_id": "5baddef1467b621adb48d922",
+      "comment": "xxxxxx" //优惠券注意事项
     }
+  },
+  {
+    //我的购物卡
+    path: '/api/v1/my/vipcards',
+    // active: true,
+    data: [{
+      "name": "test1",
+      "status": 0, //  0：可使用  1：已过期  2：已作废
+      "discount": 8,
+      "endtime": "2018-10-10 00:00:00",
+      "starttime": "2018-09-10 00:00:00",
+      "card_id": "5baddef1467b621adb48d922",
+      "use_type": 1, //适用范围类型 0:全部 1:按套系 2：按款式 3：按镶嵌方式
+      "use_type_range": ["猛狮", "A套系", "B套系"], //适用范围  数组类型  套系1，套系2 ... ； 注意：若use_type为全部(0)，use_type_range为空数组
+      "comment": "xxxxxx" //购物卡注意事项
+    }]
+  },
+  {
+    //购物卡商城
+    path: '/api/v1/vipcards',
+    // active: true,
+    data: [{
+        "card_id": "5baddef1467b621adb48d922", //VIP卡id
+        "endtime": "2018-10-10 00:00:00", //截止时间
+        "name": "test1", //卡名称
+        "discount": 7.5, //优惠折扣
+        "already": true, //是否领取过
+        "starttime": "2018-09-10 00:00:00", //开始时间
+        "price": 66, //价格
+        "use_type": 1, //适用范围类型  0:全部 1:按套系 2：按款式 3：按镶嵌方式
+        "use_type_range": ["猛狮", "A套系", "B套系"], //适用范围  数组类型  套系1，套系2 ...； 注意：若use_type为全部(0)，use_type_range为空数组
+        "comment": "xxxxxx" //购物卡注意事项
+      },
+      {
+        "card_id": "5baddffb38f7564a6a5ca31d",
+        "endtime": "2018-10-20 00:00:00",
+        "name": "test3",
+        "discount": 8,
+        "starttime": "2018-09-11 00:00:00",
+        "already": false,
+        "price": 66,
+        "use_type": "2",
+        "use_type_range": ["A款式", "B款式"],
+        "comment": "xxxxxx" //购物卡注意事项
+      }
+    ]
+  },
+  {
+    // 购物卡详情
+    path: /api\/v1\/vipcards\/detail/,
+    // active: true,
+    data: {
+      "name": "test1",
+      "status": 0, // 0：可使用  1：已过期  2：已作废
+      "discount": 8,
+      "endtime": "2018-10-10 00:00:00",
+      "price": 66,
+      "starttime": "2018-09-10 00:00:00",
+      "card_id": "5baddef1467b621adb48d922",
+      "use_type": 0, // 0:全部 1:按套系 2：按款式 3：按镶嵌方式
+      "use_type_range": [],
+      "comment": "xxxxxx" //购物卡注意事项
+    }
+  },
+  {
+    // 订单页面获取优惠活动列表
+    path: '/api/v1/order/actives',
+    type: 'kind',
+    method: 'post',
+    active: true,
+    data: {
+      "0": {
+        list: [{
+            "name": "test1",
+            "status": 0, // 0：可使用  1：已过期  2：已作废
+            "discount": 8,
+            "endtime": "2018-10-10 00:00:00",
+            "price": 66,
+            "starttime": "2018-09-10 00:00:00",
+            "card_id": "5baddef1467b621adb48d922",
+            "comment": "xxxxxx", //购物卡注意事项
+          },
+          {
+            "name": "test2",
+            "status": 0, // 0：可使用  1：已过期  2：已作废
+            "discount": 8,
+            "endtime": "2018-10-10 00:00:00",
+            "price": 66,
+            "starttime": "2018-09-10 00:00:00",
+            "card_id": "5baddef1467b621adb48d922",
+            "comment": "xxxxxx", //购物卡注意事项
+          }
+        ],
+        "save_money": "100", // 使用此活动，最多可节省的钱数}
+      },
+      "1": [{
+        "active_type": "0", // 活动类型 0：限时折扣   1：满减优惠
+        "name": "五一特惠", // 活动名称
+        "discount": 7, // 折扣
+        "start": "2018-09-10 00:00:00",
+        "end": "2018-09-10 00:00:00",
+        "use_kind": "0", //  0：全店商品， 1：指定商品
+        "save_money": "101" // 使用此活动，最多可节省的钱数
+      }, {
+        "active_type": "1", // 活动类型 0：限时折扣   1：满减优惠
+        "name": "五一特惠", // 活动名称
+        "discount": 7, // 折扣
+        "start": "2018-09-10 00:00:00",
+        "end": "2018-09-10 00:00:00",
+        "use_kind": "0", //  0：全店商品， 1：指定商品
+        "discount_type": "1", // 0:满减  1：每满减  2: 满件  3：每满件
+        "zengquan": "1", // 0: 不赠券  1：赠券
+        "items": [{
+          "all": 100,
+          "discount_money": 10,
+          "coupon_id": ""
+        }],
+        "save_money": "102" // 使用此活动，最多可节省的钱数
+      }]
+    }
+  },
+  {
+    // 订单页面获取优惠券列表
+    path: '/api/v1/order/coupons',
+    method: 'post',
+    active: true,
+    data: [{
+      "name": "test1",
+      "status": 0, // 0：可使用  1：已过期  2：已作废
+      "discount_money": 1500,
+      "endtime": "2018-10-10 00:00:00",
+      "all_money": 1000,
+      "starttime": "2018-09-10 00:00:00",
+      "coupon_id": "5baddef1467b621adb48d922",
+      "comment": "xxxx",
+      "can_use": 0 // 1 此订单可用，0 此订单不可用
+    }, {
+      "name": "test1",
+      "status": 0, // 0：可使用  1：已过期  2：已作废
+      "discount_money": 150,
+      "endtime": "2018-10-10 00:00:00",
+      "all_money": 1000,
+      "starttime": "2018-09-10 00:00:00",
+      "coupon_id": "5baddef1467b621adb48d922",
+      "comment": "xxxx",
+      "can_use": 0 // 1 此订单可用，0 此订单不可用
+    }]
+  },
+  {
+    // 订单页面获取品牌礼遇列表
+    path: '/api/v1/order/liquan',
+    method: 'get',
+    active: true,
+    data: [{
+        "id": "122",
+        "code": "3344",
+        "name": "生日礼券",
+        "discount_momey": 100,
+        "all_momey": 500,
+        "comment": "描述信息",
+        "can_use": 1
+      },
+      {
+        "id": "122",
+        "code": "3344",
+        "name": "生日礼券",
+        "discount_momey": 100,
+        "all_momey": 500,
+        "comment": "描述信息",
+        "can_use": 0
+      }
+    ]
   }
 ];

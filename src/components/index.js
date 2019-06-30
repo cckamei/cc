@@ -23,7 +23,8 @@ import tabs from './tabs'; //选项卡
 import message from './message'; //新消息提醒
 import popupSelect from './popup-select'; //页面中间弹框单选列表（代替popupConfirm + inputRadio）
 import popupConfirm2 from './popup-confirm2'; //页面中间弹框，使用refs.open方式打开 (代替popupConfirm)
-import range from './mint-ui/range/index';
+import range from './mint-ui/range/index'; //拉杆
+import splitTitle from './split-title'; //块分割线
 
 export default {
   header,
@@ -51,5 +52,6 @@ export default {
   message,
   popupSelect,
   popupConfirm2,
-  range
+  range,
+  splitTitle
 };

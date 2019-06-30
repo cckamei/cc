@@ -26,10 +26,10 @@
           name: 'cardShareURL',
           data: this.shareCard
         }).then(res => {
-          this.src = '.' + res.share_img_url;
-          // this.src = window.htp.apihost + res.share_img_url
+          // this.src = '.' + res.share_img_url;
+          this.src = window.htp.apihost + res.share_img_url
         });
-      },
+      }
     }
   };
 </script>

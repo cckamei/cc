@@ -1,6 +1,6 @@
 export default [{
     path: /api\/v1\/goods\/detail/,
-    active: true,
+    // active: true,
     data: {
       "xiangqiancaizhi": "",
       "fuzuanfenshu": "",
@@ -13,7 +13,7 @@ export default [{
           "name": "专柜联保"
         }
       ],
-      "merchant_code": "DES00153",
+      "merchant_code": "DRGC01070",
       "is_diamond": false,
       "fuzuanxingzhuang": "",
       "slide_img": ["http://img.cc-jewel.com/892dbcce-e197-11e8-bde2-00163e020fbd", "http://img.cc-jewel.com/8ac04390-e197-11e8-bde2-00163e020fbd"],
@@ -51,7 +51,7 @@ export default [{
         "already": true, //是否领取过
         "starttime": "2018-09-10 00:00:00", //开始时间
         "all_money": 1000, //达到满减要求的金额
-        "comment": "xxx", //购买注意事项
+        "comment": "xxx" //购买注意事项
       },
       {
         "coupon_id": "5baddffb38f7564a6a5ca31d",
@@ -61,7 +61,7 @@ export default [{
         "starttime": "2018-09-11 00:00:00",
         "already": false,
         "all_money": 2000,
-        "comment": "xxx",
+        "comment": "xxx"
       }
     ]
   },
@@ -75,7 +75,7 @@ export default [{
         "discount": 7, // 折扣
         "start": "2018-09-10 00:00:00",
         "end": "2018-09-10 00:00:00",
-        "use_kind": "0", //  0：全店商品， 1：指定商品
+        "use_kind": "0" //  0：全店商品， 1：指定商品
       }, {
         "active_type": "1", // 活动类型 0：限时折扣   1：满减优惠
         "name": "五一特惠2", // 活动名称

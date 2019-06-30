@@ -31,7 +31,7 @@
       <div v-else class="empty">
         <img src="@/assets/stone/icon_dia_n.png" alt=""><br/>
         <div class="label">没有找到符合您要求的钻石</div>
-        <div class="advanced">
+        <div v-if="0" class="advanced">
           <button class="btn-txt" @click="$router.push({name: 'advanced'})">立即前往</button>
           <div class="tips">为您推荐<span>高级定制</span>功能，精心打造理想美钻</div>
         </div>
@@ -41,7 +41,7 @@
         <span>加载中...</span>
       </p>
     </div>
-    <v-popup-select ref="sort" title="排序" v-model="sortIndex" :list="sorts" :show.sync="sortVisible" />
+    <v-popup-select ref="sort" title="排序" v-model="sortIndex" :list="sorts" :show.sync="sortVisible" @confirm="handleConfirmSort" />
     <v-popup-confirm2 ref="stone-confirm" @confirm="handleSelectStone">
       <div class="text">确定选择此枚主石？</div>
     </v-popup-confirm2>
@@ -65,19 +65,19 @@
         </li>
         <li>
           <div class="title">净度</div>
-          <v-button-radio v-model="cleanessIndex" :list="cleaness"></v-button-radio>
+          <v-button-radio v-model="cleanessIndex" :cancel="true" :list="cleaness"></v-button-radio>
         </li>
         <li>
           <div class="title">颜色</div>
-          <v-button-radio v-model="colorIndex" :list="colors"></v-button-radio>
+          <v-button-radio v-model="colorIndex" :cancel="true" :list="colors"></v-button-radio>
         </li>
         <li>
           <div class="title">切工</div>
-          <v-button-radio v-model="cutIndex" :list="cuts"></v-button-radio>
+          <v-button-radio v-model="cutIndex" :cancel="true" :list="cuts"></v-button-radio>
         </li>
         <li>
           <div class="title">证书类型</div>
-          <v-button-radio v-model="certificateIndex" :list="certificates"></v-button-radio>
+          <v-button-radio v-model="certificateIndex" :cancel="true" :list="certificates"></v-button-radio>
         </li>
       </ul>
       <div class="filter-footer">
@@ -102,7 +102,12 @@
         pageInfo: {},
         loading: false,
         stoneList: [],
-        sorts: ['价格从低到高', '价格从高到低', '主石重量从低到高', '主石重量从高到低'],
+        sorts: [
+          { label: '价格从低到高', value: 'shouj asc' },
+          { label: '价格从高到低', value: 'shouj desc' },
+          { label: '主石重量从低到高', value: 'zhusz asc' },
+          { label: '主石重量从高到低', value: 'zhusz desc' }
+        ],
         priceStep: 100,
         priceMin: 0,
         priceMax: 0,
@@ -169,7 +174,7 @@
           data: {
             page: (this.pageInfo.currentPage || 0) + 1,
             gsmh: this.stoneMade.gsmh,
-            jinlx: this.stoneMade.jinlx,//金类型
+            jinys: this.stoneMade.jinys,//金类型
             shouc: this.stoneMade.shouc,//手寸
             minPrice: this.price[0],//最小价格
             maxPrice: this.price[1],//最大价格
@@ -178,7 +183,8 @@
             zhusjd: cleaness,//主石净度
             shusys: color,//主石颜色
             zhusqg: cut,//主石切工
-            zslx: certificate//证书类型
+            zslx: certificate,//证书类型
+            orderBy: this.sortIndex === -1 ? '' : this.sorts[this.sortIndex].value//排序
           }
         }).then(res => {
           this.pageInfo = {
@@ -188,19 +194,26 @@
           if(this.pageInfo.currentPage == 1) {
             this.stoneList = [];
           }
-          this.stoneList = this.stoneList.concat(res.infos);
+          setTimeout(() => {
+            this.stoneList = this.stoneList.concat(res.infos);
 
-          if(this.pageInfo.currentPage < this.pageInfo.totalPage) {
-            this.loading = false;
-          } else if(this.pageInfo.currentPage != 1) {
-            this.toast('没有更多数据了');
-          }
+            if(this.pageInfo.currentPage < this.pageInfo.totalPage) {
+              this.loading = false;
+            } else if(this.pageInfo.currentPage != 1) {
+              this.toast('没有更多数据了');
+            }
+          }, 0);
         });
       },
       handleConfirmFilter() {
         this.filterVisible = false;
         this.pageInfo.currentPage = 0;
         this.getStoneList();
+      },
+      handleConfirmSort(index) {
+        this.pageInfo.currentPage = 0;
+        this.getStoneList();
+
       },
       showStoneConfirm(index) {
         this.stoneIndex = index;

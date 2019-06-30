@@ -3,8 +3,8 @@
     <v-header>品牌礼遇</v-header>
     <div class="content">
       <ul class="cards">
-        <li class="card" v-for="(item, index) in cards" :key="index" @click="$router.push({name: 'coupondetail'})">
-          <v-coupon :card="item" useText="已使用" />
+        <li class="card" v-for="(item, index) in cards" :key="index" @click="nextCouponDetail(item.coupon_id)">
+          <v-coupon :card="item" />
         </li>
       </ul>
     </div>
@@ -20,8 +20,21 @@
         cards: []
       };
     },
+    created() {
+      this.getBrandGift();
+    },
     methods: {
-      ...mapActions(['ajax'])
+      ...mapActions(['ajax']),
+      getBrandGift() {
+        this.ajax({
+          name: 'getBrandGift'
+        }).then(res => {
+          this.cards = res.list;
+        });
+      },
+      nextCouponDetail(id) {
+        this.$router.push({ name: 'coupondetail', params: { id } });
+      }
     }
   };
 </script>
