@@ -3,6 +3,9 @@ module.exports = {
   css: {
     loaderOptions: {
       css: {},
+      less: {
+        data: `@import '~@/style/vars.less'`
+      },
       postcss: {
         plugins: [
           require('postcss-px2rem')({

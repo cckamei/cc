@@ -1,13 +1,13 @@
 <template>
   <div class="card flex">
-    <div class="col1 flex-auto">
+    <div class="col1 flex-auto" @click="$emit('click')">
       <div class="price"><span>￥</span>{{card.discount_money | currency}}</div>
       <div class="limit">购物满{{card.all_money}}元使用</div>
       <div class="card-scope">适用范围：{{scope}}</div>
       <div class="expired">有效期 {{formatDate(card.starttime, 'yyyy-MM-dd')}} 至 {{formatDate(card.endtime, 'yyyy-MM-dd')}}</div>
       <div class="share" v-if="isShare && card.status === 0" @click.stop="share">分享</div>
     </div>
-    <div v-if="card.already" class="col2" @click.stop>
+    <div v-if="card.already" class="col2" @click="$emit('click')">
       <div>{{useText}}</div>
     </div>
     <div v-else class="col2" @click.stop="addCoupons">
@@ -77,6 +77,7 @@
             }
           }).then(res => {
             this.card.already = true;
+            this.$emit('click');
           });
         }
       },

@@ -22,6 +22,14 @@ const router = [{
     }
   },
   {
+    name: 'setmeal',
+    path: '/goodslist/goodssearch/goodsdetail/setmeal',
+    component: () => import('@/views/setmeal/index'),
+    meta: {
+      params: []
+    }
+  },
+  {
     name: 'cart',
     path: '/goodslist/goodssearch/goodsdetail/cart',
     component: () => import('@/views/cart'),

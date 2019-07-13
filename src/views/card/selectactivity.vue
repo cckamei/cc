@@ -69,7 +69,7 @@
       },
       getOrderShopCoupon() {
         this.ajax({ name: 'getOrderActivity', data: { "skus": this.cart.map(item => item.cart_id), "kind": "1" } }).then(res => {
-          res.forEach(item => {
+          res.list.forEach(item => {
             let desc = ['全店商品', '相关商品'][+item.use_kind];
             if(item.active_type === '0') {
               desc += `${item.discount}折`;
@@ -96,7 +96,7 @@
             desc += `，活动时间至${formatDate(item.end, 'yyyy-MM-dd')}`;
             item.desc = desc;
           });
-          this.shopCoupon = res;
+          this.shopCoupon = res.list;
         });
       },
       handleUseVipCoupon() {

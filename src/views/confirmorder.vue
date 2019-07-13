@@ -118,6 +118,7 @@
 
 <script>
   import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
+  import { formatPrice } from '@/utils';
 
   export default {
     data() {
@@ -166,12 +167,12 @@
 
       //优惠活动
       if(this.payOrder.activity) {
-        this.activityMoney = this.payOrder.activity.discount_money;
+        this.activityMoney = formatPrice(this.payOrder.activity.discount_money);
       }
 
       //优惠券
       if(this.payOrder.coupon) {
-        this.couponMoney = this.payOrder.coupon.discount_money;
+        this.couponMoney = formatPrice(this.payOrder.coupon.discount_money);
         this.reqData.coupon_id = this.payOrder.coupon.coupon_id;
       }
 
@@ -189,7 +190,7 @@
           deliveryMoney = this.delivery[this.deliveryIndex].price;
         }
 
-        return this.shopMoney + deliveryMoney - this.couponMoney - this.activityMoney;
+        return formatPrice(this.shopMoney + deliveryMoney - this.couponMoney - this.activityMoney);
       }
     },
     methods: {
@@ -226,7 +227,7 @@
           if(kind === '0') {
             this.activityLength += res.list.length ? 1 : 0;
           } else {
-            this.activityLength += res.length;
+            this.activityLength += res.list.length;
           }
         });
       },

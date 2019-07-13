@@ -29,7 +29,7 @@
         <div class="flex tag" v-if="res.tag">
           <button class="tag-btn" v-for="(item, index) in res.tag.split(',')" :key="index">{{item}}</button>
         </div>
-        <div class="shoppig-card flex"><img src="@/assets/goods/icon_gift_p.png" alt="">您持有可优惠本商品的购物卡</div>
+        <div class="shoppig-card flex" v-if="cards.length"><img src="@/assets/goods/icon_gift_p.png" alt="">您持有可优惠本商品的购物卡</div>
         <div class="name">{{res.goods_title}}</div>
         <div class="desc">{{res.sub_title}}</div>
         <ul class="mark flex">
@@ -50,7 +50,7 @@
             </template>
             <ul class="benifit-list">
               <li v-for="(card, index) in benifit" :key="index">
-                <v-coupon :card="card"></v-coupon>
+                <v-coupon :isShare="false" :card="card"></v-coupon>
               </li>
             </ul>
           </v-form-slide-up>
@@ -197,6 +197,22 @@
           </ul>
         </v-form-slide-up>
       </div>
+      <div class="gap" v-if="0"></div>
+      <div class="set-meal-wrapper" v-if="0">
+        <v-split-title>搭配套餐</v-split-title>
+        <div class="set-meal flex" @click="$router.push({name: 'setmeal'});">
+          <div class="img">
+            <img :src="setMeal.img" alt="">
+          </div>
+          <div class="detail flex-auto flex arrow">
+            <span class="name">{{setMeal.title}}</span>
+            <span class="desc">{{setMeal.desc}}</span>
+            <div class="line3">
+              套餐价：<span class="price"><span>￥</span>{{setMeal.minPrice | currency}} - {{setMeal.minPrice | currency}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="gap"></div>
       <div ref="image-text" class="section image-text">
         <div class="title flex"><span>图文详情</span></div>
@@ -287,7 +303,14 @@
         shareVisible: false,
         autoOpenSKU: false,
         emp_id: getParams().emp_id || '',
-        goodsId: getParams().goodsId || ''
+        goodsId: getParams().goodsId || '',
+        setMeal: {
+          title: '卡美婚嫁礼物组合',
+          desc: '多件搭配购买更优惠',
+          minPrice: 18888,
+          maxPrice: 28888
+        },
+        cards: []
       };
     },
     created() {
@@ -313,6 +336,7 @@
       this.getRecommend();
       this.fetchBenifit();
       this.getActivity();
+      this.getMyCard();
     },
     mounted() {
       setTimeout(() => {
@@ -458,6 +482,16 @@
           this.wxShare();
         });
       },
+      getMyCard() {
+        this.ajax({
+          name: 'getMyCards',
+          data: {
+            'goods_id': this.goodsId
+          }
+        }).then(res => {
+          this.cards = res;
+        });
+      },
       getRecommend() {
         this.ajax({
           name: 'getRecommend'
@@ -501,6 +535,23 @@
                 }
 
                 if(item.zengquan === '1') {
+                  // scope() {
+                  //         if(this.card.use_type_range) {
+                  //           let text = this.card.use_type_range.join('、');
+
+                  //           switch(this.card.use_type) {
+                  //             case 0: text = '全部商品'; break;
+                  //             case 1: text += '套系'; break;
+                  //             case 2: text += '款式'; break;
+                  //             case 3: text += '镶嵌方式'; break;
+                  //             default: text = '';
+                  //           }
+                  //           return text;
+                  //         } else {
+                  //           return '';
+                  //         }
+                  //       }
+
                   // text += `赠优惠券一张(满TODO减TODO，限XX套系)`;
                   text += `赠优惠券一张`;
                 } else {
@@ -656,8 +707,12 @@
         window.wx.closeWindow();
       },
       goStoneCusMade() {
-        this.setStoneMade({ gsmh: this.res.merchant_code, goods_id: this.res.goods_id, goods_title: this.res.goods_title, img: this.res.img });
-        this.$router.push({ name: 'cusstone' });
+        if(this.res.skus.length) {
+          this.setStoneMade({ gsmh: this.res.skus[0].gsmh, goods_id: this.res.goods_id, goods_title: this.res.goods_title, img: this.res.img });
+          this.$router.push({ name: 'cusstone' });
+        } else {
+          this.toast('公司模号为空！');
+        }
       }
     }
   };
@@ -879,6 +934,57 @@
       .title {
         color: #666;
         font-size: 24px;
+      }
+    }
+  }
+
+  .set-meal-wrapper {
+    background-color: #fff;
+  }
+
+  .set-meal {
+    padding: 30px;
+    align-items: stretch;
+    .img {
+      width: 200px;
+      height: 200px;
+      margin-right: 30px;
+      flex-shrink: 0;
+      img {
+        height: 100%;
+      }
+    }
+    .detail {
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+      .name {
+        font-size: 24px;
+        color: #666;
+        padding-top: 10px;
+      }
+      .desc {
+        font-size: 20px;
+        color: #999;
+        padding-top: 20px;
+      }
+      .line3 {
+        position: absolute;
+        width: 100%;
+        bottom: 10px;
+        left: 0;
+        align-items: center;
+        justify-content: space-between;
+        .price {
+          font-size: 30px;
+          color: @color4;
+          span {
+            font-size: 20px;
+          }
+        }
+      }
+      &.arrow:after {
+        top: 25%;
       }
     }
   }

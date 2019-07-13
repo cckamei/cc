@@ -5,8 +5,8 @@
       <v-tabs :tabs="['可使用', '不可用']" @click="i => showIndex = i"></v-tabs>
       <template v-if="showIndex === 0">
         <ul class="cards" v-if="cardsNormal.length">
-          <li class="card" v-for="(item, index) in cardsNormal" :key="index" @click="handleClick(item)">
-            <v-coupon :card="item" :isShare="false" useText="立即使用" />
+          <li class="card" v-for="(item, index) in cardsNormal" :key="index">
+            <v-coupon :card="item" :isShare="false" useText="立即使用" @click="handleClick(item)" />
           </li>
         </ul>
         <div v-else class="card-empty">
@@ -16,8 +16,8 @@
         <template v-if="giftUse.length">
           <v-split-title>品牌礼遇</v-split-title>
           <ul class="cards" v-if="cart.length !== 1">
-            <li class="card" v-for="(item, index) in giftUse" :key="index" @click="handleClick(item)">
-              <v-coupon :card="item" :isShare="false" useText="立即使用" />
+            <li class="card" v-for="(item, index) in giftUse" :key="index">
+              <v-coupon :card="item" :isShare="false" useText="立即使用" @click="handleClick(item)" />
             </li>
           </ul>
           <div v-else class="tips">

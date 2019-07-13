@@ -34,7 +34,7 @@
         return (index) => {
           if(this.materialList.length && index !== -1) {
             const thisMaterial = this.materialList[index];
-            return this.colors[thisMaterial.kt_caizhi_color] + thisMaterial.kt_caizhi + '金';
+            return (this.colors[thisMaterial.kt_caizhi_color] || '') + thisMaterial.kt_caizhi + '金';
           } else {
             return '';
           }
