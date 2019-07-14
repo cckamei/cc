@@ -37,7 +37,7 @@
         </li>
         <li class="option section">
           <div class="row">
-            <v-form-input v-if="payOrder.activity" class="activity" label="优惠活动" :arrow="true" :value="'已选 优惠' + activityMoney" @input-click="$router.push({name: 'selectactivity'})"></v-form-input>
+            <v-form-input v-if="payOrder.activity" class="activity" label="优惠活动" :arrow="true" :value="'已选 ' + (payOrder.activity.zengquan === '1' ? '赠券一张' : ('优惠' + activityMoney))" @input-click="$router.push({name: 'selectactivity'})"></v-form-input>
             <v-form-input v-else-if="activityLength" class="activity" label="优惠活动" :arrow="true" :value="activityLength + '个 可参与的活动'" @input-click="$router.push({name: 'selectactivity'})"></v-form-input>
             <v-form-input v-else label="优惠活动" class="activity" :arrow="true" value="没有可参与的活动" @input-click="$router.push({name: 'selectactivity'})"></v-form-input>
           </div>
