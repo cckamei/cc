@@ -5,8 +5,8 @@
       <slot></slot>
     </div>
     <div class="btn-group flex">
-      <button class="btn cancel" @click="visible = false">取消</button>
-      <button class="btn confirm" :class="{active: isConfirm}" @click="isConfirm && confirm()">确定</button>
+      <button v-if="cancelBtn" class="btn cancel" @click="visible = false">{{cancelText}}</button>
+      <button v-if="confirmBtn" class="btn confirm" :class="{active: isConfirm}" @click="isConfirm && confirm()">{{confirmText}}</button>
     </div>
   </mt-popup>
 </template>
@@ -21,6 +21,22 @@
       title: {
         type: String,
         default: ''
+      },
+      cancelBtn: {
+        type: Boolean,
+        default: true
+      },
+      cancelText: {
+        type: String,
+        default: '取消'
+      },
+      confirmBtn: {
+        type: Boolean,
+        default: true
+      },
+      confirmText: {
+        type: String,
+        default: '确定'
       }
     },
     data() {
@@ -64,7 +80,7 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
+  @import '~@/style/vars.less';
   .popup-confirm {
     border-radius: 20px;
     overflow: hidden;
@@ -88,7 +104,7 @@
     height: 80px;
     border-top: 1px solid #f0f0f0; /*no*/
     .btn {
-      width: 50%;
+      flex: auto;
       height: 100%;
       font-size: 30px;
       border: 0;

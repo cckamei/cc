@@ -31,8 +31,11 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
+  @import '~@/style/vars.less';
   .tabs-warp {
+    position: absolute;
+    top: 96px;
+    z-index: 1;
     width: 100%;
     height: 96px;
     box-shadow: 0 7px 50px 10px rgba(170, 170, 170, 0.5);

@@ -1,8 +1,8 @@
 <template>
   <div class="pt">
     <v-header class="header">我的购物卡</v-header>
+    <v-tabs :tabs="['可使用', '已过期']" @click="i => showIndex = i"></v-tabs>
     <div class="content">
-      <v-tabs :tabs="['可使用', '已过期']" @click="i => showIndex = i"></v-tabs>
       <v-message msg="购物卡优惠" @click="$router.push({name: 'cardmall'})"></v-message>
       <ul class="cards" v-if="cardsNormal.length" v-show="showIndex === 0">
         <li class="card" v-for="(item, index) in cardsNormal" :key="index" @click="nextCardDetail(item.card_id)">
@@ -69,6 +69,7 @@
 
 <style lang="less" scoped>
   .pt {
+    padding-top: 196px;
     background-color: #fff;
     .header {
       box-shadow: none;

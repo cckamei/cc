@@ -22,7 +22,7 @@
             <!-- <span class="desc">{{item.sub_title}}</span> -->
             <div class="line3 flex">
               <div class="price">￥{{item.shouj | currency}}</div>
-              <button class="label btn-txt btn-txt-s">{{labels[+item.fhlx - 1]}}</button>
+              <button class="label btn-txt btn-txt-s">{{labels[item.fhlx]}}</button>
             </div>
             <div class="cart"></div>
           </div>
@@ -124,7 +124,11 @@
         cuts: [],
         certificateIndex: -1,
         certificates: [],
-        labels: ['现货', '定制15天', '定制45天']
+        labels: {
+          'A': '现货',
+          'B': '定制15天',
+          'C': '定制45天'
+        }
       };
     },
     computed: {
@@ -228,7 +232,7 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
+  @import '~@/style/vars.less';
   .pt {
     padding-top: 192px;
     background-color: #fff;
@@ -259,7 +263,7 @@
         .arrow-down {
           width: 24px;
           height: 24px;
-          background: url("~@/assets/goods/icon_arrow_d.png") no-repeat;
+          background: url('~@/assets/goods/icon_arrow_d.png') no-repeat;
           background-size: 100%;
           transition: all 0.2s;
           margin-left: 16px;
@@ -323,7 +327,7 @@
           right: 16px;
           width: 40px;
           height: 40px;
-          background: url("~@/assets/goods/icon_cart.png") no-repeat;
+          background: url('~@/assets/goods/icon_cart.png') no-repeat;
           background-size: 100%;
         }
       }

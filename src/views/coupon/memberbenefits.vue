@@ -3,8 +3,12 @@
     <v-header>品牌礼遇</v-header>
     <div class="content">
       <ul class="cards">
-        <li class="card" v-for="(item, index) in cards" :key="index" @click="nextCouponDetail(item.coupon_id)">
-          <v-coupon :card="item" />
+        <li class="card" v-for="(item, index) in cards" :key="index">
+          <div class="col1 flex-auto" @click="$emit('click')">
+            <div class="price"><span>￥</span>{{item.discount_money | currency}}</div>
+            <div class="limit">购物满{{item.all_money}}元使用</div>
+            <div class="card-scope">使用要求：{{item.comment}}</div>
+          </div>
         </li>
       </ul>
     </div>
@@ -31,9 +35,6 @@
         }).then(res => {
           this.cards = res.list;
         });
-      },
-      nextCouponDetail(id) {
-        this.$router.push({ name: 'coupondetail', params: { id } });
       }
     }
   };
@@ -48,8 +49,38 @@
     margin-top: 10px;
     padding: 20px;
     .card {
-      padding-bottom: 20px;
-      background-color: #fff;
+      background-color: #fff1f1;
+      padding: 30px;
+      background-size: 100% 100%;
+      color: #fa7878;
+      border-radius: 10px;
+      .col1 {
+        position: relative;
+        .price {
+          font-size: 60px;
+          span {
+            font-size: 36px;
+          }
+        }
+        .limit,
+        .expired {
+          font-size: 20px;
+        }
+      }
+      .col2 {
+        width: 80px;
+        flex-shrink: 0;
+        text-align: center;
+        div {
+          width: 0;
+          left: 50%;
+          margin-left: 40%;
+        }
+      }
+      .card-scope {
+        font-size: 20px;
+        padding-bottom: 10px;
+      }
     }
   }
 </style>

@@ -24,7 +24,7 @@
       <div class="info">
         <div class="price">
           <i>￥</i>{{(sku.price || res.price) | currency}}
-          <img v-if="0" @click="clickShare" class="right" src="@/assets/goods/button_share.png" alt="">
+          <img @click="clickShare" class="right" src="@/assets/goods/icon_qrcode.png" alt="">
         </div>
         <div class="flex tag" v-if="res.tag">
           <button class="tag-btn" v-for="(item, index) in res.tag.split(',')" :key="index">{{item}}</button>
@@ -238,14 +238,17 @@
 
     <v-menus v-model="menusVisible" :menus="['home', 'search', 'collect']" name="goodsdetail"></v-menus>
     <v-scroll-top ref="scroll-top" v-model="topVisible" @top="(t)=> top = t"></v-scroll-top>
-    <v-popup-confirm title="分享类型" v-model="shareVisible" @confirm="wxShare" :isConfirm="shareIndex !== -1">
+    <!-- <v-popup-confirm title="分享类型" v-model="shareVisible" @confirm="wxShare" :isConfirm="shareIndex !== -1">
       <v-input-radio v-model="shareIndex" :list="['普通分享','员工分享']"></v-input-radio>
-    </v-popup-confirm>
+    </v-popup-confirm> -->
     <v-popup-confirm title="" v-model="serviceVisible" @confirm="goCustomService">
       <div class="txt-center">
-        即将离开商城，接通您的专属客服。<br>您可以在公众号中回复“人工服务”与客服进行联系与沟通。
+        即将离开商城，接通您的专属客服。<br>在公众号中回复“人工服务”与客服进行联系与沟通。
       </div>
     </v-popup-confirm>
+    <v-popup-confirm2 class="qrcode-popup" title="请向顾客出示二维码" :confirm-btn="false" cancel-text="关闭" ref="qrcode-popup">
+      <div class="qrcode" ref="qrcode" alt="" />
+    </v-popup-confirm2>
   </div>
 </template>
 
@@ -300,7 +303,7 @@
         benifit: [], //优惠券
         activity: [], //优惠活动
         shareIndex: 0, //0普通分享 1员工分享
-        shareVisible: false,
+        // shareVisible: false,
         autoOpenSKU: false,
         emp_id: getParams().emp_id || '',
         goodsId: getParams().goodsId || '',
@@ -310,7 +313,8 @@
           minPrice: 18888,
           maxPrice: 28888
         },
-        cards: []
+        cards: [],
+        qrcode: ''
       };
     },
     created() {
@@ -495,9 +499,6 @@
       getRecommend() {
         this.ajax({
           name: 'getRecommend'
-          // data: {
-          //   'goods_id': this.goodsId
-          // }
         }).then(res => {
           this.recommend = res;
         });
@@ -535,30 +536,15 @@
                 }
 
                 if(item.zengquan === '1') {
-                  // scope() {
-                  //         if(this.card.use_type_range) {
-                  //           let text = this.card.use_type_range.join('、');
-
-                  //           switch(this.card.use_type) {
-                  //             case 0: text = '全部商品'; break;
-                  //             case 1: text += '套系'; break;
-                  //             case 2: text += '款式'; break;
-                  //             case 3: text += '镶嵌方式'; break;
-                  //             default: text = '';
-                  //           }
-                  //           return text;
-                  //         } else {
-                  //           return '';
-                  //         }
-                  //       }
-
-                  // text += `赠优惠券一张(满TODO减TODO，限XX套系)`;
                   text += `赠优惠券一张`;
                 } else {
                   text += `减${d.discount_money}元`;
                 }
                 return text;
               }).join('，');
+              if(item.items.length > 1 && ['0', '2'].includes(item.discount_type)) {
+                desc += '(单笔订单仅可获赠1张)';
+              }
             }
             desc += `，活动时间至${formatDate(item.end, 'yyyy-MM-dd')}`;
             item.desc = desc;
@@ -671,12 +657,15 @@
         });
       },
       clickShare() {
-        // if(!this.token) {
-        //   this.$router.push({ name: 'login', params: { name: 'goodsdetail' } });
-        //   return false;
-        // }
-
-        // this.shareVisible = true;
+        this.$refs['qrcode-popup'].open();
+        this.$nextTick(() => {
+          let ext = '';
+          if(this.getUserInfo.is_distributor && this.userId) {
+            ext = `&emp_id=${this.userId}`;
+          }
+          let url = `${window.location.origin}/?from=wechat#/goodslist/goodssearch/goodsdetail?goodsId=${this.goodsId}${ext}`
+          new QRCode(this.$refs.qrcode, url);
+        });
       },
       wxShare() {
         if(!browser().isWeixin) {
@@ -719,7 +708,7 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
+  @import '~@/style/vars.less';
   .header {
     background-color: transparent !important;
     &.shadow {
@@ -768,8 +757,7 @@
       img {
         width: 40px;
         height: 40px;
-        padding: 20px;
-        margin-top: -10px;
+        margin-top: 10px;
       }
     }
     .tag {
@@ -907,18 +895,18 @@
           width: 40px;
           height: 40px;
           &.plus {
-            background: url("~@/assets/goods/button_plus_l.png") no-repeat;
+            background: url('~@/assets/goods/button_plus_l.png') no-repeat;
             background-size: 100%;
             &.active {
-              background: url("~@/assets/goods/button_plus_d.png") no-repeat;
+              background: url('~@/assets/goods/button_plus_d.png') no-repeat;
               background-size: 100%;
             }
           }
           &.minus {
-            background: url("~@/assets/goods/button_minus_l.png") no-repeat;
+            background: url('~@/assets/goods/button_minus_l.png') no-repeat;
             background-size: 100%;
             &.active {
-              background: url("~@/assets/goods/button_minus_d.png") no-repeat;
+              background: url('~@/assets/goods/button_minus_d.png') no-repeat;
               background-size: 100%;
             }
           }
@@ -1010,7 +998,7 @@
       width: 100%;
       justify-content: center;
       &:after {
-        content: "";
+        content: '';
         left: 30px;
         right: 30px;
         height: 1px; /*no*/
@@ -1052,11 +1040,11 @@
         height: 100%;
         font-size: 30px;
         &.cart {
-          background: url("~@/assets/goods/button_cart.png") no-repeat;
+          background: url('~@/assets/goods/button_cart.png') no-repeat;
           background-size: 100% 100%;
         }
         &.purchase {
-          background: url("~@/assets/goods/button_buynow.png") no-repeat;
+          background: url('~@/assets/goods/button_buynow.png') no-repeat;
           background-size: 100% 100%;
         }
       }
@@ -1065,7 +1053,7 @@
 </style>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
+  @import '~@/style/vars.less';
   /*popup内部的里面元素的样式直接放到该页面的根部 否则样式在手机上无效*/
   .activity-btn {
     border-radius: 12px;
@@ -1163,6 +1151,11 @@
         background-color: #fff;
       }
     }
+  }
+
+  .qrcode {
+    margin: 0 auto;
+    padding: 40px;
   }
 </style>
 

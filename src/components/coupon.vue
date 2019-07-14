@@ -93,12 +93,12 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
+  @import '~@/style/vars.less';
   .card {
     background-color: #fff1f1;
     padding: 30px;
     padding-right: 0;
-    background: url("~@/assets/coupon/coupon.png") no-repeat;
+    background: url('~@/assets/coupon/coupon.png') no-repeat;
     background-size: 100% 100%;
     color: #fa7878;
     .col1 {

@@ -20,7 +20,7 @@
         <span>待领优惠券</span>
       </div>
       <div class="card-item" @click="$router.push({ name: 'memberbenefits' })">
-        <div class="count">0</div>
+        <div class="count">{{memberBenefits.length}}</div>
         <span>品牌礼遇</span>
       </div>
     </div>
@@ -33,11 +33,13 @@
     data() {
       return {
         res: {},
-        dot: false
+        dot: false,
+        memberBenefits: []
       };
     },
     created() {
       this.getCouponCount();
+      this.getBrandGift();
     },
     methods: {
       ...mapActions(['ajax']),
@@ -53,6 +55,13 @@
           name: 'coupons'
         }).then(res => {
           this.dot = res.some(item => !item.already);
+        });
+      },
+      getBrandGift() {
+        this.ajax({
+          name: 'getBrandGift'
+        }).then(res => {
+          this.memberBenefits = res.list;
         });
       }
     }

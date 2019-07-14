@@ -1,8 +1,8 @@
 <template>
   <div class="pt">
     <v-header class="header">选择优惠券</v-header>
+    <v-tabs :tabs="['可使用', '不可用']" @click="i => showIndex = i"></v-tabs>
     <div class="content">
-      <v-tabs :tabs="['可使用', '不可用']" @click="i => showIndex = i"></v-tabs>
       <template v-if="showIndex === 0">
         <ul class="cards" v-if="cardsNormal.length">
           <li class="card" v-for="(item, index) in cardsNormal" :key="index">
@@ -110,6 +110,7 @@
 <style lang="less" scoped>
   .pt {
     background-color: #fff;
+    padding-top: 196px;
     .header {
       box-shadow: none;
     }

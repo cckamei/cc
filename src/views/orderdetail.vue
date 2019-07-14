@@ -158,7 +158,7 @@
     </v-popup-confirm>
     <v-popup-confirm title="" v-model="serviceVisible" @confirm="goCustomService">
       <div class="txt-center">
-        即将离开商城，接通您的专属客服。<br>您可以在公众号中回复“人工服务”与客服进行联系与沟通。
+        即将离开商城，接通您的专属客服。<br>在公众号中回复“人工服务”与客服进行联系与沟通。
       </div>
     </v-popup-confirm>
   </div>

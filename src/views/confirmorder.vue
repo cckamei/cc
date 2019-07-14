@@ -141,8 +141,11 @@
           skus: [],
           coupon_id: '', //优惠券id
           address_id: '', //地址id
-          yaoqiu: '',
-          logitics_id: '' //快递id
+          yaoqiu: '', //备注
+          logitics_id: '', //快递id
+          active_type: 1, //优惠活动类型 1: 购物卡优惠 2: 店铺优惠
+          active_id: '', // 当active_type 为店铺优惠时，传指定的活动ID
+          liquan_id: '' // 优惠礼券ID 即会员礼遇
         },
         activityLength: 0,
         couponLength: 0
@@ -238,7 +241,12 @@
       },
       addOrder() {
         this.reqData.logitics_id = this.delivery[this.deliveryIndex].id;
-        // this.reqData.selectCoupons = this.benifit.filter(item => item.already);
+        if(this.payOrder.activity) {
+          if(this.payOrder.activity.kind === 1) {
+            this.reqData.active_type = 2;
+            this.reqData.active_id = this.payOrder.activity.id;
+          }
+        }
 
         if(this.cart.filter(item => item.limit == 0).length) {
           this.toast('商品库存不足');
@@ -290,7 +298,10 @@
                 num: this.getPayOrder.num,
                 kezi: this.getPayOrder.kezi,
                 kezi_yaoqiu: this.getPayOrder.kezi_yaoqiu,
-                emp_id: this.getPayOrder.emp_id
+                emp_id: this.getPayOrder.emp_id,
+                active_type: this.reqData.active_type,
+                active_id: this.reqData.active_id,
+                liquan_id: this.reqData.liquan_id
               }
             }).then(res => {
               Object.assign(res, this.reqData);
@@ -311,7 +322,7 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
+  @import '~@/style/vars.less';
   .sections {
     position: relative;
     margin: 20px;
@@ -420,12 +431,12 @@
           }
           .select {
             margin-left: 6px;
-            background: url("~@/assets/payment/button_select_off.png") no-repeat;
+            background: url('~@/assets/payment/button_select_off.png') no-repeat;
             background-size: 100% 100%;
             width: 24px;
             height: 24px;
             &.active {
-              background: url("~@/assets/payment/button_select_on.png") no-repeat;
+              background: url('~@/assets/payment/button_select_on.png') no-repeat;
               background-size: 100% 100%;
             }
           }
@@ -527,7 +538,7 @@
 </style>
 
 <style lang="less">
-  @import "~@/style/vars.less";
+  @import '~@/style/vars.less';
   .confirm-order {
     .benifit-list {
       li {
