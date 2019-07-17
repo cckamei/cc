@@ -1,6 +1,6 @@
 <template>
   <div class="pt pb">
-    <v-header>主石定制</v-header>
+    <v-header>{{isAdvanced ? '高级' : '主石'}}定制</v-header>
     <div class="content">
       <div class="gap"></div>
       <div class="stone-header flex">
@@ -22,13 +22,13 @@
       </div>
       <div class="gap"></div>
       <div class="row">
-        <div class="flex arrow" @click="$refs.material.open()">
+        <div class="flex" :class="{arrow: !isAdvanced}" @click="!isAdvanced && $refs.material.open()">
           <div class="label">戒托材质</div>
           <div class="input ellipsis flex" :class="{active: !!material(materialIndex)}">{{material(materialIndex) || '请选择戒托材质'}}</div>
         </div>
       </div>
       <div class="row">
-        <div class="flex arrow" @click="handleOpenSize">
+        <div class="flex" :class="{arrow: !isAdvanced}" @click="!isAdvanced && handleOpenSize()">
           <div class="label">戒托手寸</div>
           <div class="input ellipsis flex" :class="{active: !!ringName}">{{ringName || '请选择戒托手寸'}}</div>
         </div>
@@ -64,10 +64,15 @@
           <div v-else class="input ellipsis flex">全部选定后显示</div>
         </div>
       </div>
+      <div class="gap"></div>
+      <div class="row">
+        <v-form-input class="remark" label="留言" v-model="remark" placeholder="（选填）请填写您的要求"></v-form-input>
+      </div>
     </div>
     <div class="footer">
       <div class="btns">
-        <button class="btn" :class="{active: isActive}" @click="isActive && handlePurchase()">立即购买</button>
+        <button v-if="isAdvanced" class="btn" :class="{active: isActive}" @click="isActive && handlePurchase('S')">提交订单</button>
+        <button v-else class="btn" :class="{active: isActive}" @click="isActive && handlePurchase('N')">立即购买</button>
       </div>
     </div>
     <!-- <v-popup-confirm2 ref="sizes" title="戒托手寸" class="sizes" :is-confirm="sizeIndex1 !== -1 || sizeIndex2 !== -1" @confirm="handleConfirmSize">
@@ -116,6 +121,12 @@
             selectedSizeIndex: -1
           });
         }
+        if(from.name === 'selectstone' && vm.stoneMade && vm.stoneMade.isAdvanced) {
+          vm.setStoneMade({
+            stone: null,
+            isAdvanced: false
+          });
+        }
       });
     },
     beforeRouteLeave(to, from, next) {
@@ -138,14 +149,15 @@
       }
     },
     created() {
+      this.isAdvanced = this.$route.name === 'advanced';
       this.getEmptyRing(true);
     },
     methods: {
       ...mapMutations(['setStoneMade']),
       ...mapActions(['ajax']),
-      handlePurchase() {
+      handlePurchase(ddlx) {
         this.setStoneMade({
-          stone: Object.assign(this.stoneMade.stone, { ddlx: 'N' })
+          stone: Object.assign(this.stoneMade.stone, { ddlx })
         });
         this.$router.push({ name: 'cusstoneorder' });
       }

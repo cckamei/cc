@@ -1,4 +1,5 @@
-const router = [{
+const router = [
+  {
     name: 'index',
     path: '/',
     component: () => import('@/views/home')
@@ -91,6 +92,11 @@ const router = [{
   {
     name: 'advanced',
     path: '/goodslist/goodssearch/goodsdetail/cusstone/selectstone/advanced',
+    component: () => import('@/views/cusstone/index')
+  },
+  {
+    name: 'advancedselect',
+    path: '/goodslist/goodssearch/goodsdetail/cusstone/selectstone/advanced/select',
     component: () => import('@/views/cusstone/advanced')
   },
   {

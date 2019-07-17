@@ -13,7 +13,9 @@
         sizeIndex: -1,
         selectedSizeIndex: -1,
         colors: { W: '白色', Y: '黄色', R: '玫瑰金' },
-        labels: ['现货', '15天', '45天']
+        labels: ['现货', '15天', '45天'],
+        remark: '',
+        isAdvanced: false
       };
     },
     computed: {
@@ -107,7 +109,11 @@
             jinys: this.materialList[this.materialIndex].kt_caizhi_color,
             shouc: this.sizes.ring[this.selectedSizeIndex].replace('号', '#')
           });
-          this.$router.push({ name: 'selectstone', params: {} });
+          if(this.isAdvanced) {
+            this.$router.push({ name: 'advancedselect' });
+          } else {
+            this.$router.push({ name: 'selectstone' });
+          }
         }
       },
       checkJieTuo(materialsOnly = false) {

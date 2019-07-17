@@ -1,127 +1,68 @@
 <template>
   <div class="pt pb advanced">
-    <v-header>高级定制</v-header>
+    <v-header class="header">主石选择</v-header>
     <div class="content">
-      <div class="gap"></div>
-      <div class="stone-header flex">
-        <div class="img"><img :src="stoneMade.img" alt=""></div>
-        <div class="detail flex-auto flex">
-          <span class="name">{{stoneMade.goods_title}}</span>
-          <span class="desc"></span>
-          <div class="line3">
-            <template v-if="stoneMade.stone && stoneMade.stone.shouj">
-              <div class="tips" v-if="stoneMade.stone.fhlx == 1">{{labels[+stoneMade.stone.fhlx - 1]}}</div>
-              <div class="tips" v-else>当前方案需{{labels[+stoneMade.stone.fhlx - 1]}}完成定制</div>
-              合计：&nbsp;<span class="price"><span>￥</span>{{stoneMade.stone.shouj | currency}}</span>
-            </template>
-            <template v-else>
-              合计：&nbsp;<span class="txt-lightgray">全部选定后显示</span>
-            </template>
+      <ul class="filter-content">
+        <li>
+          <div class="title">重量</div>
+          <a-slider v-model="weight" :defaultValue="weightMin" :min="weightMin" :max="weightMax" :step="weightStep" />
+          <div class="range-value">
+            <button>{{weight}}克拉</button>
           </div>
-        </div>
-      </div>
-      <div class="gap"></div>
-      <div class="row">
-        <div class="flex arrow" @click="$refs.material.open()">
-          <div class="label">戒托材质</div>
-          <div class="input ellipsis flex" :class="{active: !!material(materialIndex)}">{{material(materialIndex) || '请选择戒托材质'}}</div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="flex arrow" @click="handleOpenSize">
-          <div class="label">戒托手寸</div>
-          <div class="input ellipsis flex" :class="{active: !!ringName}">{{ringName || '请选择戒托手寸'}}</div>
-        </div>
-      </div>
-      <div class="gap"></div>
-      <div class="row bb form-input">
-        <v-form-input label="主石重量" v-model="weight" placeholder="请填写主石重量"></v-form-input>
-      </div>
-      <div class="row bb">
-        <div class="flex arrow" @click="checkJieTuo() && handleOpenCleaness()">
-          <div class="label">主石净度</div>
-          <div class="input ellipsis flex" :class="{active: !!cleanessList[selectedCleanessIndex]}">{{cleanessList[selectedCleanessIndex] || '请选择主石净度'}}</div>
-        </div>
-      </div>
-      <div class="row bb">
-        <div class="flex arrow" @click="checkJieTuo() && handleOpenColor()">
-          <div class="label">主石颜色</div>
-          <div class="input ellipsis flex" :class="{active: !!colorList[selectedColorIndex]}">{{colorList[selectedColorIndex] || '请选择主石颜色'}}</div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="flex arrow" @click="checkJieTuo() && $refs.certificate.open()">
-          <div class="label">证书类型</div>
-          <div class="input ellipsis flex" :class="{active: !!certificateList[certificateIndex]}">{{certificateList[certificateIndex] || '请选择证书类型'}}</div>
-        </div>
-      </div>
-      <div class="gap"></div>
-      <div class="row form-input">
-        <v-form-input label="留言" v-model="comments" placeholder="（选填）请填写您的要求"></v-form-input>
-      </div>
+        </li>
+        <li>
+          <div class="title">净度</div>
+          <v-button-radio class="fixwidth" v-model="cleanessIndex" :cancel="true" :list="cleaness"></v-button-radio>
+        </li>
+        <li>
+          <div class="title">颜色</div>
+          <v-button-radio class="fixwidth" v-model="colorIndex" :cancel="true" :list="colors"></v-button-radio>
+        </li>
+        <li>
+          <div class="title">切工</div>
+          <v-button-radio class="fixwidth" v-model="cutIndex" :cancel="true" :list="cuts"></v-button-radio>
+        </li>
+        <li>
+          <div class="title">证书类型</div>
+          <v-button-radio class="fixwidth" v-model="certificateIndex" :cancel="true" :list="certificates"></v-button-radio>
+        </li>
+      </ul>
     </div>
     <div class="footer">
       <div class="btns">
-        <button class="btn" :class="{active: isActive}" @click="isActive && handlePurchase()">提交订单</button>
+        <button class="btn" :class="{active: isActive}" @click="isActive && handleConfirmFilter()">确定</button>
       </div>
     </div>
-    <v-popup-confirm2 ref="sizes" title="戒托手寸" class="sizes" :is-confirm="sizeIndex !== -1" @confirm="handleConfirmSize">
-      <ul class="list flex">
-        <li v-for="(item, index) in sizes.ring" :key="index">
-          <button :class="{active: sizeIndex === index}" @click="handleSelectRing(index)">{{item}}</button>
-        </li>
-      </ul>
-    </v-popup-confirm2>
-    <v-popup-select ref="material" title="戒托材质" v-model="materialIndex" :list="materialItem" />
-    <v-popup-confirm2 ref="cleaness" title="主石净度" class="sizes" :is-confirm="cleanessIndex !== -1" @confirm="selectedCleanessIndex = cleanessIndex">
-      <ul class="list flex">
-        <li v-for="(item, index) in cleanessList" :key="index">
-          <button :class="{active: cleanessIndex === index}" @click="cleanessIndex = index">{{item}}</button>
-        </li>
-      </ul>
-    </v-popup-confirm2>
-    <v-popup-confirm2 ref="color" title="主石颜色" class="sizes" :is-confirm="colorIndex !== -1" @confirm="selectedColorIndex = colorIndex">
-      <ul class="list flex">
-        <li v-for="(item, index) in colorList" :key="index">
-          <button :class="{active: colorIndex === index}" @click="colorIndex = index">{{item}}</button>
-        </li>
-      </ul>
-    </v-popup-confirm2>
-    <v-popup-select ref="certificate" title="证书类型" v-model="certificateIndex" :list="certificateList" />
   </div>
 </template>
 
 <script>
-  import { mapMutations, mapGetters, mapActions, mapState } from 'vuex';
-  import minix from './components/mixin';
+  import { mapActions, mapState, mapMutations } from 'vuex';
 
   export default {
-    mixins: [minix],
     data() {
       return {
-        weight: '',
-        comments: '',
+        weightStep: 0.01,
+        weightMin: 0,
+        weightMax: 0,
+        weight: 0,
         cleanessIndex: -1,
-        selectedCleanessIndex: -1,
-        cleanessList: [],
+        cleaness: [],
         colorIndex: -1,
-        selectedColorIndex: -1,
-        colorList: [],
+        colors: [],
+        cutIndex: -1,
+        cuts: [],
         certificateIndex: -1,
-        certificateList: []
+        certificates: [],
       };
     },
     computed: {
+      ...mapState(['stoneMade']),
       isActive() {
-        return this.weight &&
-          this.selectedSizeIndex !== -1 &&
-          this.cleanessIndex !== -1 &&
-          this.colorIndex !== -1 &&
-          this.certificateIndex !== -1;
+        return this.cleanessIndex !== -1 && this.colorIndex !== -1 && this.cutIndex !== -1 && this.certificateIndex !== -1;
       }
     },
     created() {
-      this.getEmptyRing();
       this.getStoneOptions();
     },
     methods: {
@@ -134,46 +75,115 @@
             gsmh: this.stoneMade.gsmh
           }
         }).then(res => {
-          // this.priceMin = parseInt(res.min_price);
-          // this.priceMax = parseInt(res.max_price);
-          // this.price = [this.priceMin, this.priceMax];
-          // this.weightMin = res.min_weight;
-          // this.weightMax = res.max_weight;
-          // this.weight = [this.weightMin, this.weightMax];
-          this.cleanessList = res.zhus_jd;
-          this.colorList = res.zhus_color;
-          // this.cuts = res.zhus_qg;
-          this.certificateList = [...res.zslx, '无要求'];
+          this.weightMin = res.min_weight;
+          this.weightMax = res.max_weight;
+          this.weight = this.weightMin;
+          this.cleaness = res.zhus_jd;
+          this.colors = res.zhus_color;
+          this.cuts = res.zhus_qg;
+          this.certificates = res.zslx;
         });
       },
-      handleOpenCleaness() {
-        if(!this.checkJieTuo(true)) {
-          return false;
-        }
-        this.$refs.cleaness.open();
-        this.cleanessIndex = this.selectedCleanessIndex;
-      },
-      handleOpenColor() {
-        if(!this.checkJieTuo(true)) {
-          return false;
-        }
-        this.$refs.color.open();
-        this.colorIndex = this.selectedColorIndex;
-      },
-      handlePurchase() {
-        //#TODO获取到高级定制的价格
+      handleConfirmFilter() {
         this.setStoneMade({
-          stone: Object.assign(this.stoneMade.stone, { ddlx: 'S' })
+          stone: {
+            zhusjd: this.cleaness[this.cleanessIndex],
+            zhusys: this.colors[this.colorIndex],
+            zhusz: this.weight,
+            zhusqg: this.cuts[this.cutIndex],
+            zslx: this.certificates[this.certificateIndex],
+          },
+          isAdvanced: true
         });
-        this.$router.push({ name: 'cusstoneorder' });
-      }
+        this.$router.go(-1);
+      },
     }
   };
 </script>
 
+<style lang="less" scoped>
+  @import "~@/style/vars.less";
+  .pt {
+    background-color: #fff;
+  }
+
+  .filter-content {
+    padding: 0 24px;
+    overflow: auto;
+    height: 100%;
+    li {
+      padding: 40px 16px;
+      border-bottom: 1px solid #f0f0f0; /*no*/
+      &:last-child {
+        border-bottom: 0;
+      }
+      .title {
+        font-size: 24px;
+        color: #666;
+      }
+      .thumb {
+        background-color: #ccc;
+      }
+      .range-value {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        button {
+          border-radius: 40px;
+          background-color: #eee;
+          font-size: 24px;
+          color: #666;
+          border: 1px solid #eee; /*no*/
+          padding: 0 30px;
+          height: 40px;
+          width: 240px;
+          text-align: left;
+          &.txt-right {
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+
+  .footer {
+    height: 96px;
+    .btns {
+      padding: 14px 20px;
+    }
+    box-shadow: 0 -10px 50px 10px rgba(170, 170, 170, 0.5);
+  }
+</style>
+
 <style lang="less">
-  .advanced .form-input > div {
-    padding: 0;
+  .ant-slider {
+    height: 36px;
+    &:hover .ant-slider-track {
+      background-color: #ffb4b4;
+    }
+    .ant-slider-rail {
+      height: 16px;
+      top: 10px;
+    }
+    .ant-slider-track {
+      top: 10px;
+      height: 16px;
+      background-color: #ffb4b4;
+    }
+    .ant-slider-handle {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #dcdcdc; /*no*/
+      margin-left: -18px;
+    }
+  }
+
+  .advanced {
+    .fixwidth {
+      button {
+        min-width: 144px;
+      }
+    }
   }
 </style>
 

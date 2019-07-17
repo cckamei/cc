@@ -31,7 +31,7 @@
       <div v-else class="empty">
         <img src="@/assets/stone/icon_dia_n.png" alt=""><br/>
         <div class="label">没有找到符合您要求的钻石</div>
-        <div v-if="0" class="advanced">
+        <div class="advanced">
           <button class="btn-txt" @click="$router.push({name: 'advanced'})">立即前往</button>
           <div class="tips">为您推荐<span>高级定制</span>功能，精心打造理想美钻</div>
         </div>
@@ -232,7 +232,7 @@
 </script>
 
 <style lang="less" scoped>
-  @import '~@/style/vars.less';
+  @import "~@/style/vars.less";
   .pt {
     padding-top: 192px;
     background-color: #fff;
@@ -263,7 +263,7 @@
         .arrow-down {
           width: 24px;
           height: 24px;
-          background: url('~@/assets/goods/icon_arrow_d.png') no-repeat;
+          background: url("~@/assets/goods/icon_arrow_d.png") no-repeat;
           background-size: 100%;
           transition: all 0.2s;
           margin-left: 16px;
@@ -327,7 +327,7 @@
           right: 16px;
           width: 40px;
           height: 40px;
-          background: url('~@/assets/goods/icon_cart.png') no-repeat;
+          background: url("~@/assets/goods/icon_cart.png") no-repeat;
           background-size: 100%;
         }
       }
