@@ -36,7 +36,9 @@
           </div>
         </li>
       </ul>
-      <v-recommend title="为你推荐" :list="recommend"></v-recommend>
+      <v-wechat-group></v-wechat-group>
+      <div class="gap"></div>
+      <v-recommend title="为您推荐" :list="recommend"></v-recommend>
     </div>
     <div class="footer flex">
       <div class="checkbox" :class="{active: checkedAll}" @click="checkAll"></div>
@@ -475,6 +477,11 @@
         background-color: #fff;
       }
     }
+  }
+
+  .gap {
+    height: 16px;
+    background-color: #f3f3f3;
   }
 </style>
 

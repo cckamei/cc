@@ -14,6 +14,7 @@
           <button class="btn" @click="goOrderDetail">查看订单</button>
           <button class="btn" @click="$router.push({name: 'index'})">回到首页</button>
         </div>
+        <v-wechat-group></v-wechat-group>
       </div>
     </div>
   </div>

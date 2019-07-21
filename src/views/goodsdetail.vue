@@ -197,29 +197,31 @@
           </ul>
         </v-form-slide-up>
       </div>
-      <div class="gap" v-if="0"></div>
-      <div class="set-meal-wrapper" v-if="0">
+      <div class="gap"></div>
+      <div class="package-wrapper">
         <v-split-title>搭配套餐</v-split-title>
-        <div class="set-meal flex" @click="$router.push({name: 'setmeal'});">
+        <div class="package flex" @click="$router.push({name: 'package'});">
           <div class="img">
-            <img :src="setMeal.img" alt="">
+            <img :src="package.img" alt="">
           </div>
           <div class="detail flex-auto flex arrow">
-            <span class="name">{{setMeal.title}}</span>
-            <span class="desc">{{setMeal.desc}}</span>
+            <span class="name">{{package.title}}</span>
+            <span class="desc">{{package.desc}}</span>
             <div class="line3">
-              套餐价：<span class="price"><span>￥</span>{{setMeal.minPrice | currency}} - {{setMeal.minPrice | currency}}</span>
+              套餐价：<span class="price"><span>￥</span>{{package.minPrice | currency}} - {{package.minPrice | currency}}</span>
             </div>
           </div>
         </div>
       </div>
+      <div class="gap"></div>
+      <v-wechat-group></v-wechat-group>
       <div class="gap"></div>
       <div ref="image-text" class="section image-text">
         <div class="title flex"><span>图文详情</span></div>
         <div class="image-text-content" v-html="res.detail"></div>
       </div>
       <div class="gap"></div>
-      <v-recommend class="section" ref="recommend" title="为你推荐" :list="recommend"></v-recommend>
+      <v-recommend class="section" ref="recommend" title="为您推荐" :list="recommend"></v-recommend>
     </div>
     <div class="footer flex">
       <div class="fun-btns" @click="serviceVisible = true">
@@ -235,7 +237,7 @@
         <button class="btn purchase" @click="buyNow">立即购买</button>
       </div>
     </div>
-
+    <v-wechat-group></v-wechat-group>
     <v-menus v-model="menusVisible" :menus="['home', 'search', 'collect']" name="goodsdetail"></v-menus>
     <v-scroll-top ref="scroll-top" v-model="topVisible" @top="(t)=> top = t"></v-scroll-top>
     <!-- <v-popup-confirm title="分享类型" v-model="shareVisible" @confirm="wxShare" :isConfirm="shareIndex !== -1">
@@ -307,7 +309,7 @@
         autoOpenSKU: false,
         emp_id: getParams().emp_id || '',
         goodsId: getParams().goodsId || '',
-        setMeal: {
+        package: {
           title: '卡美婚嫁礼物组合',
           desc: '多件搭配购买更优惠',
           minPrice: 18888,
@@ -926,11 +928,11 @@
     }
   }
 
-  .set-meal-wrapper {
+  .package-wrapper {
     background-color: #fff;
   }
 
-  .set-meal {
+  .package {
     padding: 30px;
     align-items: stretch;
     .img {

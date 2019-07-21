@@ -19,7 +19,7 @@ export default new Vuex.Store({
     },
     appointment: getSen('appointment') || {},
     userInfo: getSen('userInfo') || {},
-    address: getSen('address') || {},
+    address: getSen('address') || { type: 0 },
     cart: getSen('cart') || {},
     payOrder: getSen('payOrder') || {},
     card: getSen('card') || {},
@@ -27,7 +27,8 @@ export default new Vuex.Store({
     shareCard: getSen('shareCard') || {
       url: '',
       type: 0
-    }
+    },
+    package: getSen('package') || {}
   },
   getters: {
     getCacheData: state => serialize(state.cacheData),
@@ -61,7 +62,7 @@ export default new Vuex.Store({
       setSen('appointment', state.appointment);
     },
     setAddress(state, data) {
-      state.address = data;
+      state.address = { ...state.address, ...data };
       setSen('address', data);
     },
     setCart(state, data) {
@@ -94,6 +95,10 @@ export default new Vuex.Store({
     setShareCard(state, data) {
       state.shareCard = data;
       setSen('shareCard', state.shareCard);
+    },
+    setPackage(state, data) {
+      state.package = data;
+      setSen('package', state.package);
     }
   },
   actions: {

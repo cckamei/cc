@@ -95,6 +95,7 @@
         padding: 18px;
         width: 96px;
         height: 96px;
+        line-height: 60px;
         img {
           height: 100%;
           display: block;

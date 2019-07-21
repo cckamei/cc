@@ -1,5 +1,4 @@
-const router = [
-  {
+const router = [{
     name: 'index',
     path: '/',
     component: () => import('@/views/home')
@@ -23,9 +22,17 @@ const router = [
     }
   },
   {
-    name: 'setmeal',
-    path: '/goodslist/goodssearch/goodsdetail/setmeal',
-    component: () => import('@/views/setmeal/index'),
+    name: 'package',
+    path: '/goodslist/goodssearch/goodsdetail/package',
+    component: () => import('@/views/package/index'),
+    meta: {
+      params: []
+    }
+  },
+  {
+    name: 'packageorder',
+    path: '/goodslist/goodssearch/goodsdetail/package/order',
+    component: () => import('@/views/package/confirmorder'),
     meta: {
       params: []
     }
@@ -70,6 +77,11 @@ const router = [
     name: 'paysuccess',
     path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder/pay/paysuccess',
     component: () => import('@/views/paysuccess')
+  },
+  {
+    name: 'wechatgroup',
+    path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder/pay/paysuccess/wechatgroup',
+    component: () => import('@/views/wechat/index')
   },
   {
     name: 'cusstone',
@@ -343,6 +355,16 @@ const router = [
     meta: {
       params: []
     }
+  },
+  {
+    name: 'shoplist',
+    path: '/shoplist',
+    component: () => import('@/views/shop/shoplist')
+  },
+  {
+    name: 'shopdetail',
+    path: '/shoplist/shopdetail/:id',
+    component: () => import('@/views/shop/shopdetail')
   },
   {
     path: '*',

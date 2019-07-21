@@ -10,7 +10,7 @@
           <div class="card-comment-text" v-html="card.comment"></div>
         </div>
       </div>
-      <v-recommend class="section" title="为你推荐" :list="recommend"></v-recommend>
+      <v-recommend class="section" title="为您推荐" :list="recommend"></v-recommend>
     </div>
   </div>
 </template>

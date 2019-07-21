@@ -25,6 +25,9 @@ import popupSelect from './popup-select'; //页面中间弹框单选列表（代
 import popupConfirm2 from './popup-confirm2'; //页面中间弹框，使用refs.open方式打开 (代替popupConfirm)
 import range from './mint-ui/range/index'; //拉杆
 import splitTitle from './split-title'; //块分割线
+import wechatGroup from './wechat-group'; //微信群
+import receipt from './receipt'; //取货地址
+import address from './address'; //选择省市区
 
 export default {
   header,
@@ -53,5 +56,8 @@ export default {
   popupSelect,
   popupConfirm2,
   range,
-  splitTitle
+  splitTitle,
+  wechatGroup,
+  receipt,
+  address
 };

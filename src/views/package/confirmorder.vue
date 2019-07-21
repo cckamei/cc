@@ -6,18 +6,22 @@
         <li class="section">
           <v-receipt></v-receipt>
         </li>
-        <li class="section flex goods">
-          <div class="img">
-            <img :src="card.img" alt="">
-          </div>
-          <div class="detail flex-auto flex">
-            <span class="name">{{card.name}}</span>
-            <span class="desc"></span>
-            <div class="line3 flex">
-              <span class="price"><span>￥</span>{{card.price | currency}}</span>
-              <div class="number">x1</div>
-            </div>
-          </div>
+        <li class="section cart-list">
+          <ul>
+            <li class="flex" v-for="(item, index) in package" :key="index">
+              <div class="img">
+                <img :src="item.img" alt="">
+              </div>
+              <div class="detail flex-auto flex">
+                <span class="name">{{item.goods_title}}</span>
+                <span class="desc">{{item.skuLabel}}</span>
+                <div class="line3 flex">
+                  <span class="price"><span>￥</span>{{item.price | currency}}</span>
+                  <div class="number">X{{item.count}}</div>
+                </div>
+              </div>
+            </li>
+          </ul>
         </li>
         <li class="option section">
           <div class="row">
@@ -84,7 +88,7 @@
       this.fetchLogitics();
     },
     computed: {
-      ...mapState(['card']),
+      ...mapState(['card', 'package']),
       ...mapGetters(['getAddress']),
       totalMoney() {
         let deliveryMoney = 0;
@@ -131,61 +135,67 @@
       background-color: #fff;
       margin-bottom: 16px;
       border-radius: 10px;
-      &.goods {
+      &.cart-list {
         position: relative;
         padding: 30px 40px 30px 20px;
-        display: flex;
-        background-color: #fff;
-        padding-bottom: 30px;
-        align-items: stretch;
-        position: relative;
-        .img {
-          width: 200px;
-          height: 200px;
-          margin-right: 30px;
-          flex-shrink: 0;
-          // background-color: #f5f5f5;
-          img {
-            height: 100%;
-          }
-        }
-        .detail {
-          flex-direction: column;
-          align-items: flex-start;
+        li {
+          background-color: #fff;
+          padding-bottom: 30px;
+          align-items: stretch;
           position: relative;
-          .name {
-            font-size: 24px;
-            color: #666;
-            padding-top: 10px;
+          &.last-child {
+            padding-bottom: 0;
           }
-          .desc {
-            font-size: 20px;
-            color: #999;
-            padding-top: 24px;
-          }
-          .kezi {
-            font-size: 20px;
-            color: @color4;
-            padding-top: 24px;
-          }
-          .line3 {
-            position: absolute;
-            width: 100%;
-            bottom: 0;
-            left: 0;
-            align-items: center;
-            justify-content: space-between;
-            .price {
-              font-size: 30px;
-              color: @color4;
-              span {
-                font-size: 20px;
-              }
+          .img {
+            width: 200px;
+            height: 240px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            margin-right: 30px;
+            flex-shrink: 0;
+            // background-color: #f5f5f5;
+            img {
+              height: 100%;
             }
-            .number {
+          }
+          .detail {
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            .name {
               font-size: 24px;
               color: #666;
-              font-weight: bold;
+              padding-top: 10px;
+            }
+            .desc {
+              font-size: 20px;
+              color: #999;
+              padding-top: 24px;
+            }
+            .kezi {
+              font-size: 20px;
+              color: @color4;
+              padding-top: 24px;
+            }
+            .line3 {
+              position: absolute;
+              width: 100%;
+              bottom: 0;
+              left: 0;
+              align-items: center;
+              justify-content: space-between;
+              .price {
+                font-size: 30px;
+                color: @color4;
+                span {
+                  font-size: 20px;
+                }
+              }
+              .number {
+                font-size: 24px;
+                color: #666;
+                font-weight: bold;
+              }
             }
           }
         }

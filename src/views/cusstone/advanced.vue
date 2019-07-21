@@ -53,7 +53,7 @@
         cutIndex: -1,
         cuts: [],
         certificateIndex: -1,
-        certificates: [],
+        certificates: []
       };
     },
     computed: {
@@ -91,12 +91,12 @@
             zhusys: this.colors[this.colorIndex],
             zhusz: this.weight,
             zhusqg: this.cuts[this.cutIndex],
-            zslx: this.certificates[this.certificateIndex],
+            zslx: this.certificates[this.certificateIndex]
           },
           isAdvanced: true
         });
         this.$router.go(-1);
-      },
+      }
     }
   };
 </script>

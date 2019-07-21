@@ -10,6 +10,7 @@
     color: #ccc;
     width: 100%;
     justify-content: center;
+    background-color: #fff;
     &:after {
       content: "";
       left: 30px;

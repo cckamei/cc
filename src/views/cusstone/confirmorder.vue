@@ -3,17 +3,8 @@
     <v-header>确认订单</v-header>
     <div class="content">
       <ul class="sections">
-        <li class="section address" @click="$router.push({name: 'myaddress'})">
-          <div class="arrow" :class="{empty: !getAddress.address}">
-            <template v-if="getAddress.address">
-              <div class="line1">收货人：{{getAddress.name}} <span class="tel">{{getAddress.phone}}</span></div>
-              <div class="line2">收货地址：{{getAddress.address}}</div>
-            </template>
-            <template v-else>
-              <div class="line1">添加收货地址</div>
-              <div class="line2">填写您的收货地址和联系方式</div>
-            </template>
-          </div>
+        <li class="section">
+          <v-receipt></v-receipt>
         </li>
         <li class="section flex goods">
           <div class="img">
@@ -154,28 +145,6 @@
       background-color: #fff;
       margin-bottom: 16px;
       border-radius: 10px;
-      &.address {
-        padding: 40px 20px;
-        padding-right: 20px;
-        .line1 {
-          font-size: 30px;
-          font-weight: bold;
-          .tel {
-            padding-left: 60px;
-          }
-        }
-        .line2 {
-          font-size: 24px;
-          color: #666;
-          padding-top: 16px;
-        }
-        .empty {
-          .line1,
-          .line2 {
-            color: #999;
-          }
-        }
-      }
       &.goods {
         position: relative;
         padding: 30px 40px 30px 20px;

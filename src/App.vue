@@ -24,7 +24,7 @@
 </script>
 
 <style lang="less">
-  @import "~swiper/dist/css/swiper.min.css";
+  // @import "~swiper/dist/css/swiper.min.css";
   @import "~mint-ui/lib/style.css";
   @import "./style/index.less";
   .slide-left-enter,

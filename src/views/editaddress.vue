@@ -16,7 +16,7 @@
         </li>
         <li class="address">
           <label>所在地区</label>
-          <input type="text" v-model="address" placeholder="请选择收货人所在地区" readonly @click="visible = true">
+          <input type="text" v-model="address" placeholder="请选择收货人所在地区" readonly @click="$refs.address.open(reqData)">
         </li>
         <li>
           <v-form-input label="详细地址" v-model="reqData.street" maxlength="50" placeholder="请填写街道、楼牌号等信息"></v-form-input>
@@ -30,25 +30,7 @@
         <button class="btn" :class="{active: isActive}" @click="isActive && confirmSubmit()">保存</button>
       </div>
     </div>
-    <v-slide-up v-model="visible" title="选择区域" @confirm="confirm()">
-      <ul class="addChoice">
-        <li @click="addRessClick(1)">{{reqData.province}}
-          <i v-if="chIndex==1"></i>
-        </li>
-        <li @click="addRessClick(2)">{{reqData.city}}
-          <i v-if="chIndex==2"></i>
-        </li>
-        <li @click="addRessClick(3)">{{reqData.district}}
-          <i v-if="chIndex==3"></i>
-        </li>
-      </ul>
-      <ul class="addList">
-        <li v-for="(item,index) in adList" :key="index" :class="{actived: selectedIndex==index}" @click="choice(item,index)">{{item.name}}</li>
-      </ul>
-
-    </v-slide-up>
-
-    <!-- <button @click="add()">添加地址</button> -->
+    <v-address ref="address" @confirm="handleAddressConfirm"></v-address>
   </div>
 
 </template>
@@ -57,15 +39,7 @@
   export default {
     data() {
       return {
-        chIndex: 1, //省市区选择下划线
-        addId: 1, //1:省份选择; 2:市区； 3：地区
-        provinceId: '', //选择的省份id
-        cityId: '', //选择的市id
         isEdit: false,
-        selectedIndex: -1, //选中的省市区在列表中的index
-        visible: false,
-        adList: [],
-        address: '', //展示给用户的地址
         reqData: {
           phone: '',//手机号
           province: '北京市',//省
@@ -74,8 +48,7 @@
           street: '',//街道
           code: '0',
           district: '朝阳区'//区
-        },
-        addressList: []
+        }
       };
     },
     created() {
@@ -83,11 +56,12 @@
       if(item) {
         this.reqData = item;
         this.isEdit = true;
-        this.address = item.province + '-' + item.city + '-' + item.district;
       }
-      this.getProvince();
     },
     computed: {
+      address() {
+        return this.reqData.province + '-' + this.reqData.city + '-' + this.reqData.district;
+      },
       isActive() {
         return this.reqData.phone && this.reqData.name && this.reqData.street;
       }
@@ -104,65 +78,10 @@
           this.$router.go(-1);
         });
       },
-      getProvince() {
-        this.ajax({
-          name: 'getProvince'
-        }).then(res => {
-          this.adList = res;
-        });
-      },
-      getCity() {
-        this.ajax({
-          name: 'getCity',
-          data: { pre: this.provinceId }
-        }).then(res => {
-          this.adList = res;
-        });
-      },
-      getDistrict() {
-        this.ajax({
-          name: 'getDistrict',
-          data: { pre: this.cityId }
-        }).then(res => {
-          this.adList = res;
-        });
-      },
-      choice(item, index) {
-        this.selectedIndex = index;
-        this.addressId = item.id;
-        if(this.addId == 1) {
-          this.reqData.province = item.name;
-          this.addId = 2;
-          this.chIndex = 2;
-          this.provinceId = item.id;
-          this.getCity();
-          this.selectedIndex = -1;
-        } else if(this.addId == 2) {
-          this.reqData.city = item.name;
-          this.addId = 3;
-          this.chIndex = 3;
-          this.cityId = item.id;
-          this.getDistrict();
-          this.selectedIndex = -1;
-        } else {
-          this.reqData.district = item.name;
-        }
-
-      },
-      addRessClick(index) {
-        this.chIndex = index;
-        this.selectedIndex = -1;
-        if(index == 1) {
-          this.getProvince();
-          this.addId = 1;
-        } else if(index == 2 && this.addId == 2) {
-          this.getCity();
-        } else if(index == 3 && this.addId == 3) {
-          this.getDistrict();
-        }
-      },
-      confirm() {
-        this.address = this.reqData.province + '-' + this.reqData.city + '-' + this.reqData.district;
+      handleAddressConfirm({ province, city, district }) {
+        this.reqData.province = province;
+        this.reqData.city = city;
+        this.reqData.district = district;
       },
       confirmSubmit() {
         if(this.isEdit) {

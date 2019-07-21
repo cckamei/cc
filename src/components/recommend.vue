@@ -24,7 +24,7 @@
   export default {
     props: {
       title: {
-        default: '为你推荐',
+        default: '为您推荐',
         type: String
       },
       list: {

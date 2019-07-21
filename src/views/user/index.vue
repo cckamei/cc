@@ -6,6 +6,13 @@
       <order-menu></order-menu>
       <commission v-if="getUserInfo.is_distributor"></commission>
       <card />
+      <div class="panel-header" @click="$router.push({ name: 'wechatgroup'})">
+        <span>会员微群</span>
+        <div class="more">
+          <span>查看微群信息</span>
+          <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
+        </div>
+      </div>
     </div>
     <div class="footer">
       <v-footer></v-footer>
@@ -45,5 +52,10 @@
 <style lang="less" scoped>
   .mypage {
     background: #f0f0f0;
+    .panel-header {
+      margin: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+    }
   }
 </style>
