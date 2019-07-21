@@ -12,7 +12,7 @@
           </div>
           <div class="detail flex-auto flex">
             <span class="name">{{stoneMade.goods_title}}</span>
-            <span class="desc">{{stoneMade[stoneMade].zhusz}}克拉; {{stoneMade[stoneMade.ddlx].zhusjd}}; {{stoneMade[stoneMade.ddlx].zhusys}}; {{stoneMade[stoneMade.ddlx].zslx}}证书; {{stoneMade[stoneMade.ddlx].zhusqg}}切工</span>
+            <span class="desc">{{stoneMade[stoneMade.ddlx].zhusz}}克拉; {{stoneMade[stoneMade.ddlx].zhusjd}}; {{stoneMade[stoneMade.ddlx].zhusys}}; {{stoneMade[stoneMade.ddlx].zslx}}证书; {{stoneMade[stoneMade.ddlx].zhusqg}}切工</span>
             <div class="line3 flex">
               <span class="price"><span>￥</span>{{stoneMade[stoneMade.ddlx].shouj | currency}}</span>
               <div class="number">x1</div>
@@ -93,8 +93,9 @@
         this.reqData.address_id = this.getAddress.id;
       }
 
-      this.goodsMoney = +this.stoneMade[stoneMade.ddlx].shouj;
+      this.goodsMoney = +this.stoneMade[this.stoneMade.ddlx].shouj;
       this.reqData.goods_id = this.stoneMade.goods_id;
+      this.reqData.yaoqiu = this.stoneMade.remark || '';
       this.fetchLogitics();
     },
     computed: {
@@ -119,7 +120,7 @@
       },
       addOrder() {
         this.reqData.logitics_id = this.delivery[this.deliveryIndex].id;
-        Object.assign(this.reqData, this.stoneMade[stoneMade.ddlx]);
+        Object.assign(this.reqData, this.stoneMade[this.stoneMade.ddlx]);
 
         if(!this.reqData.address_id) {
           this.toast('亲，您还未设置收货地址！');

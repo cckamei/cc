@@ -13,7 +13,11 @@
         sizeIndex: -1,
         selectedSizeIndex: -1,
         colors: { W: '白色', Y: '黄色', R: '玫瑰金' },
-        labels: ['现货', '15天', '45天'],
+        labels: {
+          'A': '现货',
+          'B': '定制15天',
+          'C': '定制45天'
+        },
         remark: '',
         isAdvanced: false
       };

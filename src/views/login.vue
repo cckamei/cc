@@ -62,6 +62,7 @@
                   if(index !== -1) {
                     let address = res[index];
                     this.setAddress({
+                      type: 0,
                       id: address.id,
                       name: address.name,
                       phone: address.phone,
@@ -115,6 +116,7 @@
               let index = res.findIndex(item => item.default);
               let address = res[index];
               this.setAddress({
+                type: 0,
                 id: address.id,
                 name: address.name,
                 phone: address.phone,

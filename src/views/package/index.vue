@@ -4,14 +4,14 @@
     <div class="content">
       <ul class="package-list">
         <li class="package-item" v-for="(item, index) in package" :key="index">
-          <div class="title">{{item.title}}</div>
+          <div class="title">{{item.name}}</div>
           <ul class="imgs flex">
-            <li v-for="img in item.goods"><img :src="img" alt=""></li>
+            <li v-for="goods in item.goods_list"><img :src="goods.good.cover_img" alt=""></li>
           </ul>
           <div class="package-b flex">
             <div>
               <div class="line1">套餐价：<span class="price"><span>￥</span>{{item.price | currency}}</span></div>
-              <div class="line2">共 {{item.goods.length}} 件商品</div>
+              <div class="line2">共 {{item.goods_list.length}} 件商品</div>
             </div>
             <button class="btn-txt" @click="buy(item)">立即购买</button>
           </div>
@@ -22,51 +22,31 @@
 </template>
 
 <script>
-  import { mapActions, mapMutations } from 'vuex';
+  import { mapActions, mapMutations, mapState } from 'vuex';
 
   export default {
     data() {
       return {
-        package: [{
-          title: '套餐1',
-          price: 20000,
-          goods: ['http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132', 'http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132']
-        },
-        {
-          title: '套餐2',
-          price: 20000,
-          goods: ['http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132', 'http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132', 'http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132', 'http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132']
-        },
-        {
-          title: '套餐3',
-          price: 20000,
-          goods: ['http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132']
-        }]
+        package: []
       };
     },
     created() {
-      // this.fetchCart();
+      this.getPackageList();
+    },
+    computed: {
+      ...mapState(['common'])
     },
     methods: {
       ...mapMutations(['setPackage']),
       ...mapActions(['ajax']),
-      // fetchCart() {
-      //   this.ajax({
-      //     name: 'cart'
-      //   }).then(res => {
-      //     res.forEach(item => {
-      //       item.checked = false;
-      //       item.deleteVisible = false;
-      //       item.limit = item.stock;
-      //       if(item.is_diamond) {
-      //         item.skuLabel = `${item.zhuzuanfenshu};${item.zuanshijingdu};${item.guige};${item.guige}`;
-      //       } else {
-      //         item.skuLabel = `${item.zhushimingcheng};${item.zhushipingji};${item.guige};${item.guige}`;
-      //       }
-      //     });
-      //     this.cart = res;
-      //   });
-      // },
+      getPackageList() {
+        this.ajax({
+          name: 'getPackageList',
+          id: this.common.goodsId
+        }).then(res => {
+          this.package = res;
+        });
+      },
       buy(val) {
         this.setPackage(val);
         this.$router.push({ name: 'packageorder' });

@@ -40,6 +40,7 @@
       this.pageInit();
     },
     computed: {
+      ...mapState(['address']),
       isActive() {
         return true;
       }
@@ -63,6 +64,7 @@
       },
       selectAddress(item) {
         this.setAddress({
+          type: this.address.type || 0,
           id: item.id,
           name: item.name,
           phone: item.phone,

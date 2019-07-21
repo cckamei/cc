@@ -63,7 +63,7 @@ export default new Vuex.Store({
     },
     setAddress(state, data) {
       state.address = { ...state.address, ...data };
-      setSen('address', data);
+      setSen('address', state.address);
     },
     setCart(state, data) {
       state.cart = data;
@@ -73,11 +73,11 @@ export default new Vuex.Store({
       state.payOrder = { ...state.payOrder, ...data };
       setSen('payOrder', state.payOrder);
     },
-    clearPayOrder(state, data) {
+    clearPayOrder(state) {
       state.payOrder = {};
       setSen('payOrder', state.payOrder);
     },
-    logout(state, data) {
+    logout(state) {
       state.userInfo = {};
       setSen('userInfo', state.userInfo);
     },

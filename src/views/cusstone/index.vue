@@ -10,12 +10,12 @@
           <span class="desc"></span>
           <div class="line3">
             <template v-if="stoneMade[this.ddlx] && stoneMade[this.ddlx].shouj">
-              <div class="tips" v-if="stoneMade[this.ddlx].fhlx == 1">{{labels[+stoneMade[this.ddlx].fhlx - 1]}}</div>
-              <div class="tips" v-else>当前方案需{{labels[+stoneMade[this.ddlx].fhlx - 1]}}完成定制</div>
+              <div class="tips" v-if="stoneMade[this.ddlx].fhlx == 1">{{labels[stoneMade[this.ddlx].fhlx]}}</div>
+              <div class="tips" v-else>当前方案需{{labels[stoneMade[this.ddlx].fhlx]}}完成定制</div>
               合计：&nbsp;<span class="price"><span>￥</span>{{stoneMade[this.ddlx].shouj | currency}}</span>
             </template>
             <template v-else-if="stoneMade[this.ddlx]">
-              合计：&nbsp;<span class="txt-lightgray">小美暂时无法为您定制此方案，请您尝试其他方案~</span>
+              <span class="tips">小美暂时无法为您定制此方案，请重新选择~</span>
             </template>
             <template v-else>
               合计：&nbsp;<span class="txt-lightgray">全部选定后显示</span>
@@ -141,10 +141,15 @@
         next();
       }
     },
+    data() {
+      return {
+        remark: ''
+      }
+    },
     computed: {
       isActive() {
         // return (this.selectedSizeIndex1 !== -1 || this.selectedSizeIndex2 !== -1) && this.stoneMade.stone;
-        return this.selectedSizeIndex !== -1 && this.stoneMade[this.stoneMade.ddlx] && this.stoneMade[this.stoneMade.ddlx].shouj;
+        return this.selectedSizeIndex !== -1 && this.stoneMade[this.ddlx] && this.stoneMade[this.ddlx].shouj;
       }
     },
     created() {
@@ -169,19 +174,18 @@
           this.setStoneMade({
             S: {
               ...this.stoneMade.S,
-              gsmh: '', // 公司模号 必填
+              gsmh: this.stoneMade.gsmh, // 公司模号 必填
               shouc: this.stoneMade.shouc.replace('#', ''),
               shouj: res.price,
               jinys: '', // 金类型
-              zhuspg: '', // 主石抛光
-              zhusdc: '', // 主石对称
-              fhlx: '', // 发货类型 # 1：现货 2： 15天 3：45天
+              fhlx: 'C', // 发货类型 # 1：现货 2： 15天 3：45天
             }
           });
         });
       },
       handlePurchase(ddlx) {
         this.setStoneMade({
+          remark: this.remark,
           ddlx,
           [this.ddlx]: Object.assign(this.stoneMade[this.ddlx], { ddlx })
         });

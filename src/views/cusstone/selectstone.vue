@@ -32,7 +32,7 @@
         <img src="@/assets/stone/icon_dia_n.png" alt=""><br/>
         <div class="label">没有找到符合您要求的钻石</div>
         <div class="advanced">
-          <button class="btn-txt" @click="$router.push({name: 'advanced'})">立即前往</button>
+          <button class="btn-txt" @click="advanceStone">立即前往</button>
           <div class="tips">为您推荐<span>高级定制</span>功能，精心打造理想美钻</div>
         </div>
       </div>
@@ -226,6 +226,10 @@
       handleSelectStone() {
         this.setStoneMade({ N: this.stoneList[this.stoneIndex] });
         this.$router.go(-1);
+      },
+      advanceStone() {
+        this.setStoneMade({ S: null });
+        this.$router.push({ name: 'advanced' });
       }
     }
   };
