@@ -1,8 +1,8 @@
 <template>
   <div class="goods-detail pb" @click.stop="menusVisible = false">
-    <v-header-goods back v-show="top <= 10">
+    <v-header-goods v-show="top <= 10">
       <div slot="menus" class="menus">
-        <div @click="$router.push({name: 'cart'})" class="menu"><img src="@/assets/goods/button_cart_r.png" alt=""></div>
+        <div @click="goCart" class="menu"><img src="@/assets/goods/button_cart_r.png" alt=""></div>
         <div class="menu" @click.stop="menusVisible = !menusVisible"><img src="@/assets/goods/button_option.png" alt=""></div>
       </div>
     </v-header-goods>
@@ -24,7 +24,7 @@
       <div class="info">
         <div class="price">
           <i>￥</i>{{(sku.price || res.price) | currency}}
-          <img @click="clickShare" class="right" src="@/assets/goods/icon_qrcode.png" alt="">
+          <img v-if="getUserInfo.is_distributor && userId" @click="clickShare" class="right" src="@/assets/goods/icon_qrcode.png" alt="">
         </div>
         <div class="flex tag" v-if="res.tag">
           <button class="tag-btn" v-for="(item, index) in res.tag.split(',')" :key="index">{{item}}</button>
@@ -306,7 +306,7 @@
         // shareVisible: false,
         autoOpenSKU: false,
         emp_id: getParams().emp_id || '',
-        goodsId: getParams().goodsId || '',
+        goodsId: '',
         setMeal: {
           title: '卡美婚嫁礼物组合',
           desc: '多件搭配购买更优惠',
@@ -318,29 +318,7 @@
       };
     },
     created() {
-      if(this.$route.params.openSKU) {
-        this.autoOpenSKU = true;
-      }
-
-      if(!this.goodsId) {
-        this.goodsId = this.getCommon.goodsId;
-      }
-
-      if(!this.goodsId) {
-        this.$router.push({ name: 'goodslist' });
-      } else {
-        this.setCommon({ goodsId: this.goodsId });
-      }
-
-      if(this.emp_id) {
-        this.setCommon({ emp_id: this.emp_id });
-      }
-
-      this.fetchGoodsDetail();
-      this.getRecommend();
-      this.fetchBenifit();
-      this.getActivity();
-      this.getMyCard();
+      this.init();
     },
     mounted() {
       setTimeout(() => {
@@ -352,6 +330,12 @@
       ...mapGetters(['getCommon', 'token', 'userId', 'getUserInfo'])
     },
     watch: {
+      '$route'(to, from) {
+        this.init();
+        $('.content').animate({
+          scrollTop: 0
+        }, 0);
+      },
       skuIndex: {
         handler({ scoreIndex, clarityIndex, colorIndex, specIndex }) {
           let selectIndexes = [scoreIndex, clarityIndex, colorIndex, specIndex];
@@ -408,6 +392,23 @@
     methods: {
       ...mapMutations(['setCart', 'clearPayOrder', 'setPayOrder', 'setCommon', 'setStoneMade']),
       ...mapActions(['ajax']),
+      init() {
+        if(this.$route.params.openSKU) {
+          this.autoOpenSKU = true;
+        }
+
+        this.goodsId = this.$route.params.id;
+        this.setCommon({ goodsId: this.goodsId });
+        if(this.emp_id) {
+          this.setCommon({ emp_id: this.emp_id });
+        }
+
+        this.fetchGoodsDetail();
+        this.getRecommend();
+        this.fetchBenifit();
+        this.getActivity();
+        this.getMyCard();
+      },
       fetchGoodsDetail() {
         this.ajax({
           name: 'goodsDetail',
@@ -562,7 +563,7 @@
       },
       buyNow() {
         if(!this.token) {
-          this.$router.push({ name: 'login', params: { name: 'goodsdetail' } });
+          this.$router.push({ name: 'login', params: { page: 'goodsdetail', params: { id: this.$route.params.id } } });
           return false;
         }
 
@@ -611,7 +612,7 @@
       },
       collect() {
         if(!this.token) {
-          this.$router.push({ name: 'login', params: { name: 'goodsdetail' } });
+          this.$router.push({ name: 'login', params: { page: 'goodsdetail', params: { id: this.$route.params.id } } });
           return false;
         }
 
@@ -626,7 +627,7 @@
       },
       goCart() {
         if(!this.token) {
-          this.$router.push({ name: 'login', params: { name: 'goodsdetail' } });
+          this.$router.push({ name: 'login', params: { page: 'goodsdetail', params: { id: this.$route.params.id } } });
           return false;
         }
 
@@ -634,7 +635,7 @@
       },
       addCart() {
         if(!this.token) {
-          this.$router.push({ name: 'login', params: { name: 'goodsdetail' } });
+          this.$router.push({ name: 'login', params: { page: 'goodsdetail', params: { id: this.$route.params.id } } });
           return false;
         }
 
@@ -661,9 +662,9 @@
         this.$nextTick(() => {
           let ext = '';
           if(this.getUserInfo.is_distributor && this.userId) {
-            ext = `&emp_id=${this.userId}`;
+            ext = `?emp_id=${this.userId}`;
           }
-          let url = `${window.location.origin}/?from=wechat#/goodslist/goodssearch/goodsdetail?goodsId=${this.goodsId}${ext}`;
+          let url = `${window.location.origin}/?from=wechat#/goodslist/goodssearch/goodsdetail/${this.goodsId}${ext}`;
           new QRCode(this.$refs.qrcode, url);
         });
       },
@@ -674,21 +675,21 @@
 
         let ext = '';
         if(this.getUserInfo.is_distributor && this.userId) {
-          ext = `&emp_id=${this.userId}`;
+          ext = `?emp_id=${this.userId}`;
         }
         //微信分享
         window.wx.showOptionMenu();
         // 分享给朋友
         window.wx.onMenuShareAppMessage({
           'imgUrl': this.res.img,
-          'link': `${window.location.origin}/?from=wechat#/goodslist/goodssearch/goodsdetail?goodsId=${this.goodsId}${ext}`,
+          'link': `${window.location.origin}/?from=wechat#/goodslist/goodssearch/goodsdetail/${this.goodsId}${ext}`,
           'title': this.res.goods_title,
           'desc': this.res.sub_title
         });
         // 分享到朋友圈
         window.wx.onMenuShareTimeline({
           'imgUrl': this.res.img,
-          'link': `${window.location.origin}/?from=wechat#/goodslist/goodssearch/goodsdetail?goodsId=${this.goodsId}${ext}`,
+          'link': `${window.location.origin}/?from=wechat#/goodslist/goodssearch/goodsdetail/${this.goodsId}${ext}`,
           'title': this.res.goods_title + ',' + this.res.sub_title
         });
       },

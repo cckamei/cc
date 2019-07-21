@@ -14,7 +14,6 @@ export default new Vuex.Store({
       goodsId: '',
       goodsType: '',
       orderId: '',
-      lastPage: 'index',
       emp_id: ''
     },
     appointment: getSen('appointment') || {},
@@ -27,6 +26,11 @@ export default new Vuex.Store({
     shareCard: getSen('shareCard') || {
       url: '',
       type: 0
+    },
+    redirect: getSen('redirect') || {
+      page: '',
+      params: {},
+      query: {}
     }
   },
   getters: {
@@ -51,6 +55,10 @@ export default new Vuex.Store({
     setCommon(state, data) {
       state.common = { ...state.common, ...data };
       setSen('common', state.common);
+    },
+    setRedirect(state, data) {
+      state.redirect = data;
+      setSen('redirect', data);
     },
     setUserInfo(state, data) {
       state.userInfo = { ...state.userInfo, ...data };
@@ -110,9 +118,9 @@ export default new Vuex.Store({
           }
           xhr(data)
             .then(res => {
-              state.commit('setCacheData', {
-                [name]: serialize(res)
-              });
+              // state.commit('setCacheData', {
+              //   [name]: serialize(res)
+              // });
               resolve(res);
             })
             .catch(res => reject(res));

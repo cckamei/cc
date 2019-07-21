@@ -160,11 +160,11 @@
       },
       goDetail(val) {
         this.setCommon({ goodsId: val.goods_id });
-        this.$router.push({ name: 'goodsdetail' });
+        this.$router.push({ name: 'goodsdetail', params: { id: val.goods_id } });
       },
       addToCart(val) {
         this.setCommon({ goodsId: val.goods_id });
-        this.$router.push({ name: 'goodsdetail', params: { openSKU: true } });
+        this.$router.push({ name: 'goodsdetail', params: { id: val.goods_id, openSKU: true } });
       }
     }
   };

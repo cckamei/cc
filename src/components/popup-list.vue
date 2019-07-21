@@ -59,7 +59,7 @@
       },
       goGoodsDetail(id) {
         this.setCommon({ goodsId: id });
-        this.$router.push({ name: 'goodsdetail' });
+        this.$router.push({ name: 'goodsdetail', params: { id } });
       }
     }
   };

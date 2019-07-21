@@ -1,6 +1,6 @@
 <template>
-  <div class="header" :class="{shadow: isDefined('shadow')}">
-    <div v-if="isDefined('back')" class="menu-left" @click="backHandler"><img src="@/assets/goods/button_back_r.png" alt=""></div>
+  <div class="header">
+    <div class="menu-left" @click="backHandler"><img src="@/assets/goods/button_back_r.png" alt=""></div>
     <div class="title ellipsis">
       <slot></slot>
     </div>
@@ -10,45 +10,9 @@
 
 <script>
   export default {
-    props: {
-      back: {
-        type: String
-      },
-      home: {
-        type: String
-      },
-      shadow: {
-        type: String
-      }
-    },
     methods: {
-      isDefined(val) {
-        return this[val] !== undefined;
-      },
-      isFunction(val) {
-        return this[val] === 'function';
-      },
       backHandler() {
-        if(this.isDefined('back')) {
-          if(this.isFunction('back')) {
-            this.back();
-          } else {
-            if(this.$route.name === 'goodsdetail' && this.$route.query.goodsId) {
-              this.$router.push({ name: 'goodslist' });
-            } else {
-              this.$router.go(-1);
-            }
-          }
-        }
-      },
-      homeHandler() {
-        if(this.isDefined('home')) {
-          if(this.isFunction('home')) {
-            this.back();
-          } else {
-            this.$router.go(-1);
-          }
-        }
+        this.$router.go(-1);
       }
     }
   };
