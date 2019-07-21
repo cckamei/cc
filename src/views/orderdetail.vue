@@ -400,8 +400,8 @@
         justify-content: space-between;
         .titleleft {
           img {
-            display: inline;
             margin-right: 12px;
+            width: 26px;
           }
         }
         .listright {
