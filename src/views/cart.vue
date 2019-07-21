@@ -176,7 +176,7 @@
       },
       goGoodsDetail(item) {
         this.setCommon({ goodsId: item.goods_id });
-        this.$router.push({ name: 'goodsdetail', params: { openSKU: true } });
+        this.$router.push({ name: 'goodsdetail', params: { id: item.goods_id, openSKU: true } });
       },
       openKezi(val) {
         this.lettering.keziVisible = true;

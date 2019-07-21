@@ -40,7 +40,7 @@
       ...mapActions(['ajax']),
       collect(item) {
         if(!this.token) {
-          this.$router.push({ name: 'login', params: { name: this.name } });
+          this.$router.push({ name: 'login', params: { page: 'goodsdetail', params: { id: this.$route.params.id } } });
           return false;
         }
 
@@ -55,7 +55,7 @@
       },
       goGoodsDetail(goodsId) {
         this.setCommon({ goodsId });
-        this.$router.replace({ name: 'redirect' });
+        this.$router.replace({ name: 'goodsdetail', params: { id: goodsId } });
       }
     }
   };

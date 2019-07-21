@@ -295,7 +295,7 @@
       //商品详情
       goGoodsDetail(id) {
         this.setCommon({ goodsId: id });
-        this.$router.push({ name: 'goodsdetail' });
+        this.$router.push({ name: 'goodsdetail', params: { id: val.goods_id } });
       },
       parOrder(order) {
         this.setPayOrder(order);
