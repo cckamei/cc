@@ -196,10 +196,8 @@
           return false;
         }
       },
-      computed: {
-        appName() {
-          return window.htp.appName;
-        }
+      appName() {
+        return window.htp.appName;
       }
     },
     methods: {
@@ -332,6 +330,10 @@
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
+        img {
+          width: 36px;
+          height: 36px;
+        }
         > div {
           display: flex;
           flex-flow: row nowrap;
@@ -378,6 +380,10 @@
       }
       p {
         color: #999999;
+      }
+      img {
+        width: 36px;
+        height: 36px;
       }
     }
     .listitem {
