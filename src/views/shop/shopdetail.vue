@@ -14,7 +14,9 @@
       </ul>
       <div class="gap"></div>
       <v-split-title>门店地图</v-split-title>
-      <div id="container" style="height:500px;"></div>
+      <div class="map-container">
+        <iframe src="https://apis.map.qq.com/tools/poimarker?type=0&marker=coord:39.96554,116.26719;title:成都;addr:北京市海淀区复兴路32号院&key=S36BZ-DUXCD-VMK4L-HQO4H-SFMAO-7DFFJ&referer=cc" frameborder="0"></iframe>
+      </div>
       <div class="gap"></div>
       <v-split-title>门店资质</v-split-title>
       <ul class="imgs flex">
@@ -31,6 +33,7 @@
 
 <script>
   import { mapActions, mapMutations } from 'vuex';
+  import { setTimeout } from 'timers';
 
   export default {
     data() {
@@ -47,54 +50,6 @@
         },
         goods: ['http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132', 'http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132', 'http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132', 'http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132']
       };
-    },
-    mounted() {
-      this.getMyLocation();
-    },
-    methods: {
-      getMyLocation() {
-        var geolocation = new qq.maps.Geolocation("yourkey", "yourkey名称");
-        console.log(geolocation);
-        geolocation.getIpLocation(this.showPosition, this.showErr);
-      },
-      showPosition(position) {
-        console.log(position);
-        this.latitude = position.lat;
-        this.longitude = position.lng;
-        this.city = position.city;
-        this.setMap();
-      },
-      showErr() {
-        console.log("定位失败");
-        this.getMyLocation();//定位失败再请求定位，测试使用
-      },
-      //第二部分
-      //位置信息在地图上展示
-      setMap() {
-        //步骤：定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
-        //设置地图中心点
-        var myLatlng = new qq.maps.LatLng(this.latitude, this.longitude);
-        //定义工厂模式函数
-        var myOptions = {
-          zoom: 13,               //设置地图缩放级别
-          center: myLatlng,    //设置中心点样式
-          mapTypeId: qq.maps.MapTypeId.ROADMAP  //设置地图样式详情参见MapType
-        }
-        // //获取dom元素添加地图信息
-        var map = new qq.maps.Map(document.getElementById("container"), myOptions);
-        //第三部分
-        //给定位的位置添加图片标注
-        var marker = new qq.maps.Marker({
-          position: myLatlng,
-          map: map
-        });
-        //给定位的位置添加文本标注
-        var marker = new qq.maps.Label({
-          position: myLatlng,
-          map: map,
-          content: '这是我当前的位置，偏差有点大，哈哈'
-        });
-      }
     }
   };
 </script>
@@ -134,6 +89,15 @@
         }
       }
     }
+
+    .map-container {
+      padding: 30px;
+      height: 600px;
+    }
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
   }
   .footer {
     height: 96px;
@@ -141,6 +105,13 @@
       padding: 14px 20px;
     }
     box-shadow: 0 -10px 50px 10px rgba(170, 170, 170, 0.5);
+  }
+</style>
+
+
+<style>
+  .downloadBtn {
+    display: none;
   }
 </style>
 

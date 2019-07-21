@@ -109,7 +109,7 @@
             jinys: this.materialList[this.materialIndex].kt_caizhi_color,
             shouc: this.sizes.ring[this.selectedSizeIndex].replace('号', '#')
           });
-          if(this.isAdvanced) {
+          if(this.ddlx === 'S') {
             this.$router.push({ name: 'advancedselect' });
           } else {
             this.$router.push({ name: 'selectstone' });

@@ -1,6 +1,6 @@
 <template>
   <div class="pt pb">
-    <v-header>{{isAdvanced ? '高级' : '主石'}}定制</v-header>
+    <v-header>{{ddlx === 'S' ? '高级' : '主石'}}定制</v-header>
     <div class="content">
       <div class="gap"></div>
       <div class="stone-header flex">
@@ -9,10 +9,13 @@
           <span class="name">{{stoneMade.goods_title}}</span>
           <span class="desc"></span>
           <div class="line3">
-            <template v-if="stoneMade.stone && stoneMade.stone.shouj">
-              <div class="tips" v-if="stoneMade.stone.fhlx == 1">{{labels[+stoneMade.stone.fhlx - 1]}}</div>
-              <div class="tips" v-else>当前方案需{{labels[+stoneMade.stone.fhlx - 1]}}完成定制</div>
-              合计：&nbsp;<span class="price"><span>￥</span>{{stoneMade.stone.shouj | currency}}</span>
+            <template v-if="stoneMade[this.ddlx] && stoneMade[this.ddlx].shouj">
+              <div class="tips" v-if="stoneMade[this.ddlx].fhlx == 1">{{labels[+stoneMade[this.ddlx].fhlx - 1]}}</div>
+              <div class="tips" v-else>当前方案需{{labels[+stoneMade[this.ddlx].fhlx - 1]}}完成定制</div>
+              合计：&nbsp;<span class="price"><span>￥</span>{{stoneMade[this.ddlx].shouj | currency}}</span>
+            </template>
+            <template v-else-if="stoneMade[this.ddlx]">
+              合计：&nbsp;<span class="txt-lightgray">小美暂时无法为您定制此方案，请您尝试其他方案~</span>
             </template>
             <template v-else>
               合计：&nbsp;<span class="txt-lightgray">全部选定后显示</span>
@@ -22,13 +25,13 @@
       </div>
       <div class="gap"></div>
       <div class="row">
-        <div class="flex" :class="{arrow: !isAdvanced}" @click="!isAdvanced && $refs.material.open()">
+        <div class="flex" :class="{arrow: ddlx === 'N'}" @click="ddlx === 'N' && $refs.material.open()">
           <div class="label">戒托材质</div>
           <div class="input ellipsis flex" :class="{active: !!material(materialIndex)}">{{material(materialIndex) || '请选择戒托材质'}}</div>
         </div>
       </div>
       <div class="row">
-        <div class="flex" :class="{arrow: !isAdvanced}" @click="!isAdvanced && handleOpenSize()">
+        <div class="flex" :class="{arrow: ddlx === 'N'}" @click="ddlx === 'N' && handleOpenSize()">
           <div class="label">戒托手寸</div>
           <div class="input ellipsis flex" :class="{active: !!ringName}">{{ringName || '请选择戒托手寸'}}</div>
         </div>
@@ -37,22 +40,22 @@
       <div class="row bb">
         <div class="flex arrow" @click="selectStone">
           <div class="label">选择主石</div>
-          <div class="input ellipsis flex"><span v-if="!stoneMade.stone">请选择主石</span></div>
+          <div class="input ellipsis flex"><span v-if="!stoneMade[this.ddlx]">请选择主石</span></div>
         </div>
       </div>
-      <div v-if="stoneMade.stone" class="stone flex">
+      <div v-if="stoneMade[this.ddlx]" class="stone flex">
         <div class="img"><img src="@/assets/stone/pic_dia.png" alt=""></div>
         <div class="detail flex-auto flex">
           <div class="detail-row flex">
-            <div class="col">重量：{{stoneMade.stone.zhusz}}克拉</div>
-            <div class="col">净度：{{stoneMade.stone.zhusjd}}</div>
+            <div class="col">重量：{{stoneMade[this.ddlx].zhusz}}克拉</div>
+            <div class="col">净度：{{stoneMade[this.ddlx].zhusjd}}</div>
           </div>
           <div class="detail-row flex">
-            <div class="col">颜色：{{stoneMade.stone.zhusys}}</div>
-            <div class="col">证书：{{stoneMade.stone.zslx}}证书</div>
+            <div class="col">颜色：{{stoneMade[this.ddlx].zhusys}}</div>
+            <div class="col">证书：{{stoneMade[this.ddlx].zslx}}证书</div>
           </div>
           <div class="detail-row flex">
-            <div class="col">切工：{{stoneMade.stone.zhusqg}}</div>
+            <div class="col">切工：{{stoneMade[this.ddlx].zhusqg}}</div>
             <div class="col"></div>
           </div>
         </div>
@@ -60,7 +63,8 @@
       <div class="row">
         <div class="flex">
           <div class="label">主石价格</div>
-          <div class="input ellipsis flex active" v-if="stoneMade.stone && stoneMade.stone.shouj">￥{{stoneMade.stone.shouj | currency}}</div>
+          <div class="input ellipsis flex active" v-if="stoneMade[ddlx] && stoneMade[ddlx].shouj">￥{{stoneMade[ddlx].shouj | currency}}</div>
+          <div class="input ellipsis flex" v-else-if="stoneMade[ddlx]">当前钻石方案暂无商品</div>
           <div v-else class="input ellipsis flex">全部选定后显示</div>
         </div>
       </div>
@@ -71,7 +75,7 @@
     </div>
     <div class="footer">
       <div class="btns">
-        <button v-if="isAdvanced" class="btn" :class="{active: isActive}" @click="isActive && handlePurchase('S')">提交订单</button>
+        <button v-if="ddlx === 'S'" class="btn" :class="{active: isActive}" @click="isActive && handlePurchase('S')">提交订单</button>
         <button v-else class="btn" :class="{active: isActive}" @click="isActive && handlePurchase('N')">立即购买</button>
       </div>
     </div>
@@ -114,17 +118,12 @@
       next(vm => {
         if(from.name === 'goodsdetail') {
           vm.setStoneMade({
-            stone: null,
+            N: null,
+            S: null,
             materialIndex: -1,
             // selectedSizeIndex1: -1,
             // selectedSizeIndex2: -1
             selectedSizeIndex: -1
-          });
-        }
-        if(from.name === 'selectstone' && vm.stoneMade && vm.stoneMade.isAdvanced) {
-          vm.setStoneMade({
-            stone: null,
-            isAdvanced: false
           });
         }
       });
@@ -145,19 +144,46 @@
     computed: {
       isActive() {
         // return (this.selectedSizeIndex1 !== -1 || this.selectedSizeIndex2 !== -1) && this.stoneMade.stone;
-        return this.selectedSizeIndex !== -1 && this.stoneMade.stone;
+        return this.selectedSizeIndex !== -1 && this.stoneMade[this.stoneMade.ddlx] && this.stoneMade[this.stoneMade.ddlx].shouj;
       }
     },
     created() {
-      this.isAdvanced = this.$route.name === 'advanced';
+      this.ddlx = this.$route.name === 'advanced' ? 'S' : 'N';
       this.getEmptyRing(true);
+      if(this.ddlx === 'S' && this.stoneMade.S) {
+        this.getStonePrice();
+      }
     },
     methods: {
       ...mapMutations(['setStoneMade']),
       ...mapActions(['ajax']),
+      getStonePrice() {
+        this.ajax({
+          name: 'getStonePrice',
+          data: {
+            gsmh: this.stoneMade.gsmh,
+            shouc: this.stoneMade.shouc.replace('#', ''),
+            ...this.stoneMade.S
+          }
+        }).then(res => {
+          this.setStoneMade({
+            S: {
+              ...this.stoneMade.S,
+              gsmh: '', // 公司模号 必填
+              shouc: this.stoneMade.shouc.replace('#', ''),
+              shouj: res.price,
+              jinys: '', // 金类型
+              zhuspg: '', // 主石抛光
+              zhusdc: '', // 主石对称
+              fhlx: '', // 发货类型 # 1：现货 2： 15天 3：45天
+            }
+          });
+        });
+      },
       handlePurchase(ddlx) {
         this.setStoneMade({
-          stone: Object.assign(this.stoneMade.stone, { ddlx })
+          ddlx,
+          [this.ddlx]: Object.assign(this.stoneMade[this.ddlx], { ddlx })
         });
         this.$router.push({ name: 'cusstoneorder' });
       }

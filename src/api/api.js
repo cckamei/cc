@@ -63,7 +63,8 @@ let api = {
   getActivity: { url: 'api/v1/active/list', method: 'get' }, //获取商品详情优惠活动列表
   getBrandGift: { url: 'api/v1/order/liquan', method: 'get' }, //获取品牌礼遇列表
   getOrderCoupon: { url: 'api/v1/order/coupons', method: 'post', isJson: true }, //获取下单时可用的优惠券
-  getOrderActivity: { url: 'api/v1/order/actives', method: 'post', isJson: true } //获取下单时优惠活动列表
+  getOrderActivity: { url: 'api/v1/order/actives', method: 'post', isJson: true }, //获取下单时优惠活动列表
+  getStonePrice: { url: 'api/v1/s_diy_price', method: 'get' } //高级定制价格查询
 };
 
 for (var k in api) {

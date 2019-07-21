@@ -224,7 +224,7 @@
         this.$refs['stone-confirm'].open();
       },
       handleSelectStone() {
-        this.setStoneMade({ stone: this.stoneList[this.stoneIndex] });
+        this.setStoneMade({ N: this.stoneList[this.stoneIndex] });
         this.$router.go(-1);
       }
     }
