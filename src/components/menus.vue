@@ -52,7 +52,7 @@
           this.$router.push({ name: 'goodssearch' });
         } else if(item === 'collect') {
           if(!this.token) {
-            this.$router.push({ name: 'login', params: { name: this.name } });
+            this.$router.push({ name: 'login', params: { page: this.name, params: { id: this.$route.params.id } } });
             return false;
           }
           this.$router.push({ name: 'mystore' });

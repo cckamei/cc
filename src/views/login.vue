@@ -25,8 +25,8 @@
 </template>
 
 <script>
-  import { mapActions, mapMutations, mapGetters } from 'vuex';
-  import { checkPhone, browser } from '@/utils';
+  import { mapActions, mapMutations, mapGetters, mapState } from 'vuex';
+  import { checkPhone, browser, serialize } from '@/utils';
   export default {
     data() {
       return {
@@ -35,17 +35,18 @@
       };
     },
     created() {
-      if(this.$route.params.name) {
-        this.setCommon({ lastPage: this.$route.params.name });
+      if(this.$route.params.page) {
+        this.setRedirect(this.$route.params);
       }
       if(browser().isWeixin) {
-        //2.没有userId，有code时进行授权登录
+        //有code时进行授权登录调回来的情况
         if(window.location.href.match(/code=[\w]{32}/, 'g')) {
           this.ajax({
             name: 'wxLogin',
             data: {
               code: window.location.href.match(/code=([\w]{32})/, 'g')[1]
-            }
+            },
+            error: true
           })
             .then(res => {
               res.userId = res.user_id;
@@ -76,7 +77,9 @@
                   this.setUserInfo(res2);
                   if(res2.phone) {
                     if(res2.vip_code) {
-                      this.$router.replace({ name: this.getCommon.lastPage });
+                      const { page, params, query } = serialize(this.redirect);
+                      this.setRedirect({ page: '', params: {}, query: {} });
+                      this.$router.replace({ name: page, params, query });
                     } else {
                       this.$router.push({ name: 'perfectinfo' });
                     }
@@ -85,11 +88,14 @@
                   }
                 });
               });
+            }).catch(() => {
+              this.$router.push({ name: 'index' });
             });
         }
       }
     },
     computed: {
+      ...mapState(['redirect']),
       ...mapGetters(['userId', 'getCommon']),
       isActive() {
         return this.phone.length && this.password.length && checkPhone(this.phone);
@@ -97,7 +103,7 @@
     },
     methods: {
       ...mapActions(['ajax']),
-      ...mapMutations(['setUserInfo', 'setCommon', 'setAddress']),
+      ...mapMutations(['setUserInfo', 'setRedirect', 'setAddress']),
       login() {
         this.ajax({
           name: 'login',

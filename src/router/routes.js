@@ -15,7 +15,7 @@ const router = [{
   },
   {
     name: 'goodsdetail',
-    path: '/goodslist/goodssearch/goodsdetail',
+    path: '/goodslist/goodssearch/goodsdetail/:id',
     component: () => import('@/views/goodsdetail'),
     meta: {
       params: []
@@ -272,14 +272,6 @@ const router = [{
     name: 'freebuy',
     path: '/home/freebuy',
     component: () => import('@/views/freebuy'),
-    meta: {
-      params: []
-    }
-  },
-  {
-    name: 'redirect',
-    path: '/redirect',
-    component: () => import('@/views/redirect'),
     meta: {
       params: []
     }
