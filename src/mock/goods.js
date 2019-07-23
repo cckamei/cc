@@ -14,7 +14,6 @@ export default [{
         }
       ],
       "merchant_code": "DRGC01070",
-      "is_diamond": false,
       "fuzuanxingzhuang": "",
       "slide_img": ["http://img.cc-jewel.com/892dbcce-e197-11e8-bde2-00163e020fbd", "http://img.cc-jewel.com/8ac04390-e197-11e8-bde2-00163e020fbd"],
       "cangku": "广东深圳",
