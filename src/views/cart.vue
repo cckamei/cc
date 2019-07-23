@@ -112,10 +112,12 @@
             item.checked = false;
             item.deleteVisible = false;
             item.limit = item.stock;
-            if(item.is_diamond) {
-              item.skuLabel = `${item.zhuzuanfenshu};${item.zuanshijingdu};${item.guige};${item.guige}`;
+            if(item.good_kind === '0') {
+              item.skuLabel = `${item.zhuzuanfenshu};${item.zuanshijingdu};${item.color};${item.guige}`;
+            } else if(item.good_kind === '1') {
+              item.skuLabel = `${item.zhushimingcheng};${item.zhushipingji};${item.color};${item.guige}`;
             } else {
-              item.skuLabel = `${item.zhushimingcheng};${item.zhushipingji};${item.guige};${item.guige}`;
+              item.skuLabel = `${item.s_jinleixing};${item.s_jinzhong};${item.guige}`;
             }
           });
           this.cart = res;

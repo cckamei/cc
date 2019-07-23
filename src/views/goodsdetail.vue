@@ -97,22 +97,56 @@
                 <span class="code">商品编号：{{sku.merchantCode || sku.defaultMerchantCode}} &nbsp;&nbsp;&nbsp; 库存：{{sku.stock}}</span>
               </div>
             </li>
-            <li>
-              <div class="title">{{isZuan ? '主钻分数' : '主石名称'}}</div>
-              <v-button-radio v-model="skuIndex.scoreIndex" :list="sku.skuScore" :cancel="true"></v-button-radio>
-            </li>
-            <li>
-              <div class="title">{{isZuan ? '钻石净度' : '主石评级'}}</div>
-              <v-button-radio v-model="skuIndex.clarityIndex" :list="sku.skuClarity" :cancel="true"></v-button-radio>
-            </li>
-            <li>
-              <div class="title">颜色</div>
-              <v-button-radio v-model="skuIndex.colorIndex" :list="sku.skuColor" :cancel="true"></v-button-radio>
-            </li>
-            <li>
-              <div class="title">规格</div>
-              <v-button-radio v-model="skuIndex.specIndex" :list="sku.skuSpec" :cancel="true"></v-button-radio>
-            </li>
+            <template v-if="res.good_kind === '0' && skuList.length">
+              <li>
+                <div class="title">主钻分数</div>
+                <v-button-radio v-model="skuIndex[0]" :list="skuList[0]" :cancel="true"></v-button-radio>
+              </li>
+              <li>
+                <div class="title">钻石净度</div>
+                <v-button-radio v-model="skuIndex[1]" :list="skuList[1]" :cancel="true"></v-button-radio>
+              </li>
+              <li>
+                <div class="title">颜色</div>
+                <v-button-radio v-model="skuIndex[2]" :list="skuList[2]" :cancel="true"></v-button-radio>
+              </li>
+              <li>
+                <div class="title">规格</div>
+                <v-button-radio v-model="skuIndex[3]" :list="skuList[3]" :cancel="true"></v-button-radio>
+              </li>
+            </template>
+            <template v-else-if="res.good_kind === '1' && skuList.length">
+              <li>
+                <div class="title">主石名称</div>
+                <v-button-radio v-model="skuIndex[0]" :list="skuList[0]" :cancel="true"></v-button-radio>
+              </li>
+              <li>
+                <div class="title">主石评级</div>
+                <v-button-radio v-model="skuIndex[1]" :list="skuList[1]" :cancel="true"></v-button-radio>
+              </li>
+              <li>
+                <div class="title">颜色</div>
+                <v-button-radio v-model="skuIndex[2]" :list="skuList[2]" :cancel="true"></v-button-radio>
+              </li>
+              <li>
+                <div class="title">规格</div>
+                <v-button-radio v-model="skuIndex[3]" :list="skuList[3]" :cancel="true"></v-button-radio>
+              </li>
+            </template>
+            <template v-else-if="res.good_kind === '2' && skuList.length">
+              <li>
+                <div class="title">金类型</div>
+                <v-button-radio v-model="skuIndex[0]" :list="skuList[0]" :cancel="true"></v-button-radio>
+              </li>
+              <li>
+                <div class="title">金重</div>
+                <v-button-radio v-model="skuIndex[1]" :list="skuList[1]" :cancel="true"></v-button-radio>
+              </li>
+              <li>
+                <div class="title">规格</div>
+                <v-button-radio v-model="skuIndex[2]" :list="skuList[2]" :cancel="true"></v-button-radio>
+              </li>
+            </template>
             <li class="count flex">
               <span>数量</span>
               <div class="flex">
@@ -271,17 +305,15 @@
           bannerList: [],
           service: []
         },
-        skuIndex: {
-          scoreIndex: -1,
-          clarityIndex: -1,
-          colorIndex: -1,
-          specIndex: -1
-        },
+        // skuIndex: {
+        //   scoreIndex: -1,
+        //   clarityIndex: -1,
+        //   colorIndex: -1,
+        //   specIndex: -1
+        // },
+        skuIndex: [],
+        skuList: [],
         sku: {
-          skuScore: [],
-          skuClarity: [],
-          skuColor: [],
-          skuSpec: [],
           merchantCode: '',
           price: 0,
           defaultSKU: '',
@@ -337,9 +369,9 @@
         }, 0);
       },
       skuIndex: {
-        handler({ scoreIndex, clarityIndex, colorIndex, specIndex }) {
-          let selectIndexes = [scoreIndex, clarityIndex, colorIndex, specIndex];
-          [this.sku.skuScore, this.sku.skuClarity, this.sku.skuColor, this.sku.skuSpec].forEach((type, typeIndex) => {
+        handler(val) {
+          let selectIndexes = val;
+          this.skuList.forEach((type, typeIndex) => {
             type.forEach((item, index) => {
               let arr = Object.assign([], selectIndexes);
               arr[typeIndex] = index;
@@ -358,11 +390,9 @@
             this.sku.price = price;
             this.sku.merchantCode = merchant_code;
 
-            let selectedScore = this.sku.skuScore[scoreIndex].label;
-            let selectedClarity = this.sku.skuClarity[clarityIndex].label;
-            let selectedSpec = this.sku.skuSpec[specIndex].label;
-            let selectedColor = this.sku.skuColor[colorIndex].label;
-            this.sku.selectedSku = `${selectedScore};${selectedClarity};${selectedSpec};${selectedColor}`;
+            this.sku.selectedSku = this.skuList.map((item, index) => {
+              return item[selectIndexes[index]].label
+            }).join(';');
 
             this.getGoodsStock(sku_id, stock => {
               this.sku.stock = stock;
@@ -415,12 +445,12 @@
           id: this.goodsId
         }).then(res => {
           this.res = res;
-          let skuScore = [];
-          let skuClarity = [];
-          let skuColor = [];
-          let skuSpec = [];
 
-          this.isZuan = res.is_diamond;
+          const goodsKind = +res.good_kind;
+          const dimensions = [];
+          const skuIndex = [];
+          const skuKeys = [['zhuzuanfenshu', 'zuanshijingdu', 'color', 'guige'], ['zhushimingcheng', 'zhushipingji', 'color', 'guige'], ['s_jinleixing', 's_jinzhong', 'guige']]
+
 
           res.skus.forEach((item, index) => {
             if(!index) {
@@ -431,56 +461,38 @@
                 this.sku.stock = stock;
               });
             }
-            if(this.isZuan) {
-              if(item.zhuzuanfenshu) {
-                skuScore.push(item.zhuzuanfenshu);
+            // 把不同维度的值放进不同的维度数组中
+            skuKeys[goodsKind].forEach((key, index) => {
+              if(!dimensions[index]) {
+                dimensions[index] = [];
               }
-              if(item.zuanshijingdu) {
-                skuClarity.push(item.zuanshijingdu);
-              }
-            } else {
-              if(item.zhushimingcheng) {
-                skuScore.push(item.zhushimingcheng);
-              }
-              if(item.zhushipingji) {
-                skuClarity.push(item.zhushipingji);
-              }
-            }
-            if(item.color) {
-              skuColor.push(item.color);
-            }
-            if(item.guige) {
-              skuSpec.push(item.guige);
-            }
+              item[key] && dimensions[index].push(item[key]);
+            });
           });
 
-          skuScore = [...new Set(skuScore)];
-          skuClarity = [...new Set(skuClarity)];
-          skuColor = [...new Set(skuColor)];
-          skuSpec = [...new Set(skuSpec)];
 
+
+          // 去掉每一个维度的重复项
+          dimensions.forEach((item, index) => {
+            // item = [...new Set(item)];
+            dimensions[index] = [...new Set(item)];
+          })
+
+          // 给每一条sku设置一个id（规则是相关属性的值组合而成）
           res.skus.forEach(item => {
-            if(this.isZuan) {
-              item.skuIds = [
-                skuScore.indexOf(item.zhuzuanfenshu),
-                skuClarity.indexOf(item.zuanshijingdu),
-                skuColor.indexOf(item.color),
-                skuSpec.indexOf(item.guige)
-              ].join('_');
-            } else {
-              item.skuIds = [
-                skuScore.indexOf(item.zhushimingcheng),
-                skuClarity.indexOf(item.zhushipingji),
-                skuColor.indexOf(item.color),
-                skuSpec.indexOf(item.guige)
-              ].join('_');
-            }
+            item.skuIds = skuKeys[goodsKind].map((key, index) => dimensions[index].indexOf(item[key])).join('_');
           });
 
-          this.sku.skuScore = skuScore.map(item => ({ label: item, disabled: false }));
-          this.sku.skuClarity = skuClarity.map(item => ({ label: item, disabled: false }));
-          this.sku.skuColor = skuColor.map(item => ({ label: item, disabled: false }));
-          this.sku.skuSpec = skuSpec.map(item => ({ label: item, disabled: false }));
+          // 初始化disable为false，并付给sku选项
+          this.skuList = dimensions.map(d => {
+            return d.map(item => ({ label: item, disabled: false }));
+          });
+
+          // 初始化选项选中状态
+          dimensions.forEach(item => {
+            skuIndex.push(-1);
+          })
+          this.skuIndex = skuIndex;
 
           this.res.bannerList = res.slide_img;
 
