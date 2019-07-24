@@ -88,7 +88,7 @@
         </div>
       </div>
       <div class="row">
-        <v-form-slide-up :open.sync="autoOpenSKU" label="商品规格" v-model="sku.selectedSku" :placeholder="`选择 ${isZuan ? '主钻分数；钻石净度；' : '主石名称；主石评级；'}颜色；规格；数量`">
+        <v-form-slide-up :open.sync="autoOpenSKU" label="商品规格" v-model="sku.selectedSku" :placeholder="placeholder">
           <ul class="sku">
             <li class="sku-icon flex">
               <img class="icon" :src="res.img" alt="">
@@ -173,7 +173,7 @@
               <span class="label">款式</span>
               <span class="value">{{res.kuanshi}}</span>
             </li>
-            <template v-if="isZuan">
+            <template v-if="res.good_kind === '0'">
               <li class="flex">
                 <span class="label">钻石切工</span>
                 <span class="value">{{res.zuanshiqiegong}}</span>
@@ -191,6 +191,10 @@
                 <span class="value">{{res.fuzuanfenshu || '无副钻'}}</span>
               </li>
             </template>
+            <li v-if="res.good_kind === '2'" class="flex">
+              <span class="label">贵金属成色</span>
+              <span class="value">{{res.guijinshuchengse}}</span>
+            </li>
             <li class="flex">
               <span class="label">镶嵌材质</span>
               <span class="value">{{res.xiangqiancaizhi}}</span>
@@ -299,7 +303,6 @@
         serviceVisible: false,
         top: 0,
         offsetTops: [],
-        isZuan: true, //钻石/主石
         res: {
           logitics: {},
           bannerList: [],
@@ -359,7 +362,18 @@
       }, 1000);
     },
     computed: {
-      ...mapGetters(['getCommon', 'token', 'userId', 'getUserInfo'])
+      ...mapGetters(['getCommon', 'token', 'userId', 'getUserInfo']),
+      placeholder() {
+        if(this.res.good_kind === '0') {
+          return '选择 主钻分数；钻石净度；颜色；规格；数量';
+        }
+        if(this.res.good_kind === '1') {
+          return '选择 主石名称；主石评级；颜色；规格；数量';
+        }
+        if(this.res.good_kind === '2') {
+          return '选择 金类型；金重；规格；数量';
+        }
+      }
     },
     watch: {
       '$route'(to, from) {
