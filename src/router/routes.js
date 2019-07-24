@@ -23,7 +23,7 @@ const router = [{
   },
   {
     name: 'package',
-    path: '/goodslist/goodssearch/goodsdetail/package',
+    path: '/goodslist/goodssearch/goods-detail/package',
     component: () => import('@/views/package/index'),
     meta: {
       params: []
@@ -31,7 +31,7 @@ const router = [{
   },
   {
     name: 'packageorder',
-    path: '/goodslist/goodssearch/goodsdetail/package/order',
+    path: '/goodslist/goodssearch/goods-detail/package/order',
     component: () => import('@/views/package/confirmorder'),
     meta: {
       params: []
@@ -39,7 +39,7 @@ const router = [{
   },
   {
     name: 'cart',
-    path: '/goodslist/goodssearch/goodsdetail/cart',
+    path: '/goodslist/goodssearch/goods-detail/cart',
     component: () => import('@/views/cart'),
     meta: {
       params: ['token']
@@ -47,50 +47,50 @@ const router = [{
   },
   {
     name: 'confirmorder',
-    path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder',
+    path: '/goodslist/goodssearch/goods-detail/cart/confirmorder',
     component: () => import('@/views/confirmorder'),
     meta: {}
   },
   {
     name: 'selectcoupon',
-    path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder/selectcoupon',
+    path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/selectcoupon',
     component: () => import('@/views/coupon/selectcoupon'),
     meta: {}
   },
   {
     name: 'selectactivity',
-    path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder/selectactivity',
+    path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/selectactivity',
     component: () => import('@/views/card/selectactivity'),
     meta: {}
   },
   {
     name: 'address',
-    path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder/address',
+    path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/address',
     component: () => import('@/views/address')
   },
   {
     name: 'pay',
-    path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder/pay',
+    path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/pay',
     component: () => import('@/views/pay')
   },
   {
     name: 'paysuccess',
-    path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder/pay/paysuccess',
+    path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/pay/paysuccess',
     component: () => import('@/views/paysuccess')
   },
   {
     name: 'wechatgroup',
-    path: '/goodslist/goodssearch/goodsdetail/cart/confirmorder/pay/paysuccess/wechatgroup',
+    path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/pay/paysuccess/wechatgroup',
     component: () => import('@/views/wechat/index')
   },
   {
     name: 'cusstone',
-    path: '/goodslist/goodssearch/goodsdetail/cusstone',
+    path: '/goodslist/goodssearch/goods-detail/cusstone',
     component: () => import('@/views/cusstone/index')
   },
   {
     name: 'cusstoneorder',
-    path: '/goodslist/goodssearch/goodsdetail/cusstone/order',
+    path: '/goodslist/goodssearch/goods-detail/cusstone/order',
     component: () => import('@/views/cusstone/confirmorder'),
     meta: {
       params: []
@@ -98,22 +98,22 @@ const router = [{
   },
   {
     name: 'selectstone',
-    path: '/goodslist/goodssearch/goodsdetail/cusstone/selectstone',
+    path: '/goodslist/goodssearch/goods-detail/cusstone/selectstone',
     component: () => import('@/views/cusstone/selectstone')
   },
   {
     name: 'advanced',
-    path: '/goodslist/goodssearch/goodsdetail/cusstone/selectstone/advanced',
+    path: '/goodslist/goodssearch/goods-detail/cusstone/selectstone/advanced',
     component: () => import('@/views/cusstone/index')
   },
   {
     name: 'advancedselect',
-    path: '/goodslist/goodssearch/goodsdetail/cusstone/selectstone/advanced/select',
+    path: '/goodslist/goodssearch/goods-detail/cusstone/selectstone/advanced/select',
     component: () => import('@/views/cusstone/advanced')
   },
   {
     name: 'success',
-    path: '/goodslist/goodssearch/goodsdetail/cusstone/selectstone/advanced/success',
+    path: '/goodslist/goodssearch/goods-detail/cusstone/selectstone/advanced/success',
     component: () => import('@/views/cusstone/success')
   },
   {
