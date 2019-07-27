@@ -159,7 +159,7 @@
         </v-form-slide-up>
       </div>
       <div class="row">
-        <v-form-slide-up label="商品参数" title="商品参数" placeholder="套系；款式；钻石切工；主钻形状；副钻形状‘副钻分数；镶嵌材质；镶嵌方式">
+        <v-form-slide-up label="商品参数" title="商品参数" :placeholder="placeholder2">
           <ul class="goods-param">
             <li class="flex">
               <span class="label">商品货号</span>
@@ -374,6 +374,17 @@
         }
         if(this.res.good_kind === '2') {
           return '选择 金类型；金重；规格；数量';
+        }
+      },
+      placeholder2() {
+        if(this.res.good_kind === '0') {
+          return '套系；款式；钻石切工；主钻形状；副钻形状；副钻分数；镶嵌材质；镶嵌方式';
+        }
+        if(this.res.good_kind === '1') {
+          return '套系；款式；镶嵌材质；镶嵌方式';
+        }
+        if(this.res.good_kind === '2') {
+          return '套系；款式；贵金属成色；镶嵌材质；镶嵌方式';
         }
       }
     },
@@ -737,7 +748,7 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
+  @import '~@/style/vars.less';
   .header {
     background-color: transparent !important;
     &.shadow {
@@ -924,18 +935,18 @@
           width: 40px;
           height: 40px;
           &.plus {
-            background: url("~@/assets/goods/button_plus_l.png") no-repeat;
+            background: url('~@/assets/goods/button_plus_l.png') no-repeat;
             background-size: 100%;
             &.active {
-              background: url("~@/assets/goods/button_plus_d.png") no-repeat;
+              background: url('~@/assets/goods/button_plus_d.png') no-repeat;
               background-size: 100%;
             }
           }
           &.minus {
-            background: url("~@/assets/goods/button_minus_l.png") no-repeat;
+            background: url('~@/assets/goods/button_minus_l.png') no-repeat;
             background-size: 100%;
             &.active {
-              background: url("~@/assets/goods/button_minus_d.png") no-repeat;
+              background: url('~@/assets/goods/button_minus_d.png') no-repeat;
               background-size: 100%;
             }
           }
@@ -1027,7 +1038,7 @@
       width: 100%;
       justify-content: center;
       &:after {
-        content: "";
+        content: '';
         left: 30px;
         right: 30px;
         height: 1px; /*no*/
@@ -1069,11 +1080,11 @@
         height: 100%;
         font-size: 30px;
         &.cart {
-          background: url("~@/assets/goods/button_cart.png") no-repeat;
+          background: url('~@/assets/goods/button_cart.png') no-repeat;
           background-size: 100% 100%;
         }
         &.purchase {
-          background: url("~@/assets/goods/button_buynow.png") no-repeat;
+          background: url('~@/assets/goods/button_buynow.png') no-repeat;
           background-size: 100% 100%;
         }
       }
@@ -1082,7 +1093,7 @@
 </style>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
+  @import '~@/style/vars.less';
   /*popup内部的里面元素的样式直接放到该页面的根部 否则样式在手机上无效*/
   .activity-btn {
     border-radius: 12px;
