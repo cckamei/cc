@@ -75,7 +75,7 @@
     .label {
       flex-shrink: 0;
       min-width: 30%;
-      color: #666;
+      color: #999;
       font-size: 24px;
     }
     input {

@@ -15,15 +15,20 @@
     </div>
     <div class="content">
       <ul class="list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="50" infinite-scroll-immediate-check="true">
-        <li v-for="(item, index) in goodsList" :key="index" class="flex" v-touch.press="handlePress" :data-index="index">
-          <div class="img"><img :src="item.img" alt=""></div>
-          <div class="detail flex-auto flex">
-            <span class="name">{{item.goods_title}}</span>
-            <span class="desc">{{item.sub_title}}</span>
-            <div class="line3 flex">
-              <div class="price"><span>￥</span>{{item.price | currency}}</div>
-              <div class="cart" @click.stop="addToCart(item)"></div>
+        <li v-for="(item, index) in goodsList" :key="index" v-touch.press="handlePress" :data-index="index">
+          <div class="goods flex">
+            <div class="img"><img :src="item.img" alt=""></div>
+            <div class="detail flex-auto flex">
+              <span class="name">{{item.goods_title}}</span>
+              <span class="desc">{{item.sub_title}}</span>
+              <div class="line3 flex">
+                <div class="price"><span>￥</span>{{item.price | currency}}</div>
+                <div class="cart" @click.stop="addToCart(item)"></div>
+              </div>
             </div>
+          </div>
+          <div class="coupon-tips">
+            <img src="@/assets/mypage/icon_buy.png" alt="">3个优惠活动正在进行中
           </div>
           <div class="mask-delete flex" v-if="item.deleteVisible" @click="item.deleteVisible = false">
             <div class="delete" @click="removeCart(item, index)">删除</div>
@@ -225,51 +230,67 @@
     position: relative;
     li {
       padding: 30px 40px 30px 30px;
-      align-items: stretch;
-      .img {
-        width: 200px;
-        height: 200px;
-        margin-right: 30px;
-        flex-shrink: 0;
-        background-color: #f5f5f5;
-        img {
-          height: 100%;
+      position: relative;
+      border-bottom: 1px solid #f0f0f0; /*no*/
+      .goods {
+        align-items: stretch;
+        .img {
+          width: 200px;
+          height: 200px;
+          margin-right: 30px;
+          flex-shrink: 0;
+          background-color: #f5f5f5;
+          img {
+            height: 100%;
+          }
         }
-      }
-      .detail {
-        flex-direction: column;
-        align-items: flex-start;
-        position: relative;
-        .name {
-          font-size: 30px;
-          color: #666;
-          padding-top: 10px;
-        }
-        .desc {
-          font-size: 20px;
-          color: #999;
-          padding-top: 24px;
-        }
-        .line3 {
-          position: absolute;
-          width: 100%;
-          bottom: 10px;
-          left: 0;
-          align-items: center;
-          justify-content: space-between;
-          .price {
+        .detail {
+          flex-direction: column;
+          align-items: flex-start;
+          position: relative;
+          .name {
             font-size: 30px;
-            color: @color4;
-            span {
-              font-size: 20px;
+            color: #666;
+            padding-top: 10px;
+          }
+          .desc {
+            font-size: 20px;
+            color: #999;
+            padding-top: 24px;
+          }
+          .line3 {
+            position: absolute;
+            width: 100%;
+            bottom: 10px;
+            left: 0;
+            align-items: center;
+            justify-content: space-between;
+            .price {
+              font-size: 30px;
+              color: @color4;
+              span {
+                font-size: 20px;
+              }
+            }
+            .cart {
+              width: 40px;
+              height: 40px;
+              background: url("~@/assets/goods/icon_cart.png") no-repeat;
+              background-size: 100%;
             }
           }
-          .cart {
-            width: 40px;
-            height: 40px;
-            background: url("~@/assets/goods/icon_cart.png") no-repeat;
-            background-size: 100%;
-          }
+        }
+      }
+
+      .coupon-tips {
+        font-size: 20px;
+        color: #999;
+        padding-top: 10px;
+        text-align: center;
+        img {
+          width: 32px;
+          height: 32px;
+          margin-right: 8px;
         }
       }
 

@@ -160,7 +160,7 @@
       }
     },
     methods: {
-      ...mapMutations(['setStoneMade']),
+      ...mapMutations(['setStoneMade', 'setAddress', 'setInvoice']),
       ...mapActions(['ajax']),
       getStonePrice() {
         this.ajax({
@@ -189,6 +189,8 @@
           ddlx,
           [this.ddlx]: Object.assign(this.stoneMade[this.ddlx], { ddlx })
         });
+        this.setAddress({ type: 0 });
+        this.setInvoice({ use: '' });
         this.$router.push({ name: 'cusstoneorder' });
       }
     }

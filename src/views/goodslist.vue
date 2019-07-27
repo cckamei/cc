@@ -20,15 +20,23 @@
     </div>
     <div class="content">
       <ul class="list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="50" infinite-scroll-immediate-check="true">
-        <li v-for="(item, index) in goodsList" :key="index" class="flex" @click="goDetail(item)">
-          <div class="img"><img :src="item.img" alt=""></div>
-          <div class="detail flex-auto flex">
-            <span class="name">{{item.goods_title}}</span>
-            <span class="desc">{{item.sub_title}}</span>
-            <div class="line3 flex">
-              <div class="price"><span>￥</span>{{item.price | currency}}</div>
-              <div class="cart" @click.stop="addToCart(item)"></div>
+        <li v-for="(item, index) in goodsList" :key="index" @click="goDetail(item)">
+          <div class="goods flex">
+            <div class="img"><img :src="item.img" alt=""></div>
+            <div class="detail flex-auto flex">
+              <span class="name">{{item.goods_title}}</span>
+              <span class="desc">{{item.sub_title}}</span>
+              <div class="line3 flex">
+                <div class="price"><span>￥</span>{{item.price | currency}}</div>
+                <div class="cart" @click.stop="addToCart(item)"></div>
+              </div>
             </div>
+          </div>
+          <div class="diy-stone flex">
+            <img src="@/assets/goods/icon_dia.png" alt="">
+            <span>定制你的专属钻戒</span>
+            <button class="btn-txt">30分 ￥12998</button>
+            <button class="btn-txt">70分 ￥26998</button>
           </div>
         </li>
       </ul>
@@ -206,52 +214,73 @@
     background-color: #fff;
     position: relative;
     li {
-      padding: 30px 40px 30px 30px;
-      align-items: stretch;
-      .img {
-        width: 200px;
-        height: 200px;
-        margin-right: 30px;
-        flex-shrink: 0;
-        background-color: #f5f5f5;
-        img {
-          height: 100%;
+      padding: 30px;
+      border-bottom: 1px solid #f0f0f0; /*no*/
+      .goods {
+        align-items: stretch;
+        .img {
+          width: 200px;
+          height: 200px;
+          margin-right: 30px;
+          flex-shrink: 0;
+          background-color: #f5f5f5;
+          img {
+            height: 100%;
+          }
         }
-      }
-      .detail {
-        flex-direction: column;
-        align-items: flex-start;
-        position: relative;
-        .name {
-          font-size: 30px;
-          color: #666;
-          padding-top: 10px;
-        }
-        .desc {
-          font-size: 20px;
-          color: #999;
-          padding-top: 24px;
-        }
-        .line3 {
-          position: absolute;
-          width: 100%;
-          bottom: 10px;
-          left: 0;
-          align-items: center;
-          justify-content: space-between;
-          .price {
+        .detail {
+          flex-direction: column;
+          align-items: flex-start;
+          position: relative;
+          .name {
             font-size: 30px;
-            color: @color4;
-            span {
-              font-size: 20px;
+            color: #666;
+            padding-top: 10px;
+          }
+          .desc {
+            font-size: 20px;
+            color: #999;
+            padding-top: 24px;
+          }
+          .line3 {
+            position: absolute;
+            width: 100%;
+            bottom: 10px;
+            left: 0;
+            align-items: center;
+            justify-content: space-between;
+            .price {
+              font-size: 30px;
+              color: @color4;
+              span {
+                font-size: 20px;
+              }
+            }
+            .cart {
+              width: 40px;
+              height: 40px;
+              background: url("~@/assets/goods/icon_cart.png") no-repeat;
+              background-size: 100%;
             }
           }
-          .cart {
-            width: 40px;
-            height: 40px;
-            background: url("~@/assets/goods/icon_cart.png") no-repeat;
-            background-size: 100%;
-          }
+        }
+      }
+      .diy-stone {
+        padding-top: 32px;
+        img {
+          width: 32px;
+          height: 32px;
+          margin-right: 8px;
+        }
+        span {
+          color: #999;
+          font-size: 24px;
+        }
+        .btn-txt {
+          height: 32px;
+          line-height: 32px;
+          margin-left: 24px;
+          width: 200px;
         }
       }
     }

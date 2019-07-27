@@ -17,25 +17,16 @@ const router = [{
     name: 'goodsdetail',
     path: '/goodslist/goodssearch/goodsdetail/:id',
     component: () => import('@/views/goodsdetail'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'package',
     path: '/goodslist/goodssearch/goods-detail/package',
     component: () => import('@/views/package/index'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'packageorder',
     path: '/goodslist/goodssearch/goods-detail/package/order',
     component: () => import('@/views/package/confirmorder'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'cart',
@@ -49,19 +40,16 @@ const router = [{
     name: 'confirmorder',
     path: '/goodslist/goodssearch/goods-detail/cart/confirmorder',
     component: () => import('@/views/confirmorder'),
-    meta: {}
   },
   {
     name: 'selectcoupon',
     path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/selectcoupon',
     component: () => import('@/views/coupon/selectcoupon'),
-    meta: {}
   },
   {
     name: 'selectactivity',
     path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/selectactivity',
     component: () => import('@/views/card/selectactivity'),
-    meta: {}
   },
   {
     name: 'address',
@@ -84,6 +72,11 @@ const router = [{
     component: () => import('@/views/wechat/index')
   },
   {
+    name: 'invoice',
+    path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/invoice',
+    component: () => import('@/views/invoice/index'),
+  },
+  {
     name: 'cusstone',
     path: '/goodslist/goodssearch/goods-detail/cusstone',
     component: () => import('@/views/cusstone/index')
@@ -92,9 +85,6 @@ const router = [{
     name: 'cusstoneorder',
     path: '/goodslist/goodssearch/goods-detail/cusstone/order',
     component: () => import('@/views/cusstone/confirmorder'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'selectstone',
@@ -272,81 +262,51 @@ const router = [{
     name: 'freebuy',
     path: '/home/freebuy',
     component: () => import('@/views/freebuy'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'mycard',
     path: '/card/mycard',
     component: () => import('@/views/card/mycard'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'cardmall',
     path: '/card/mycard/cardmall',
     component: () => import('@/views/card/cardmall'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'carddetail',
     path: '/card/mycard/cardmall/:id',
     component: () => import('@/views/card/carddetail'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'cardorder',
     path: '/card/mycard/cardmall/carddetail/order',
     component: () => import('@/views/card/confirmorder'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'mycoupon',
     path: '/coupon/mycoupon',
     component: () => import('@/views/coupon/mycoupon'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'couponmall',
     path: '/coupon/mycoupon/couponmall',
     component: () => import('@/views/coupon/couponmall'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'coupondetail',
     path: '/coupon/mycoupon/couponmall/:id',
     component: () => import('@/views/coupon/coupondetail'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'sharecard',
     path: '/sharecard',
     component: () => import('@/views/coupon/share'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'memberbenefits',
     path: '/coupon/memberbenefits',
     component: () => import('@/views/coupon/memberbenefits'),
-    meta: {
-      params: []
-    }
   },
   {
     name: 'shoplist',

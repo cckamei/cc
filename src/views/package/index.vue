@@ -37,7 +37,7 @@
       ...mapState(['common'])
     },
     methods: {
-      ...mapMutations(['setPackage']),
+      ...mapMutations(['setPackage', 'setAddress', 'setInvoice']),
       ...mapActions(['ajax']),
       getPackageList() {
         this.ajax({
@@ -48,6 +48,8 @@
         });
       },
       buy(val) {
+        this.setAddress({ type: 0 });
+        this.setInvoice({ use: '' });
         this.setPackage(val);
         this.$router.push({ name: 'packageorder' });
       }

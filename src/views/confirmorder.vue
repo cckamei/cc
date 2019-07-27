@@ -4,7 +4,7 @@
     <div class="content">
       <ul class="sections">
         <li class="section">
-          <v-receipt></v-receipt>
+          <v-receipt :ziti="true"></v-receipt>
         </li>
         <li class="section cart-list">
           <ul>
@@ -37,6 +37,9 @@
             <v-form-input v-else-if="couponLength" class="coupon" label="优惠券" :arrow="true" :value="couponLength + '张 可用的优惠券'" @input-click="$router.push({name: 'selectcoupon'})"></v-form-input>
             <v-form-input v-else label="优惠券" class="coupon" :arrow="true" value="没有可用的优惠券" @input-click="$router.push({name: 'selectcoupon'})"></v-form-input>
           </div>
+          <div v-if="getAddress.type" class="row">
+            <v-form-datepicker label="自提时间" title="自提时间" v-model="reqData.ziti" format="yyyy-MM-dd" placeholder="选择自提时间" :startDate="startDate" :endDate="new Date('2050/01/01')" :arrow="true"></v-form-datepicker>
+          </div>
           <div class="row">
             <v-form-slide-up label="配送方式" title="配送方式" confirmText="完成">
               <template slot="value">
@@ -52,6 +55,9 @@
                 </li>
               </ul>
             </v-form-slide-up>
+          </div>
+          <div class="row">
+            <v-form-input v-model="invoice.use" label="申请开票" placeholder="(选填) 填写开票信息" :arrow="true" @input-click="$router.push({name: 'invoice'})"></v-form-input>
           </div>
           <!-- <div class="row">
             <div class="insurance flex">
@@ -109,9 +115,11 @@
 
 <script>
   import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
+  import confirmOrderMixins from './mixins/confirmorder.vue';
   import { formatPrice } from '@/utils';
 
   export default {
+    mixins: [confirmOrderMixins],
     data() {
       return {
         shopMoney: 0, //商品总额
@@ -136,7 +144,8 @@
           logitics_id: '', //快递id
           active_type: 1, //优惠活动类型 1: 购物卡优惠 2: 店铺优惠
           active_id: '', // 当active_type 为店铺优惠时，传指定的活动ID
-          liquan_id: '' // 优惠礼券ID 即会员礼遇
+          liquan_id: '', // 优惠礼券ID 即会员礼遇
+          ziti: '' //自提时间
         },
         activityLength: 0,
         couponLength: 0
@@ -185,6 +194,12 @@
         }
 
         return formatPrice(this.shopMoney + deliveryMoney - this.couponMoney - this.activityMoney);
+      },
+      startDate() {
+        const date = new Date();
+
+        date.setDate(date.getDate() + 3);
+        return date;
       }
     },
     methods: {
@@ -295,6 +310,9 @@
                 liquan_id: this.reqData.liquan_id
               }
             }).then(res => {
+              if(this.invoice.use) {
+                this.applyInvock(res.order_id);
+              }
               Object.assign(res, this.reqData);
               this.setPayOrder(res);
               this.$router.push({ name: 'pay' });

@@ -42,7 +42,7 @@
         </li>
         <li class="summary section">
           <div class="row">
-            <v-form-input class="freight" label="商品总额" :value="'￥' + goodsMoney" :readonly="true"></v-form-input>
+            <v-form-input label="商品总额" :value="'￥' + goodsMoney" :readonly="true"></v-form-input>
           </div>
           <div class="row" v-if="delivery.length">
             <v-form-input class="freight" label="运费" :value="'+￥' + delivery[deliveryIndex].price" :readonly="true"></v-form-input>
@@ -293,6 +293,7 @@
 </style>
 
 <style lang="less">
+  @import "~@/style/vars.less";
   .confirm-order {
     .row > .flex {
       padding-left: 0;
@@ -300,6 +301,11 @@
     .summary .label,
     .remark .label {
       color: #999 !important;
+    }
+    .freight {
+      input {
+        color: @color2;
+      }
     }
   }
 </style>

@@ -16,9 +16,10 @@
       }
     },
     methods: {
-      ...mapMutations(['setCard']),
+      ...mapMutations(['setCard', 'setAddress']),
       buy() {
         this.setCard(this.card);
+        this.setAddress({ type: 0 });
         this.$router.push({ name: 'cardorder' });
       }
     }

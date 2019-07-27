@@ -65,7 +65,9 @@ let api = {
   getOrderCoupon: { url: 'api/v1/order/coupons', method: 'post', isJson: true }, //获取下单时可用的优惠券
   getOrderActivity: { url: 'api/v1/order/actives', method: 'post', isJson: true }, //获取下单时优惠活动列表
   getStonePrice: { url: 'api/v1/s_diy_price', method: 'get' }, //高级定制价格查询
-  getPackageList: { url: 'api/v1/gp/:id', method: 'get' } //根据商品id获取套餐
+  getPackageList: { url: 'api/v1/gp/:id', method: 'get' }, //根据商品id获取套餐
+  buyPackage: { url: 'api/v1/buy_taocan_now', method: 'post' }, //套餐购买
+  addInvoice: { url: 'api/v1/add_invoice', method: 'post' } //开票
 };
 
 for (var k in api) {

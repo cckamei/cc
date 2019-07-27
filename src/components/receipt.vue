@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="tabs flex">
+    <div v-if="ziti" class="tabs flex">
       <span class="tab" @click="setAddressType(0)" :class="{active: address.type === 0}">配送</span>
       <span class="tab" @click="setAddressType(1)" :class="{active: address.type === 1}">自提</span>
     </div>
@@ -28,6 +28,12 @@
 <script>
   import { mapState, mapMutations } from 'vuex';
   export default {
+    props: {
+      ziti: {
+        type: Boolean,
+        default: false
+      }
+    },
     computed: {
       ...mapState(['address'])
     },

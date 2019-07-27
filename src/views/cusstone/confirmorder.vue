@@ -37,15 +37,18 @@
             </v-form-slide-up>
           </div>
           <div class="row">
+            <v-form-input v-model="invoice.use" label="申请开票" placeholder="(选填) 填写开票信息" :arrow="true" @input-click="$router.push({name: 'invoice'})"></v-form-input>
+          </div>
+          <div class="row">
             <v-form-input class="remark" label="留言" v-model="reqData.yaoqiu" placeholder="（选填）建议留言前先与卖家沟通确认"></v-form-input>
           </div>
         </li>
         <li class="summary section">
           <div class="row">
-            <v-form-input label="商品总额" v-model="goodsMoney" :readonly="true"></v-form-input>
+            <v-form-input label="商品总额" :value="'￥' + goodsMoney" :readonly="true"></v-form-input>
           </div>
           <div class="row" v-if="delivery.length">
-            <v-form-input label="运费" v-model="delivery[deliveryIndex].price" :readonly="true"></v-form-input>
+            <v-form-input class="freight" label="运费" :value="'+￥' + delivery[deliveryIndex].price" :readonly="true"></v-form-input>
           </div>
         </li>
       </ul>
@@ -60,8 +63,10 @@
 
 <script>
   import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
+  import confirmOrderMixins from '../mixins/confirmorder.vue';
 
   export default {
+    mixins: [confirmOrderMixins],
     data() {
       return {
         goodsMoney: 0, //商品总额
@@ -128,6 +133,9 @@
         }
 
         this.ajax({ name: 'addDIYStoneOrder', data: this.reqData }).then(res => {
+          if(this.invoice.use) {
+            this.applyInvock(res.order_id);
+          }
           this.clearPayOrder();
           this.setPayOrder(res);
           this.$router.push({ name: 'pay' });
@@ -308,6 +316,7 @@
 </style>
 
 <style lang="less">
+  @import "~@/style/vars.less";
   .confirm-order {
     .row > .flex {
       padding-left: 0;
@@ -315,6 +324,11 @@
     .summary .label,
     .remark .label {
       color: #999 !important;
+    }
+    .freight {
+      input {
+        color: @color2;
+      }
     }
   }
 </style>

@@ -8,16 +8,16 @@
         </li>
         <li class="section cart-list">
           <ul>
-            <li class="flex" v-for="(item, index) in package" :key="index">
+            <li class="flex" v-for="(item, index) in package.goods_list" :key="index">
               <div class="img">
-                <img :src="item.img" alt="">
+                <img :src="item.good.cover_img" alt="">
               </div>
               <div class="detail flex-auto flex">
-                <span class="name">{{item.goods_title}}</span>
-                <span class="desc">{{item.skuLabel}}</span>
+                <span class="name">{{item.good.title}}</span>
+                <span class="desc">{{item.sku.zhuzuanfenshu}}</span>
                 <div class="line3 flex">
                   <span class="price"><span>￥</span>{{item.price | currency}}</span>
-                  <div class="number">X{{item.count}}</div>
+                  <div class="number">X1</div>
                 </div>
               </div>
             </li>
@@ -41,12 +41,15 @@
             </v-form-slide-up>
           </div>
           <div class="row">
+            <v-form-input v-model="invoice.use" label="申请开票" placeholder="(选填) 填写开票信息" :arrow="true" @input-click="$router.push({name: 'invoice'})"></v-form-input>
+          </div>
+          <div class="row">
             <v-form-input class="remark" label="留言" v-model="reqData.yaoqiu" placeholder="（选填）建议留言前先与卖家沟通确认"></v-form-input>
           </div>
         </li>
         <li class="summary section">
           <div class="row">
-            <v-form-input class="freight" label="商品总额" :value="'￥' + goodsMoney" :readonly="true"></v-form-input>
+            <v-form-input label="商品总额" :value="'￥' + goodsMoney" :readonly="true"></v-form-input>
           </div>
           <div class="row" v-if="delivery.length">
             <v-form-input class="freight" label="运费" :value="'+￥' + delivery[deliveryIndex].price" :readonly="true"></v-form-input>
@@ -64,8 +67,10 @@
 
 <script>
   import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
+  import confirmOrderMixins from '../mixins/confirmorder.vue';
 
   export default {
+    mixins: [confirmOrderMixins],
     data() {
       return {
         goodsMoney: 0, //商品总额
@@ -75,7 +80,7 @@
           address_id: '', //地址id
           logitics_id: '', //快递id
           yaoqiu: '',
-          vipcard_id: ''
+          taocan_id: ''
         }
       };
     },
@@ -84,11 +89,11 @@
         this.reqData.address_id = this.getAddress.id;
       }
 
-      this.goodsMoney = this.card.price;
+      this.goodsMoney = this.package.price;
       this.fetchLogitics();
     },
     computed: {
-      ...mapState(['card', 'package']),
+      ...mapState(['package']),
       ...mapGetters(['getAddress']),
       totalMoney() {
         let deliveryMoney = 0;
@@ -109,14 +114,17 @@
       },
       addOrder() {
         this.reqData.logitics_id = this.delivery[this.deliveryIndex].id;
-        this.reqData.vipcard_id = this.card.card_id;
+        this.reqData.taocan_id = this.package.id;
 
         if(!this.reqData.address_id) {
           this.toast('亲，您还未设置收货地址！');
           return false;
         }
 
-        this.ajax({ name: 'buyCard', data: this.reqData }).then(res => {
+        this.ajax({ name: 'buyPackage', data: this.reqData }).then(res => {
+          if(this.invoice.use) {
+            this.applyInvock(res.order_id);
+          }
           this.clearPayOrder();
           this.setPayOrder(res);
           this.$router.push({ name: 'pay' });
@@ -303,6 +311,7 @@
 </style>
 
 <style lang="less">
+  @import "~@/style/vars.less";
   .confirm-order {
     .row > .flex {
       padding-left: 0;
@@ -310,6 +319,11 @@
     .summary .label,
     .remark .label {
       color: #999 !important;
+    }
+    .freight {
+      input {
+        color: @color2;
+      }
     }
   }
 </style>

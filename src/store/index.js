@@ -32,7 +32,9 @@ export default new Vuex.Store({
       page: '',
       params: {},
       query: {}
-    }
+    },
+    invoice: getSen('invoice') || {}
+
   },
   getters: {
     getCacheData: state => serialize(state.cacheData),
@@ -107,6 +109,10 @@ export default new Vuex.Store({
     setPackage(state, data) {
       state.package = data;
       setSen('package', state.package);
+    },
+    setInvoice(state, data) {
+      state.invoice = { ...state.invoice, ...data };
+      setSen('invoice', state.invoice);
     }
   },
   actions: {

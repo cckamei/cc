@@ -47,7 +47,7 @@
     },
     methods: {
       ...mapActions(['ajax']),
-      ...mapMutations(['setAddress']),
+      ...mapMutations(['setAddress', 'setInvoice']),
       pageInit() {
         this.ajax({
           name: 'getAddress'
@@ -70,6 +70,7 @@
           phone: item.phone,
           address: `${item.province}${item.city}${item.district}${item.street}`
         });
+        this.setInvoice({ address: `${item.province}${item.city}${item.district}${item.street}` });
         this.$router.go(-1);
       }
     }
