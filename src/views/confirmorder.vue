@@ -120,6 +120,15 @@
 
   export default {
     mixins: [confirmOrderMixins],
+    beforeRouteEnter(to, from, next) {
+      if(from.name === 'pay') {
+        next(vm => {
+          vm.$router.go(-1);
+        })
+      } else {
+        next();
+      }
+    },
     data() {
       return {
         shopMoney: 0, //商品总额
@@ -137,15 +146,17 @@
           skuId: ''
         },
         reqData: {
+          pslx: 0, //0快递， 1自提
+          address_id: '', //地址id
+          store_id: '', //自提门店id
+          ziti: '', //自提时间
           skus: [],
           coupon_id: '', //优惠券id
-          address_id: '', //地址id
           yaoqiu: '', //备注
           logitics_id: '', //快递id
           active_type: 1, //优惠活动类型 1: 购物卡优惠 2: 店铺优惠
           active_id: '', // 当active_type 为店铺优惠时，传指定的活动ID
           liquan_id: '', // 优惠礼券ID 即会员礼遇
-          ziti: '' //自提时间
         },
         activityLength: 0,
         couponLength: 0
@@ -162,11 +173,11 @@
       }
 
       //从支付页面返回时，回填数据
-      if(this.getPayOrder.order_id) {
-        // this.reqData.coupon_id = this.getPayOrder.coupon_id;
-        this.reqData.yaoqiu = this.getPayOrder.yaoqiu;
-        this.reqData.logitics_id = this.getPayOrder.logitics_id;
-      }
+      // if(this.getPayOrder.order_id) {
+      //   // this.reqData.coupon_id = this.getPayOrder.coupon_id;
+      //   this.reqData.yaoqiu = this.getPayOrder.yaoqiu;
+      //   this.reqData.logitics_id = this.getPayOrder.logitics_id;
+      // }
 
       //优惠活动
       if(this.payOrder.activity) {
@@ -176,7 +187,11 @@
       //优惠券
       if(this.payOrder.coupon) {
         this.couponMoney = formatPrice(this.payOrder.coupon.discount_money);
-        this.reqData.coupon_id = this.payOrder.coupon.coupon_id;
+        if(this.payOrder.coupon.type === 1) {
+          this.reqData.liquan_id = this.payOrder.coupon.id;
+        } else {
+          this.reqData.coupon_id = this.payOrder.coupon.coupon_id;
+        }
       }
 
       this.fetchLogitics();
@@ -264,17 +279,44 @@
           return false;
         }
 
+        this.reqData.pslx = this.getAddress.type;
+        if(this.getAddress.type) {
+          this.reqData.store_id = ''; // TODO
+        }
+
+        if(this.reqData.pslx) {
+          if(!this.reqData.store_id) {
+            this.toast('请选择自提门店！');
+            return false;
+          }
+
+          if(!this.reqData.ziti) {
+            this.toast('请选择自提时间');
+            return false;
+          }
+        }
+
         //修改
-        if(this.getPayOrder.order_id) {
-          this.ajax({
-            name: 'updateOrder',
-            data: {
-              order_id: this.getPayOrder.order_id,
-              coupon_id: this.reqData.coupon_id,
-              logitics_id: this.reqData.logitics_id,
-              yaoqiu: this.reqData.yaoqiu
-            }
-          }).then(res => {
+        // if(this.getPayOrder.order_id) {
+        //   this.ajax({
+        //     name: 'updateOrder',
+        //     data: {
+        //       order_id: this.getPayOrder.order_id,
+        //       coupon_id: this.reqData.coupon_id,
+        //       logitics_id: this.reqData.logitics_id,
+        //       yaoqiu: this.reqData.yaoqiu
+        //     }
+        //   }).then(res => {
+        //     Object.assign(res, this.reqData);
+        //     this.setPayOrder(res);
+        //     this.$router.push({ name: 'pay' });
+        //   }).catch(() => {
+        //     this.setGoodsStock();
+        //   });
+        // } else {
+        if(!this.getPayOrder.num) {
+          //购物车支付
+          this.ajax({ name: 'addOrder', data: this.reqData }).then(res => {
             Object.assign(res, this.reqData);
             this.setPayOrder(res);
             this.$router.push({ name: 'pay' });
@@ -282,43 +324,33 @@
             this.setGoodsStock();
           });
         } else {
-          if(!this.getPayOrder.num) {
-            //购物车支付
-            this.ajax({ name: 'addOrder', data: this.reqData }).then(res => {
-              Object.assign(res, this.reqData);
-              this.setPayOrder(res);
-              this.$router.push({ name: 'pay' });
-            }).catch(() => {
-              this.setGoodsStock();
-            });
-          } else {
-            //立即购买
-            this.ajax({
-              name: 'buyNow',
-              data: {
-                coupon_id: this.reqData.coupon_id, //优惠券id
-                address_id: this.reqData.address_id, //地址id
-                yaoqiu: this.reqData.yaoqiu,
-                logitics_id: this.reqData.logitics_id, //快递id
-                sku: this.getPayOrder.cart_id,
-                num: this.getPayOrder.num,
-                kezi: this.getPayOrder.kezi,
-                kezi_yaoqiu: this.getPayOrder.kezi_yaoqiu,
-                emp_id: this.getPayOrder.emp_id,
-                active_type: this.reqData.active_type,
-                active_id: this.reqData.active_id,
-                liquan_id: this.reqData.liquan_id
-              }
-            }).then(res => {
-              if(this.invoice.use) {
-                this.applyInvock(res.order_id);
-              }
-              Object.assign(res, this.reqData);
-              this.setPayOrder(res);
-              this.$router.push({ name: 'pay' });
-            });
-          }
+          //立即购买
+          this.ajax({
+            name: 'buyNow',
+            data: {
+              coupon_id: this.reqData.coupon_id, //优惠券id
+              address_id: this.reqData.address_id, //地址id
+              yaoqiu: this.reqData.yaoqiu,
+              logitics_id: this.reqData.logitics_id, //快递id
+              sku: this.getPayOrder.cart_id,
+              num: this.getPayOrder.num,
+              kezi: this.getPayOrder.kezi,
+              kezi_yaoqiu: this.getPayOrder.kezi_yaoqiu,
+              emp_id: this.getPayOrder.emp_id,
+              active_type: this.reqData.active_type,
+              active_id: this.reqData.active_id,
+              liquan_id: this.reqData.liquan_id
+            }
+          }).then(res => {
+            if(this.invoice.use) {
+              this.applyInvock(res.order_id);
+            }
+            Object.assign(res, this.reqData);
+            this.setPayOrder(res);
+            this.$router.push({ name: 'pay' });
+          });
         }
+        // }
       },
       openKezi(val) {
         this.lettering.keziVisible = true;

@@ -736,6 +736,11 @@
         window.wx.closeWindow();
       },
       goStoneCusMade() {
+        if(!this.token) {
+          this.$router.push({ name: 'login', params: { page: 'goodsdetail', params: { id: this.$route.params.id } } });
+          return false;
+        }
+
         if(this.res.skus.length) {
           this.setStoneMade({ gsmh: this.res.skus[0].gsmh, goods_id: this.res.goods_id, goods_title: this.res.goods_title, img: this.res.img });
           this.$router.push({ name: 'cusstone' });
@@ -748,7 +753,7 @@
 </script>
 
 <style lang="less" scoped>
-  @import '~@/style/vars.less';
+  @import "~@/style/vars.less";
   .header {
     background-color: transparent !important;
     &.shadow {
@@ -935,18 +940,18 @@
           width: 40px;
           height: 40px;
           &.plus {
-            background: url('~@/assets/goods/button_plus_l.png') no-repeat;
+            background: url("~@/assets/goods/button_plus_l.png") no-repeat;
             background-size: 100%;
             &.active {
-              background: url('~@/assets/goods/button_plus_d.png') no-repeat;
+              background: url("~@/assets/goods/button_plus_d.png") no-repeat;
               background-size: 100%;
             }
           }
           &.minus {
-            background: url('~@/assets/goods/button_minus_l.png') no-repeat;
+            background: url("~@/assets/goods/button_minus_l.png") no-repeat;
             background-size: 100%;
             &.active {
-              background: url('~@/assets/goods/button_minus_d.png') no-repeat;
+              background: url("~@/assets/goods/button_minus_d.png") no-repeat;
               background-size: 100%;
             }
           }
@@ -1038,7 +1043,7 @@
       width: 100%;
       justify-content: center;
       &:after {
-        content: '';
+        content: "";
         left: 30px;
         right: 30px;
         height: 1px; /*no*/
@@ -1080,11 +1085,11 @@
         height: 100%;
         font-size: 30px;
         &.cart {
-          background: url('~@/assets/goods/button_cart.png') no-repeat;
+          background: url("~@/assets/goods/button_cart.png") no-repeat;
           background-size: 100% 100%;
         }
         &.purchase {
-          background: url('~@/assets/goods/button_buynow.png') no-repeat;
+          background: url("~@/assets/goods/button_buynow.png") no-repeat;
           background-size: 100% 100%;
         }
       }
@@ -1093,7 +1098,7 @@
 </style>
 
 <style lang="less" scoped>
-  @import '~@/style/vars.less';
+  @import "~@/style/vars.less";
   /*popup内部的里面元素的样式直接放到该页面的根部 否则样式在手机上无效*/
   .activity-btn {
     border-radius: 12px;

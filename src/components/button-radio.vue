@@ -1,7 +1,7 @@
 <template>
   <ul class="flex">
-    <li v-for="(item, index) in list" @click="!disabled && switchBtn(item, index)" :key="index">
-      <button :class="{active: selectIndex === index, disabled: item.disabled}">{{typeof item === 'object' ? item[keyName] : item}}</button>
+    <li v-for="(item, index) in list2" @click="!disabled && switchBtn(item)" :key="index">
+      <button :style="{'min-width': width ? width + 'px' : 'auto'}" :class="{active: item.selected, disabled: item.disabled}">{{typeof item === 'object' ? item[keyName] : item}}</button>
     </li>
   </ul>
 </template>
@@ -10,7 +10,7 @@
   export default {
     props: {
       value: {
-        type: Number,
+        type: [Number, Array],
         required: true
       },
       list: {
@@ -28,31 +28,72 @@
       disabled: {
         type: Boolean,
         default: false
+      },
+      multiple: {
+        type: Boolean,
+        default: false
+      },
+      width: {
+        type: Number,
+        default: 0
       }
     },
     data() {
       return {
-        selectIndex: 0
+        list2: []
       };
     },
     watch: {
       value: {
         handler(val) {
-          this.selectIndex = val;
+          if(this.multiple) {
+            this.list2.forEach((item, index) => {
+              item.selected = val.includes(index);
+            });
+          } else {
+            this.list2.forEach((item, index) => {
+              item.selected = val === index
+            });
+          }
         },
         immediate: true
       },
-      selectIndex(val) {
-        this.$emit('input', this.selectIndex);
+      list: {
+        handler(val) {
+          this.list2 = val.map(item => {
+            if(typeof item === 'string') {
+              return {
+                label: item,
+                selected: false
+              }
+            } else {
+              return {
+                ...item,
+                selected: false
+              }
+            }
+          });
+        },
+        immediate: true
       }
     },
     methods: {
-      switchBtn(item, index) {
+      switchBtn(item) {
         if(!item.disabled) {
-          if(this.cancel && this.selectIndex === index) {
-            this.selectIndex = -1;
+          if(this.multiple || (this.cancel && item.selected)) {
+            item.selected = !item.selected;
           } else {
-            this.selectIndex = index;
+            if(!item.selected) {
+              this.list2.forEach(item => {
+                item.selected = false;
+              });
+              item.selected = true;
+            }
+          }
+          if(this.multiple) {
+            this.$emit('input', this.list2.map((item, index) => item.selected ? index : -1).filter(item => item !== -1));
+          } else {
+            this.$emit('input', this.list2.findIndex(item => item.selected));
           }
         }
       }
@@ -67,7 +108,7 @@
     margin-left: -15px;
     margin-right: -15px;
     li {
-      padding: 30px 15px 0 15px;
+      margin: 30px 15px 0 15px;
       button {
         border-radius: 40px;
         background-color: #eee;

@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <div v-if="isDefined('back')" class="back" @click="backHandler"><img src="@/assets/common/button_back.png" alt=""></div>
+    <div v-if="back" class="back" @click="backHandler"><img src="@/assets/common/button_back.png" alt=""></div>
     <div class="title ellipsis">
       <slot></slot>
     </div>
@@ -14,7 +14,9 @@
   export default {
     props: {
       back: {
-        type: Boolean
+        type: Boolean,
+        default: true
+
       },
       gocancel: {
         type: Boolean
@@ -27,12 +29,6 @@
       }
     },
     methods: {
-      isDefined(val) {
-        return this[val] !== undefined;
-      },
-      isFunction(val) {
-        return this[val] === 'function';
-      },
       backHandler() {
         if(this.gocancel) {
           this.$router.push({ name: 'cancelList' });

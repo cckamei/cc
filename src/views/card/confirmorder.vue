@@ -62,6 +62,15 @@
   import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
 
   export default {
+    beforeRouteEnter(to, from, next) {
+      if(from.name === 'pay') {
+        next(vm => {
+          vm.$router.go(-1);
+        })
+      } else {
+        next();
+      }
+    },
     data() {
       return {
         goodsMoney: 0, //商品总额

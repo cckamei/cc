@@ -1,6 +1,6 @@
 <template>
   <div class="pt">
-    <v-header>订单支付成功</v-header>
+    <v-header :back="false">订单支付成功</v-header>
     <div class="content">
       <div class="section">
         <div class="success-info flex">
@@ -24,8 +24,13 @@
   import { mapActions, mapMutations, mapGetters } from 'vuex';
 
   export default {
+    beforeRouteLeave(to, from, next) {
+      //支付成功后只能跳转到指定的几个页面，不能返回上一页面
+      next(this.nextList.includes(to.name));
+    },
     data() {
       return {
+        nextList: ['wechatgroup', 'index', 'orderdetail']
       };
     },
     computed: {

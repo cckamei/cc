@@ -27,16 +27,15 @@
               <span class="name">{{item.goods_title}}</span>
               <span class="desc">{{item.sub_title}}</span>
               <div class="line3 flex">
-                <div class="price"><span>￥</span>{{item.price | currency}}</div>
+                <div class="price"><span>￥</span>{{item.price || 0 | currency}}</div>
                 <div class="cart" @click.stop="addToCart(item)"></div>
               </div>
             </div>
           </div>
-          <div class="diy-stone flex">
+          <div v-if="item.zhanshifangan && item.zhanshifangan.length" class="diy-stone flex">
             <img src="@/assets/goods/icon_dia.png" alt="">
             <span>定制你的专属钻戒</span>
-            <button class="btn-txt">30分 ￥12998</button>
-            <button class="btn-txt">70分 ￥26998</button>
+            <button class="btn-txt" v-for="(diy, index) in item.zhanshifangan" :key="index">{{diy.score}}分 ￥{{diy.price}}</button>
           </div>
         </li>
       </ul>

@@ -18,17 +18,6 @@
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
-    // beforeRouteEnter(to, from, next) {
-    //   console.log('to:', to);
-    //   console.log('from:', from, from.matched.length);
-
-    //   next(vm => {
-    //     if(!from.matched.length) {
-    //       vm.showHeader = false;l
-    //     }
-    //     // 通过 `vm` 访问组件实例
-    //   })
-    // },
     data() {
       return {
         showHeader: true,

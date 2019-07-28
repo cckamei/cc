@@ -65,19 +65,19 @@
         </li>
         <li>
           <div class="title">净度</div>
-          <v-button-radio v-model="cleanessIndex" :cancel="true" :list="cleaness"></v-button-radio>
+          <v-button-radio v-model="cleanessIndex" :multiple="true" :list="cleaness" :width="80"></v-button-radio>
         </li>
         <li>
           <div class="title">颜色</div>
-          <v-button-radio v-model="colorIndex" :cancel="true" :list="colors"></v-button-radio>
+          <v-button-radio v-model="colorIndex" :multiple="true" :list="colors" :width="80"></v-button-radio>
         </li>
         <li>
           <div class="title">切工</div>
-          <v-button-radio v-model="cutIndex" :cancel="true" :list="cuts"></v-button-radio>
+          <v-button-radio v-model="cutIndex" :multiple="true" :list="cuts" :width="80"></v-button-radio>
         </li>
         <li>
           <div class="title">证书类型</div>
-          <v-button-radio v-model="certificateIndex" :cancel="true" :list="certificates"></v-button-radio>
+          <v-button-radio v-model="certificateIndex" :cancel="true" :list="certificates" :width="80"></v-button-radio>
         </li>
       </ul>
       <div class="filter-footer">
@@ -116,11 +116,11 @@
         weightMin: 0,
         weightMax: 0,
         weight: [0, 0],
-        cleanessIndex: -1,
+        cleanessIndex: [],
         cleaness: [],
-        colorIndex: -1,
+        colorIndex: [],
         colors: [],
-        cutIndex: -1,
+        cutIndex: [],
         cuts: [],
         certificateIndex: -1,
         certificates: [],
@@ -168,9 +168,9 @@
         });
       },
       getStoneList() {
-        const cleaness = this.cleanessIndex === -1 ? '' : this.cleaness[this.cleanessIndex];
-        const color = this.colorIndex === -1 ? '' : this.colors[this.colorIndex];
-        const cut = this.cutIndex === -1 ? '' : this.cuts[this.cutIndex];
+        const cleaness = this.cleanessIndex.length ? this.cleaness.filter((item, i) => this.cleanessIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
+        const color = this.colorIndex.length ? this.colors.filter((item, i) => this.colorIndex.includes(i)).map(item => `'${item}'`).join(',') : ''
+        const cut = this.cutIndex.length ? this.cuts.filter((item, i) => this.cutIndex.includes(i)).map(item => `'${item}'`).join(',') : ''
         const certificate = this.certificateIndex === -1 ? '' : this.certificates[this.certificateIndex];
 
         this.ajax({

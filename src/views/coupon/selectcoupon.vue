@@ -15,9 +15,9 @@
         </div>
         <template v-if="giftUse.length">
           <v-split-title>品牌礼遇</v-split-title>
-          <ul class="cards" v-if="cart.length !== 1">
+          <ul class="cards" v-if="cart.length === 1">
             <li class="card" v-for="(item, index) in giftUse" :key="index">
-              <v-coupon :card="item" :isShare="false" useText="立即使用" @click="handleClick(item)" />
+              <liquan :card="item" useText="立即使用" @click="handleClick(item)" />
             </li>
           </ul>
           <div v-else class="tips">
@@ -35,14 +35,14 @@
           <img src="@/assets/coupon/bg_coupon_empty.png" alt="">
           <span>暂无可用优惠券</span>
         </div>
-        <template v-if="giftUnuse.length">
+        <!-- <template v-if="giftUnuse.length">
           <v-split-title>品牌礼遇</v-split-title>
           <ul class="cards">
             <li class="card" v-for="(item, index) in giftUnuse" :key="index">
               <v-coupon :card="item" :isShare="false" useText="条件不符" />
             </li>
           </ul>
-        </template>
+        </template> -->
       </template>
     </div>
   </div>
@@ -50,8 +50,12 @@
 
 <script>
   import { mapState, mapActions, mapMutations } from 'vuex';
+  import liquan from './liquan.vue';
 
   export default {
+    components: {
+      liquan
+    },
     data() {
       return {
         cards: [],
@@ -68,15 +72,15 @@
         return this.cards.filter(item => item.can_use === 0);
       },
       giftUse() {
-        return this.gifts.filter(item => item.can_use === 1);
+        return this.gifts.filter(item => item.used === '0');
       },
-      giftUnuse() {
-        return this.gifts.filter(item => item.can_use === 0);
-      }
+      // giftUnuse() {
+      //   return this.gifts.filter(item => item.can_use === 0);
+      // }
     },
     created() {
       this.getOrderCoupons();
-      // this.getBrandGift();
+      this.getBrandGift();
     },
     methods: {
       ...mapMutations(['setPayOrder']),
@@ -93,10 +97,10 @@
         this.ajax({
           name: 'getBrandGift'
         }).then(res => {
-          res.forEach(item => {
-            item.already = true;
+          res.list.forEach(item => {
+            item.type = 1;
           });
-          this.gifts = res;
+          this.gifts = res.list;
         });
       },
       handleClick(card) {

@@ -1,6 +1,6 @@
 <template>
   <div class="pt pb">
-    <v-header>收银台</v-header>
+    <v-header :back="false">收银台</v-header>
     <div class="content">
       <div class="order-info section">
         <div class="order">订单内容：{{getPayOrder.goods[0].goods_name}}{{getPayOrder.goods.length>1?'等':''}} 共{{getPayOrder.goods.length}}件</div>
