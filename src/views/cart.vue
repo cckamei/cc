@@ -36,7 +36,7 @@
           </div>
         </li>
       </ul>
-      <v-wechat-group></v-wechat-group>
+      <v-wechat-group :type="2"></v-wechat-group>
       <div class="gap"></div>
       <v-recommend title="为您推荐" :list="recommend"></v-recommend>
     </div>

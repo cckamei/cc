@@ -27,8 +27,8 @@
               </div>
             </div>
           </div>
-          <div class="coupon-tips">
-            <img src="@/assets/mypage/icon_buy.png" alt="">3个优惠活动正在进行中
+          <div v-if="item.active_counts" class="coupon-tips">
+            <img src="@/assets/mypage/icon_buy.png" alt="">{{item.active_counts}}个优惠活动正在进行中
           </div>
           <div class="mask-delete flex" v-if="item.deleteVisible" @click="item.deleteVisible = false">
             <div class="delete" @click="removeCart(item, index)">删除</div>

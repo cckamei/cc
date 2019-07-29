@@ -121,7 +121,6 @@
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
             <button class="btngrey" @click="goGoods">再次购买</button>
           </div>
-
         </div>
       </div>
       <!-- 订单信息 -->
@@ -262,6 +261,7 @@
       cancelOrder() {
         this.cancelVisible = true;
       },
+      // 确认签收
       handleSConfirm() {
         this.ajax({
           name: 'changeOrder',
@@ -274,6 +274,7 @@
           this.$router.push({ name: 'orderlist' });
         });
       },
+      // 取消订单
       handleConfirm() {
         this.ajax({
           name: 'changeOrder',
@@ -294,6 +295,7 @@
         this.setCommon({ goodsId: id });
         this.$router.push({ name: 'goodsdetail', params: { id: val.goods_id } });
       },
+      // 立即付款
       parOrder(order) {
         this.setPayOrder(order);
         this.$router.push({ name: 'pay' });

@@ -6,11 +6,11 @@
         <li v-for="(item, index) in wechatGroup">
           <div class="wechat-item flex">
             <div class="img">
-              <img :src="item.img" alt="">
+              <img :src="item.marketing_group_image" alt="">
             </div>
             <div class="detail flex-auto flex">
-              <span class="name">{{item.title}}</span>
-              <span class="desc">{{item.desc}}</span>
+              <span class="name">{{item.name}}</span>
+              <span class="desc">{{item.description}}</span>
             </div>
           </div>
         </li>
@@ -20,23 +20,29 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
+
   export default {
     data() {
       return {
-        wechatGroup: [{
-          src: '',
-          title: '会员售前咨询1群',
-          desc: '加群享受CC小美一对一贴心服务~'
-        }, {
-          src: '',
-          title: '会员售前咨询2群',
-          desc: '加群享受CC小美一对一贴心服务~'
-        }, {
-          src: '',
-          title: '会员售前咨询3群',
-          desc: '加群享受CC小美一对一贴心服务~'
-        }]
+        wechatGroup: []
       };
+    },
+    created() {
+      this.getWechatGroup();
+    },
+    methods: {
+      ...mapActions(['ajax']),
+      getWechatGroup() {
+        this.ajax({
+          name: 'getWechatGroup',
+          data: {
+            belong_to_page_name: '个人中心页面'
+          }
+        }).then(res => {
+          this.wechatGroup = res.list;
+        });
+      }
     }
   };
 </script>

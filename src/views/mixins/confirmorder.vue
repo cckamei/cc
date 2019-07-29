@@ -7,6 +7,7 @@
     },
     methods: {
       applyInvock(id) {
+        const invoice = this.invoice;
         const name = invoice.invoiceType ? invoice.ticketCompanyName : invoice.ticketName;
         return this.ajax({
           name: 'addInvoice',
@@ -28,7 +29,7 @@
             phone: invoice.invoicePhone, //# 收票人电话
             address: invoice.address, //# 收票人地址
             address_num: invoice.postalCode, //= StringField() # 收票人邮编
-            addr_type: isSameAddress ? 2 : 1, //# 收票人地址是否和送货地址相同 1 相同 2 不同
+            addr_type: invoice.isSameAddress ? 2 : 1, //# 收票人地址是否和送货地址相同 1 相同 2 不同
             order_id: id,  //# 订单号码
             //   "invoice_haoma": "13123123",  //#发票号码
             //   "invoice_daima": "13123123123", //# 发票代码

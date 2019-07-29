@@ -252,7 +252,7 @@
         </div>
       </div>
       <div class="gap"></div>
-      <v-wechat-group></v-wechat-group>
+      <v-wechat-group :type="1"></v-wechat-group>
       <div class="gap"></div>
       <div ref="image-text" class="section image-text">
         <div class="title flex"><span>图文详情</span></div>
@@ -275,7 +275,6 @@
         <button class="btn purchase" @click="buyNow">立即购买</button>
       </div>
     </div>
-    <v-wechat-group></v-wechat-group>
     <v-menus v-model="menusVisible" :menus="['home', 'search', 'collect']" name="goodsdetail"></v-menus>
     <v-scroll-top ref="scroll-top" v-model="topVisible" @top="(t)=> top = t"></v-scroll-top>
     <!-- <v-popup-confirm title="分享类型" v-model="shareVisible" @confirm="wxShare" :isConfirm="shareIndex !== -1">
@@ -447,7 +446,7 @@
       }
     },
     methods: {
-      ...mapMutations(['setCart', 'clearPayOrder', 'setPayOrder', 'setCommon', 'setStoneMade']),
+      ...mapMutations(['setCart', 'clearPayOrder', 'setPayOrder', 'setCommon', 'setStoneMade', 'setInvoice']),
       ...mapActions(['ajax']),
       init() {
         if(this.$route.params.openSKU) {
@@ -629,6 +628,7 @@
             }
           }]);
           this.clearPayOrder();
+          this.setInvoice({ use: '' });
           this.setPayOrder({
             cart_id: this.sku.skuId || this.sku.defaultSKU,
             num: this.sku.count,

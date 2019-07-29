@@ -3,13 +3,13 @@
     <v-split-title>会员微群</v-split-title>
     <swiper :options="swiperOption" class="wechat-group-swiper">
       <swiper-slide v-for="(item, index) in wechatGroup" :key="index">
-        <div class="wechat-item flex" @click="$router.push({name: 'wechatgroup'})">
+        <div class="wechat-item flex">
           <div class="img">
-            <img :src="item.img" alt="">
+            <img :src="item.marketing_group_image" alt="">
           </div>
           <div class="detail flex-auto flex">
-            <span class="name">{{item.title}}</span>
-            <span class="desc">{{item.desc}}</span>
+            <span class="name">{{item.name}}</span>
+            <span class="desc">{{item.description}}</span>
           </div>
         </div>
       </swiper-slide>
@@ -22,34 +22,46 @@
 <script>
   import 'swiper/dist/css/swiper.css';
   import { swiper, swiperSlide } from 'vue-awesome-swiper';
+  import { mapActions } from 'vuex';
 
   export default {
     components: {
       swiper,
       swiperSlide
     },
+    props: {
+      type: {
+        type: Number,
+        default: 0
+      }
+    },
     data() {
       return {
+        types: ['支付成功页面', '商品详情页面', '购物车页面', '个人中心页面'],
         swiperOption: {
           navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev'
           }
         },
-        wechatGroup: [{
-          src: '',
-          title: '会员售前咨询1群',
-          desc: '加群享受CC小美一对一贴心服务~'
-        }, {
-          src: '',
-          title: '会员售前咨询2群',
-          desc: '加群享受CC小美一对一贴心服务~'
-        }, {
-          src: '',
-          title: '会员售前咨询3群',
-          desc: '加群享受CC小美一对一贴心服务~'
-        }]
+        wechatGroup: []
       };
+    },
+    created() {
+      this.getWechatGroup();
+    },
+    methods: {
+      ...mapActions(['ajax']),
+      getWechatGroup() {
+        this.ajax({
+          name: 'getWechatGroup',
+          data: {
+            belong_to_page_name: this.types[this.type]
+          }
+        }).then(res => {
+          this.wechatGroup = res.list;
+        });
+      }
     }
   };
 </script>
