@@ -223,7 +223,7 @@
               item.skuLabel = `${item.s_jinleixing};${item.s_jinzhong};${item.guige}`;
             }
           });
-          if(!this.order.logistics.info) {
+          if(!this.order.logistics.info || !this.order.logistics.info.result) {
             this.order.logistics = {
               info: {
                 data: []
