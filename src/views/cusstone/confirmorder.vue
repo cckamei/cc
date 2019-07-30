@@ -71,7 +71,7 @@
       if(from.name === 'pay') {
         next(vm => {
           vm.$router.go(-1);
-        })
+        });
       } else {
         next();
       }

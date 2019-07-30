@@ -169,8 +169,8 @@
       },
       getStoneList() {
         const cleaness = this.cleanessIndex.length ? this.cleaness.filter((item, i) => this.cleanessIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
-        const color = this.colorIndex.length ? this.colors.filter((item, i) => this.colorIndex.includes(i)).map(item => `'${item}'`).join(',') : ''
-        const cut = this.cutIndex.length ? this.cuts.filter((item, i) => this.cutIndex.includes(i)).map(item => `'${item}'`).join(',') : ''
+        const color = this.colorIndex.length ? this.colors.filter((item, i) => this.colorIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
+        const cut = this.cutIndex.length ? this.cuts.filter((item, i) => this.cutIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
         const certificate = this.certificateIndex === -1 ? '' : this.certificates[this.certificateIndex];
 
         this.ajax({

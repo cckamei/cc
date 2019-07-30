@@ -124,7 +124,7 @@
       if(from.name === 'pay') {
         next(vm => {
           vm.$router.go(-1);
-        })
+        });
       } else {
         next();
       }
@@ -156,7 +156,7 @@
           logitics_id: '', //快递id
           active_type: 1, //优惠活动类型 1: 购物卡优惠 2: 店铺优惠
           active_id: '', // 当active_type 为店铺优惠时，传指定的活动ID
-          liquan_id: '', // 优惠礼券ID 即会员礼遇
+          liquan_id: '' // 优惠礼券ID 即会员礼遇
         },
         activityLength: 0,
         couponLength: 0

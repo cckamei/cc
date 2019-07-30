@@ -3,7 +3,7 @@
     <v-header>会员微群</v-header>
     <div class="content">
       <ul>
-        <li v-for="(item, index) in wechatGroup">
+        <li v-for="(item, index) in wechatGroup" :key="index">
           <div class="wechat-item flex">
             <div class="img">
               <img :src="item.marketing_group_image" alt="">

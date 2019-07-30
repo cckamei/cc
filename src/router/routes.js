@@ -16,17 +16,17 @@ const router = [{
   {
     name: 'goodsdetail',
     path: '/goodslist/goodssearch/goodsdetail/:id',
-    component: () => import('@/views/goodsdetail'),
+    component: () => import('@/views/goodsdetail')
   },
   {
     name: 'package',
     path: '/goodslist/goodssearch/goods-detail/package',
-    component: () => import('@/views/package/index'),
+    component: () => import('@/views/package/index')
   },
   {
     name: 'packageorder',
     path: '/goodslist/goodssearch/goods-detail/package/order',
-    component: () => import('@/views/package/confirmorder'),
+    component: () => import('@/views/package/confirmorder')
   },
   {
     name: 'cart',
@@ -39,17 +39,17 @@ const router = [{
   {
     name: 'confirmorder',
     path: '/goodslist/goodssearch/goods-detail/cart/confirmorder',
-    component: () => import('@/views/confirmorder'),
+    component: () => import('@/views/confirmorder')
   },
   {
     name: 'selectcoupon',
     path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/selectcoupon',
-    component: () => import('@/views/coupon/selectcoupon'),
+    component: () => import('@/views/coupon/selectcoupon')
   },
   {
     name: 'selectactivity',
     path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/selectactivity',
-    component: () => import('@/views/card/selectactivity'),
+    component: () => import('@/views/card/selectactivity')
   },
   {
     name: 'address',
@@ -74,7 +74,7 @@ const router = [{
   {
     name: 'invoice',
     path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/invoice',
-    component: () => import('@/views/invoice/index'),
+    component: () => import('@/views/invoice/index')
   },
   {
     name: 'cusstone',
@@ -84,7 +84,7 @@ const router = [{
   {
     name: 'cusstoneorder',
     path: '/goodslist/goodssearch/goods-detail/cusstone/order',
-    component: () => import('@/views/cusstone/confirmorder'),
+    component: () => import('@/views/cusstone/confirmorder')
   },
   {
     name: 'selectstone',
@@ -261,52 +261,52 @@ const router = [{
   {
     name: 'freebuy',
     path: '/home/freebuy',
-    component: () => import('@/views/freebuy'),
+    component: () => import('@/views/freebuy')
   },
   {
     name: 'mycard',
     path: '/card/mycard',
-    component: () => import('@/views/card/mycard'),
+    component: () => import('@/views/card/mycard')
   },
   {
     name: 'cardmall',
     path: '/card/mycard/cardmall',
-    component: () => import('@/views/card/cardmall'),
+    component: () => import('@/views/card/cardmall')
   },
   {
     name: 'carddetail',
     path: '/card/mycard/cardmall/:id',
-    component: () => import('@/views/card/carddetail'),
+    component: () => import('@/views/card/carddetail')
   },
   {
     name: 'cardorder',
     path: '/card/mycard/cardmall/carddetail/order',
-    component: () => import('@/views/card/confirmorder'),
+    component: () => import('@/views/card/confirmorder')
   },
   {
     name: 'mycoupon',
     path: '/coupon/mycoupon',
-    component: () => import('@/views/coupon/mycoupon'),
+    component: () => import('@/views/coupon/mycoupon')
   },
   {
     name: 'couponmall',
     path: '/coupon/mycoupon/couponmall',
-    component: () => import('@/views/coupon/couponmall'),
+    component: () => import('@/views/coupon/couponmall')
   },
   {
     name: 'coupondetail',
     path: '/coupon/mycoupon/couponmall/:id',
-    component: () => import('@/views/coupon/coupondetail'),
+    component: () => import('@/views/coupon/coupondetail')
   },
   {
     name: 'sharecard',
     path: '/sharecard',
-    component: () => import('@/views/coupon/share'),
+    component: () => import('@/views/coupon/share')
   },
   {
     name: 'memberbenefits',
     path: '/coupon/memberbenefits',
-    component: () => import('@/views/coupon/memberbenefits'),
+    component: () => import('@/views/coupon/memberbenefits')
   },
   {
     name: 'shoplist',

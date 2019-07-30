@@ -73,7 +73,7 @@
       },
       giftUse() {
         return this.gifts.filter(item => item.used === '0');
-      },
+      }
       // giftUnuse() {
       //   return this.gifts.filter(item => item.can_use === 0);
       // }

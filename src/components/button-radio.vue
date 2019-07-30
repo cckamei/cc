@@ -52,7 +52,7 @@
             });
           } else {
             this.list2.forEach((item, index) => {
-              item.selected = val === index
+              item.selected = val === index;
             });
           }
         },
@@ -65,12 +65,12 @@
               return {
                 label: item,
                 selected: false
-              }
+              };
             } else {
               return {
                 ...item,
                 selected: false
-              }
+              };
             }
           });
         },

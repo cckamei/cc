@@ -93,7 +93,7 @@
             zhusz: this.weight,
             zhusqg: this.cuts[this.cutIndex],
             zslx: this.certificates[this.certificateIndex]
-          },
+          }
         });
         this.$router.go(-1);
       }

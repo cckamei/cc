@@ -240,13 +240,13 @@
         <v-split-title>搭配套餐</v-split-title>
         <div class="package flex" @click="$router.push({name: 'package'});">
           <div class="img">
-            <img :src="package.img" alt="">
+            <img :src="res.taocan_fengmian" alt="">
           </div>
           <div class="detail flex-auto flex arrow">
-            <span class="name">{{package.title}}</span>
-            <span class="desc">{{package.desc}}</span>
+            <span class="name">{{res.taocan_biaoti}}</span>
+            <span class="desc">{{res.taocan_miaoshu}}</span>
             <div class="line3">
-              套餐价：<span class="price"><span>￥</span>{{package.minPrice | currency}} - {{package.minPrice | currency}}</span>
+              套餐价：<span class="price"><span>￥</span>{{res.min_price | currency}}<span v-if="res.min_price !== res.max_price"> - {{res.max_price | currency}}</span></span>
             </div>
           </div>
         </div>
@@ -343,12 +343,6 @@
         autoOpenSKU: false,
         emp_id: getParams().emp_id || '',
         goodsId: '',
-        package: {
-          title: '卡美婚嫁礼物组合',
-          desc: '多件搭配购买更优惠',
-          minPrice: 18888,
-          maxPrice: 28888
-        },
         cards: [],
         qrcode: ''
       };
@@ -417,7 +411,7 @@
             this.sku.merchantCode = merchant_code;
 
             this.sku.selectedSku = this.skuList.map((item, index) => {
-              return item[selectIndexes[index]].label
+              return item[selectIndexes[index]].label;
             }).join(';');
 
             this.getGoodsStock(sku_id, stock => {
@@ -475,7 +469,7 @@
           const goodsKind = +res.good_kind;
           const dimensions = [];
           const skuIndex = [];
-          const skuKeys = [['zhuzuanfenshu', 'zuanshijingdu', 'color', 'guige'], ['zhushimingcheng', 'zhushipingji', 'color', 'guige'], ['s_jinleixing', 's_jinzhong', 'guige']]
+          const skuKeys = [['zhuzuanfenshu', 'zuanshijingdu', 'color', 'guige'], ['zhushimingcheng', 'zhushipingji', 'color', 'guige'], ['s_jinleixing', 's_jinzhong', 'guige']];
 
 
           res.skus.forEach((item, index) => {
@@ -502,7 +496,7 @@
           dimensions.forEach((item, index) => {
             // item = [...new Set(item)];
             dimensions[index] = [...new Set(item)];
-          })
+          });
 
           // 给每一条sku设置一个id（规则是相关属性的值组合而成）
           res.skus.forEach(item => {
@@ -517,7 +511,7 @@
           // 初始化选项选中状态
           dimensions.forEach(item => {
             skuIndex.push(-1);
-          })
+          });
           this.skuIndex = skuIndex;
 
           this.res.bannerList = res.slide_img;

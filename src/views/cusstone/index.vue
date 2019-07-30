@@ -144,7 +144,7 @@
     data() {
       return {
         remark: ''
-      }
+      };
     },
     computed: {
       isActive() {
@@ -178,7 +178,7 @@
               shouc: this.stoneMade.shouc.replace('#', ''),
               shouj: res.price,
               jinys: '', // 金类型
-              fhlx: 'C', // 发货类型 # 1：现货 2： 15天 3：45天
+              fhlx: 'C' // 发货类型 # 1：现货 2： 15天 3：45天
             }
           });
         });
