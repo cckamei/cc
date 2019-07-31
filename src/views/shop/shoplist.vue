@@ -18,7 +18,7 @@
         </li>
       </ul>
     </div>
-    <v-address ref="address" @click="reqShoplist(item)"></v-address>
+    <v-address ref="address" @confirm="handleConfirm"></v-address>
   </div>
 </template>
 
@@ -47,7 +47,7 @@
       // this.fetchCart();
     },
     methods: {
-      reqShoplist() {
+      handleConfirm() {
 
       }
     }

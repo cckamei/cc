@@ -163,7 +163,31 @@ const router = [{
   {
     name: 'orderdetail',
     path: '/my/orderdetail',
-    component: () => import('@/views/orderdetail'),
+    component: () => import('@/views/order/orderdetail'),
+    meta: {
+      params: ['token']
+    }
+  },
+  {
+    name: 'viewinvoice',
+    path: '/orderlist/orderdetail/invoice',
+    component: () => import('@/views/invoice/viewinvoice'),
+    meta: {
+      params: ['token']
+    }
+  },
+  {
+    name: 'returndiffapply',
+    path: '/orderlist/orderdetail/returndiffapply',
+    component: () => import('@/views/returndiff/returndiffapply'),
+    meta: {
+      params: ['token']
+    }
+  },
+  {
+    name: 'returndiffstatus',
+    path: '/orderlist/orderdetail/returndiffapply/returndiffstatus',
+    component: () => import('@/views/returndiff/returndiffstatus'),
     meta: {
       params: ['token']
     }

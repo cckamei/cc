@@ -94,6 +94,8 @@
           <!-- 待发货 -->
           <div class="ordertypeWC" v-if="order.status==1">
             <button class="btngrey btnleft flexleft" @click="goApplyRefund">申请退款</button>
+            <button class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button class="btngrey btnleft" @click="applyReturnDiff">退差价</button>
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
           </div>
           <!-- 待付款 -->
@@ -260,6 +262,13 @@
       },
       cancelOrder() {
         this.cancelVisible = true;
+      },
+      applyInvoice() {
+        this.$router.push({ name: 'viewinvoice' });
+      },
+      applyReturnDiff() {
+        // this.$router.push({ name: 'returndiffstatus' });
+        this.$router.push({ name: 'returndiffapply' });
       },
       // 确认签收
       handleSConfirm() {

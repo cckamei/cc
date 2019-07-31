@@ -40,6 +40,7 @@
       open({ province = '北京市', city = '北京市', district = '朝阳区' } = {}) {
         this.visible = true;
 
+        this.chIndex = 1;
         this.province = province;
         this.city = city;
         this.district = district;

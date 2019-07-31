@@ -464,6 +464,10 @@
           name: 'goodsDetail',
           id: this.goodsId
         }).then(res => {
+          if(!res.active) {
+            this.$router.push({ name: 'index' });
+            return false;
+          }
           this.res = res;
 
           const goodsKind = +res.good_kind;

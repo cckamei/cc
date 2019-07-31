@@ -44,33 +44,13 @@
       };
     },
     watch: {
-      value: {
-        handler(val) {
-          if(this.multiple) {
-            this.list2.forEach((item, index) => {
-              item.selected = val.includes(index);
-            });
-          } else {
-            this.list2.forEach((item, index) => {
-              item.selected = val === index;
-            });
-          }
-        },
-        immediate: true
-      },
       list: {
         handler(val) {
-          this.list2 = val.map(item => {
+          this.list2 = val.map((item, index) => {
             if(typeof item === 'string') {
-              return {
-                label: item,
-                selected: false
-              };
+              return { label: item, selected: this.multiple ? this.value.includes(index) : this.value === index };
             } else {
-              return {
-                ...item,
-                selected: false
-              };
+              return { ...item, selected: this.multiple ? this.value.includes(index) : this.value === index };
             }
           });
         },

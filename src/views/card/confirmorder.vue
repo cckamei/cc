@@ -8,7 +8,7 @@
         </li>
         <li class="section flex goods">
           <div class="img">
-            <img :src="card.img" alt="">
+            <img src="@/assets/card/img_card.png" alt="">
           </div>
           <div class="detail flex-auto flex">
             <span class="name">{{card.name}}</span>
