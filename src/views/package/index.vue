@@ -6,7 +6,7 @@
         <li class="package-item" v-for="(item, index) in package" :key="index">
           <div class="title">{{item.name}}</div>
           <ul class="imgs flex">
-            <li v-for="goods in item.goods_list"><img :src="goods.good.cover_img" alt=""></li>
+            <li v-for="(goods, goodsIndex) in item.goods_list" @click="showSku(index, goodsIndex)"><img :src="goods.good.cover_img" alt=""></li>
           </ul>
           <div class="package-b flex">
             <div>
@@ -18,6 +18,68 @@
         </li>
       </ul>
     </div>
+
+    <v-slide-up title="商品规格" v-model="visible">
+      <ul class="sku" v-if="visible">
+        <li class="sku-icon flex">
+          <img class="icon" :src="goods.good.cover_img" alt="">
+          <div>
+            <div class="price"><span>￥</span>{{goods.price | currency}}</div>
+            <span class="code">商品编号：{{goods.sku.merchant_code}} &nbsp;&nbsp;&nbsp; 库存：{{goods.sku.count}}</span>
+          </div>
+        </li>
+        <template v-if="goods.good.good_kind === '0' && skuList.length">
+          <li>
+            <div class="title">主钻分数</div>
+            <v-button-radio :disabled="true" v-model="value" :list="skuList[0]" :cancel="true"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">钻石净度</div>
+            <v-button-radio :disabled="true" v-model="value" :list="skuList[1]" :cancel="true"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">颜色</div>
+            <v-button-radio :disabled="true" v-model="value" :list="skuList[2]" :cancel="true"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">规格</div>
+            <v-button-radio :disabled="true" v-model="value" :list="skuList[3]" :cancel="true"></v-button-radio>
+          </li>
+        </template>
+        <template v-else-if="goods.good.good_kind === '1' && skuList.length">
+          <li>
+            <div class="title">主石名称</div>
+            <v-button-radio :disabled="true" v-model="value" :list="skuList[0]" :cancel="true"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">主石评级</div>
+            <v-button-radio :disabled="true" v-model="value" :list="skuList[1]" :cancel="true"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">颜色</div>
+            <v-button-radio :disabled="true" v-model="value" :list="skuList[2]" :cancel="true"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">规格</div>
+            <v-button-radio :disabled="true" v-model="value" :list="skuList[3]" :cancel="true"></v-button-radio>
+          </li>
+        </template>
+        <template v-else-if="goods.good.good_kind === '2' && skuList.length">
+          <li>
+            <div class="title">金类型</div>
+            <v-button-radio :disabled="true" v-model="value" :list="skuList[0]" :cancel="true"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">金重</div>
+            <v-button-radio :disabled="true" v-model="value" :list="skuList[1]" :cancel="true"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">规格</div>
+            <v-button-radio :disabled="true" v-model="value" :list="skuList[2]" :cancel="true"></v-button-radio>
+          </li>
+        </template>
+      </ul>
+    </v-slide-up>
   </div>
 </template>
 
@@ -27,7 +89,11 @@
   export default {
     data() {
       return {
-        package: []
+        package: [],
+        goods: {},
+        skuList: [],
+        visible: false,
+        value: 0
       };
     },
     created() {
@@ -52,6 +118,18 @@
         this.setInvoice({ use: '' });
         this.setPackage(val);
         this.$router.push({ name: 'packageorder' });
+      },
+      showSku(packageIndex, goodsIndex) {
+        const goods = this.package[packageIndex].goods_list[goodsIndex];
+        const goodsKind = +goods.good.good_kind;
+        const skuKeys = [['zhuzuanfenshu', 'zuanshijingdu', 'color', 'guige'], ['zhushimingcheng', 'zhushipingji', 'color', 'guige'], ['s_jinleixing', 's_jinzhong', 'guige']];
+        const skuList = [];
+        skuKeys[goodsKind].forEach(item => {
+          skuList.push([{ label: goods.sku[item] }]);
+        });
+        this.goods = goods;
+        this.skuList = skuList;
+        this.visible = true;
       }
     }
   };
@@ -103,6 +181,66 @@
           color: #999;
           padding-top: 10px;
         }
+      }
+    }
+  }
+
+  .sku {
+    li {
+      padding: 20px;
+      border-bottom: 1px solid #f0f0f0; /*no*/
+      &.sku-icon {
+        align-items: flex-end;
+        border: none;
+        .icon {
+          width: 200px;
+          height: 200px;
+          margin-right: 30px;
+        }
+        .price {
+          color: @color4;
+          font-size: 42px;
+        }
+        .code {
+          color: #999;
+          font-size: 20px;
+        }
+      }
+      &.count {
+        color: #666;
+        font-size: 24px;
+        justify-content: space-between;
+        .btn {
+          width: 40px;
+          height: 40px;
+          &.plus {
+            background: url("~@/assets/goods/button_plus_l.png") no-repeat;
+            background-size: 100%;
+            &.active {
+              background: url("~@/assets/goods/button_plus_d.png") no-repeat;
+              background-size: 100%;
+            }
+          }
+          &.minus {
+            background: url("~@/assets/goods/button_minus_l.png") no-repeat;
+            background-size: 100%;
+            &.active {
+              background: url("~@/assets/goods/button_minus_d.png") no-repeat;
+              background-size: 100%;
+            }
+          }
+        }
+        input {
+          width: 0;
+          min-width: 120px;
+          color: #666;
+          text-align: center;
+          padding: 0 10px;
+        }
+      }
+      .title {
+        color: #666;
+        font-size: 24px;
       }
     }
   }

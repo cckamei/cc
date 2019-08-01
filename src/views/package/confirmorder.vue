@@ -14,7 +14,7 @@
               </div>
               <div class="detail flex-auto flex">
                 <span class="name">{{item.good.title}}</span>
-                <span class="desc">{{item.sku.zhuzuanfenshu}}</span>
+                <span class="desc">{{skuLabel(item)}}</span>
                 <div class="line3 flex">
                   <span class="price"><span>￥</span>{{item.price | currency}}</span>
                   <div class="number">X1</div>
@@ -111,6 +111,17 @@
         }
 
         return this.goodsMoney + deliveryMoney;
+      },
+      skuLabel() {
+        return item => {
+          if(item.good.good_kind === '0') {
+            return `${item.sku.zhuzuanfenshu};${item.sku.zuanshijingdu};${item.sku.color};${item.sku.guige}`;
+          } else if(item.good.good_kind === '1') {
+            return `${item.sku.zhushimingcheng};${item.sku.zhushipingji};${item.sku.color};${item.sku.guige}`;
+          } else {
+            return `${item.sku.s_jinleixing};${item.sku.s_jinzhong};${item.sku.guige}`;
+          }
+        }
       }
     },
     methods: {
