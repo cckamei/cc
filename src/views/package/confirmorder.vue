@@ -121,7 +121,7 @@
           } else {
             return `${item.sku.s_jinleixing};${item.sku.s_jinzhong};${item.sku.guige}`;
           }
-        }
+        };
       }
     },
     methods: {

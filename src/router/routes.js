@@ -42,6 +42,16 @@ const router = [{
     component: () => import('@/views/confirmorder')
   },
   {
+    name: 'lettering',
+    path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/lettering/:type/:index',
+    component: () => import('@/views/lettering/index')
+  },
+  {
+    name: 'letteringedit',
+    path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/lettering-edit/:index',
+    component: () => import('@/views/lettering/edit')
+  },
+  {
     name: 'selectcoupon',
     path: '/goodslist/goodssearch/goods-detail/cart/confirmorder/selectcoupon',
     component: () => import('@/views/coupon/selectcoupon')
@@ -245,7 +255,7 @@ const router = [{
   {
     name: 'applyrefund',
     path: '/my/applyrefund',
-    component: () => import('@/views/applyrefund'),
+    component: () => import('@/views/order/applyrefund'),
     meta: {
       params: ['token']
     }
@@ -253,7 +263,7 @@ const router = [{
   {
     name: 'refunddetail',
     path: '/my/refunddetail',
-    component: () => import('@/views/refunddetail'),
+    component: () => import('@/views/order/refunddetail'),
     meta: {
       params: ['token']
     }
@@ -261,7 +271,7 @@ const router = [{
   {
     name: 'cancelList',
     path: '/my/cancelList',
-    component: () => import('@/views/cancelList'),
+    component: () => import('@/views/order/cancelList'),
     meta: {
       params: ['token']
     }

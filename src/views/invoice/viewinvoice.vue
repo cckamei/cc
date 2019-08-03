@@ -51,10 +51,10 @@
     data() {
       return {
         res: {}
-      }
+      };
     },
     computed: {
-      ...mapGetters(['getOrderId']),
+      ...mapGetters(['getOrderId'])
     },
     created() {
       this.viewInvoice();
@@ -72,7 +72,7 @@
         });
       }
     }
-  }
+  };
 </script>
 
 

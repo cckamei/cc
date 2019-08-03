@@ -1,6 +1,6 @@
 <template>
   <div class="applyrefundPage">
-    <v-header :godetail="true">申请退款</v-header>
+    <v-header>申请退款</v-header>
     <div class="content">
       <ul class=" refunditem refundGoods">
         <li>

@@ -13,11 +13,14 @@
                 <img :src="item.img" alt="">
               </div>
               <div class="detail flex-auto flex">
-                <span class="name">{{item.goods_title}}</span>
-                <span class="desc">{{item.skuLabel}}</span>
-                <div class="kezi">
-                  <span v-if="item.has_kezi" @click="openKezi(item)">刻字&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span>库存：{{item.limit}}</span>
+                <div class="line1">
+                  <span class="name">{{item.goods_title}}</span>
+                  <div class="lettering" @click="$router.push({name: 'lettering', params: {type: 'cart', index}})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
                 </div>
+                <span class="desc">{{item.skuLabel}}</span>
+                <!-- <div class="kezi">
+                  <span v-if="item.has_kezi" @click="openKezi(item)">刻字&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span>库存：{{item.limit}}</span>
+                </div> -->
                 <div class="line3 flex">
                   <span class="price"><span>￥</span>{{item.price | currency}}</span>
                   <div class="number">X{{item.count}}</div>
@@ -94,7 +97,7 @@
       <div class="price">￥{{totalMoney | currency}}</div>
       <button class="btn settlement" @click="addOrder">提交订单</button>
     </div>
-    <v-slide-up v-model="lettering.keziVisible" title="刻字定制">
+    <!-- <v-slide-up v-model="lettering.keziVisible" title="刻字定制">
       <ul class="lettering">
         <li class="lettering-enable">
           <div class="title">是否刻字</div>
@@ -109,7 +112,7 @@
           <input :disabled="true" v-model="lettering.remarks" class="lettering-text" type="text" maxlength="50" placeholder="请填写您的要求（不超过50个字）">
         </li>
       </ul>
-    </v-slide-up>
+    </v-slide-up> -->
   </div>
 </template>
 
@@ -137,14 +140,14 @@
         cart: [],
         deliveryIndex: 0,
         delivery: [], //快递
-        lettering: { //刻字
-          keziVisible: false,
-          disable: 1,
-          text: '',
-          remarks: '',
-          lettering: '',
-          skuId: ''
-        },
+        // lettering: { //刻字
+        //   keziVisible: false,
+        //   disable: 1,
+        //   text: '',
+        //   remarks: '',
+        //   lettering: '',
+        //   skuId: ''
+        // },
         reqData: {
           pslx: 0, //0快递， 1自提
           address_id: '', //地址id
@@ -334,8 +337,8 @@
               logitics_id: this.reqData.logitics_id, //快递id
               sku: this.getPayOrder.cart_id,
               num: this.getPayOrder.num,
-              kezi: this.getPayOrder.kezi,
-              kezi_yaoqiu: this.getPayOrder.kezi_yaoqiu,
+              // kezi: this.getPayOrder.kezi,
+              // kezi_yaoqiu: this.getPayOrder.kezi_yaoqiu,
               emp_id: this.getPayOrder.emp_id,
               active_type: this.reqData.active_type,
               active_id: this.reqData.active_id,
@@ -351,13 +354,13 @@
           });
         }
         // }
-      },
-      openKezi(val) {
-        this.lettering.keziVisible = true;
-        this.lettering.disable = Number(!val.kezi.kezi);
-        this.lettering.text = val.kezi.kezi;
-        this.lettering.remarks = val.kezi.yaoqiu;
       }
+      // openKezi(val) {
+      //   this.lettering.keziVisible = true;
+      //   this.lettering.disable = Number(!val.kezi.kezi);
+      //   this.lettering.text = val.kezi.kezi;
+      //   this.lettering.remarks = val.kezi.yaoqiu;
+      // }
     }
   };
 </script>
@@ -398,21 +401,29 @@
             flex-direction: column;
             align-items: flex-start;
             position: relative;
-            .name {
-              font-size: 24px;
-              color: #666;
-              padding-top: 10px;
+            .line1 {
+              width: 100%;
+              .name {
+                font-size: 24px;
+                color: #666;
+                padding-top: 10px;
+              }
+              .lettering {
+                width: 30px;
+                height: 30px;
+                float: right;
+              }
             }
             .desc {
               font-size: 20px;
               color: #999;
               padding-top: 24px;
             }
-            .kezi {
-              font-size: 20px;
-              color: @color4;
-              padding-top: 24px;
-            }
+            // .kezi {
+            //   font-size: 20px;
+            //   color: @color4;
+            //   padding-top: 24px;
+            // }
             .line3 {
               position: absolute;
               width: 100%;

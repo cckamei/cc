@@ -1,7 +1,7 @@
 <template>
   <ul class="flex">
     <li v-for="(item, index) in list2" @click="!disabled && switchBtn(item)" :key="index">
-      <button :style="{'min-width': width ? width + 'px' : 'auto'}" :class="{active: item.selected, disabled: item.disabled}">{{typeof item === 'object' ? item[keyName] : item}}</button>
+      <button :class="[className, {active: item.selected, disabled: item.disabled}]">{{typeof item === 'object' ? item[keyName] : item}}</button>
     </li>
   </ul>
 </template>
@@ -36,6 +36,10 @@
       width: {
         type: Number,
         default: 0
+      },
+      className: {
+        type: String,
+        default: ''
       }
     },
     data() {

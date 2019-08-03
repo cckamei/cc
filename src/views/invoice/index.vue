@@ -5,7 +5,7 @@
       <ul class="invoice-content">
         <li>
           <div class="title">发票抬头</div>
-          <v-button-radio class="fixwidth" v-model="reqData.invoiceType" :list="['个人', '单位']"></v-button-radio>
+          <v-button-radio className="fixwidth" v-model="reqData.invoiceType" :list="['个人', '单位']"></v-button-radio>
           <div v-if="reqData.invoiceType === 0" class="input-wrapper flex">
             <input v-model="reqData.ticketName" placeholder="购票人姓名"></input>
           </div>
@@ -29,7 +29,7 @@
         </li>
         <li>
           <div class="title">收票地址是否同收货地址</div>
-          <v-button-radio class="fixwidth" v-model="reqData.isSameAddress" :list="['是', '否']"></v-button-radio>
+          <v-button-radio className="fixwidth" v-model="reqData.isSameAddress" :list="['是', '否']"></v-button-radio>
         </li>
         <li>
           <template v-if="reqData.address">
@@ -165,9 +165,7 @@
 <style lang="less">
   .invoice {
     .fixwidth {
-      button {
-        min-width: 200px;
-      }
+      min-width: 200px;
     }
     .address {
       padding-left: 0;

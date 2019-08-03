@@ -60,7 +60,7 @@
           receivables_city: '',
           return_amount: ''
         }
-      }
+      };
     },
     computed: {
       ...mapGetters(['getOrderId']),
@@ -87,7 +87,7 @@
         });
       }
     }
-  }
+  };
 </script>
 
 

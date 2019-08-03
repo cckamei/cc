@@ -85,29 +85,31 @@
           </ul>
         </div>
         <div class="itemfoot">
-          <!-- 待收货 -->
-          <div class="ordertypeDS" v-if="order.status==2">
-            <button class="btngrey btnleft flexleft" @click="goApplyRefund()">申请退款</button>
-            <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
-            <button class="btnpink" @click="isConform = true">确认收货</button>
-          </div>
-          <!-- 待发货 -->
-          <div class="ordertypeWC" v-if="order.status==1">
-            <button class="btngrey btnleft flexleft" @click="goApplyRefund">申请退款</button>
-            <button class="btngrey btnleft" @click="applyInvoice">申请开票</button>
-            <button class="btngrey btnleft" @click="applyReturnDiff">退差价</button>
-            <button class="btngrey" @click="serviceVisible = true">联系客服</button>
-          </div>
           <!-- 待付款 -->
           <div class="ordertypeDF" v-if="order.status==0">
             <button class="btngrey btnleft flexleft" @click="cancelOrder">取消订单</button>
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
             <button class="btnpink" @click="parOrder(order)">立即付款</button>
           </div>
+          <!-- 待发货 -->
+          <div class="ordertypeWC" v-if="order.status==1">
+            <button class="btngrey btnleft flexleft" @click="goApplyRefund">申请退款</button>
+            <button class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button class="btngrey" @click="serviceVisible = true">联系客服</button>
+          </div>
+          <!-- 待收货 -->
+          <div class="ordertypeDS" v-if="order.status==2">
+            <button class="btngrey btnleft flexleft" @click="goApplyRefund()">申请退款</button>
+            <button class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
+            <button class="btnpink" @click="isConform = true">确认收货</button>
+          </div>
           <!-- 已完成 -->
           <div class="ordertypeQX" v-if="order.status==3">
-            <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
-            <button class="btngrey" @click="tradeIn">以旧换新</button>
+            <button v-if="order.return_flag !== 0" class="btngrey flexleft" @click="applyReturnDiff">退差价</button>
+            <button class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button class="btngrey" @click="serviceVisible = true">联系客服</button>
+            <!-- <button class="btngrey" @click="tradeIn">以旧换新</button> -->
           </div>
           <!-- 退款中 -->
           <div class="ordertypeTK" v-if="order.status==4">
@@ -119,9 +121,10 @@
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
             <button class="btngrey" @click="goRefundDetail">查看退款</button>
           </div>
+          <!-- 已取消 -->
           <div class="ordertypeTK" v-if="order.status==8">
-            <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
-            <button class="btngrey" @click="goGoods">再次购买</button>
+            <button class="btngrey" @click="serviceVisible = true">联系客服</button>
+            <!-- <button class="btngrey" @click="goGoods">再次购买</button> -->
           </div>
         </div>
       </div>
@@ -267,8 +270,12 @@
         this.$router.push({ name: 'viewinvoice' });
       },
       applyReturnDiff() {
-        // this.$router.push({ name: 'returndiffstatus' });
-        this.$router.push({ name: 'returndiffapply' });
+        // 0:不退款 1:已经打开退款 2:已经完成退款 3:退款被拒绝 4:退款中
+        if(this.order.return_flag === 1) {
+          this.$router.push({ name: 'returndiffapply', params: { type: 1 } });
+        } else {
+          this.$router.push({ name: 'returndiffstatus', params: { type: this.order.return_flag } });
+        }
       },
       // 确认签收
       handleSConfirm() {

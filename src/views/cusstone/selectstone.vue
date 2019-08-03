@@ -65,19 +65,19 @@
         </li>
         <li>
           <div class="title">净度</div>
-          <v-button-radio v-model="cleanessIndex" :multiple="true" :list="cleaness" :width="80"></v-button-radio>
+          <v-button-radio v-model="cleanessIndex" :multiple="true" :list="cleaness" className="fixwidth"></v-button-radio>
         </li>
         <li>
           <div class="title">颜色</div>
-          <v-button-radio v-model="colorIndex" :multiple="true" :list="colors" :width="80"></v-button-radio>
+          <v-button-radio v-model="colorIndex" :multiple="true" :list="colors" className="fixwidth"></v-button-radio>
         </li>
         <li>
           <div class="title">切工</div>
-          <v-button-radio v-model="cutIndex" :multiple="true" :list="cuts" :width="80"></v-button-radio>
+          <v-button-radio v-model="cutIndex" :multiple="true" :list="cuts" className="fixwidth"></v-button-radio>
         </li>
         <li>
           <div class="title">证书类型</div>
-          <v-button-radio v-model="certificateIndex" :cancel="true" :list="certificates" :width="80"></v-button-radio>
+          <v-button-radio v-model="certificateIndex" :cancel="true" :list="certificates" className="fixwidth"></v-button-radio>
         </li>
       </ul>
       <div class="filter-footer">
@@ -443,6 +443,11 @@
 </style>
 
 <style lang="less">
+  .selectstone {
+    .fixwidth {
+      width: 144px;
+    }
+  }
   .ant-slider {
     height: 36px;
     &:hover .ant-slider-track {

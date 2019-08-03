@@ -12,19 +12,19 @@
         </li>
         <li>
           <div class="title">净度</div>
-          <v-button-radio class="fixwidth" v-model="cleanessIndex" :cancel="true" :list="cleaness"></v-button-radio>
+          <v-button-radio className="fixwidth" v-model="cleanessIndex" :cancel="true" :list="cleaness"></v-button-radio>
         </li>
         <li>
           <div class="title">颜色</div>
-          <v-button-radio class="fixwidth" v-model="colorIndex" :cancel="true" :list="colors"></v-button-radio>
+          <v-button-radio className="fixwidth" v-model="colorIndex" :cancel="true" :list="colors"></v-button-radio>
         </li>
         <li>
           <div class="title">切工</div>
-          <v-button-radio class="fixwidth" v-model="cutIndex" :cancel="true" :list="cuts"></v-button-radio>
+          <v-button-radio className="fixwidth" v-model="cutIndex" :cancel="true" :list="cuts"></v-button-radio>
         </li>
         <li>
           <div class="title">证书类型</div>
-          <v-button-radio class="fixwidth" v-model="certificateIndex" :cancel="true" :list="certificates"></v-button-radio>
+          <v-button-radio className="fixwidth" v-model="certificateIndex" :cancel="true" :list="certificates"></v-button-radio>
         </li>
       </ul>
     </div>
@@ -180,9 +180,7 @@
 
   .advanced {
     .fixwidth {
-      button {
-        min-width: 144px;
-      }
+      min-width: 144px;
     }
   }
 </style>

@@ -218,8 +218,14 @@
         </v-form-slide-up>
       </div>
       <div class="row" v-if="res.has_kezi">
-        <v-form-slide-up label="刻字定制" title="刻字定制" placeholder="填写您的刻字信息" v-model="lettering.lettering">
-          <ul class="lettering">
+        <v-form-slide-up label="刻字定制" title="刻字定制" placeholder="填写您的刻字信息">
+          <ul class="service">
+            <li>
+              <div class="flex"><img src="@/assets/goods/icon_hook_mini.png" alt=""><span>本商品支持刻字服务</span></div>
+              <div class="note">本服务免费，请先选定商品，并在稍后的确认订单页面中设置您的刻字要求</div>
+            </li>
+          </ul>
+          <!-- <ul class="lettering">
             <li class="lettering-enable">
               <div class="title">是否刻字</div>
               <v-button-radio v-model="lettering.disable" :list="['是', '否']"></v-button-radio>
@@ -232,7 +238,7 @@
               <div class="title">要求</div>
               <input :disabled="!!lettering.disable" v-model="lettering.remarks" class="lettering-text" type="text" maxlength="50" placeholder="请填写您的要求（不超过50个字）">
             </li>
-          </ul>
+          </ul> -->
         </v-form-slide-up>
       </div>
       <div class="gap"></div>
@@ -329,12 +335,12 @@
           selectedSku: '',
           stock: 0 //经销库存
         },
-        lettering: { //刻字
-          disable: 1,
-          text: '',
-          remarks: '',
-          lettering: ''
-        },
+        // lettering: { //刻字
+        //   disable: 1,
+        //   text: '',
+        //   remarks: '',
+        //   lettering: ''
+        // },
         recommend: [], //推荐商品
         benifit: [], //优惠券
         activity: [], //优惠活动
@@ -426,18 +432,18 @@
           }
         },
         deep: true
-      },
-      lettering: {
-        handler(val) {
-          if(!val.disable) {
-            let disable = this.lettering.disable ? '否' : '是';
-            this.lettering.lettering = this.lettering.disable ? '' : `刻字 ${this.lettering.text}；要求 ${this.lettering.remarks}`;
-          } else {
-            this.lettering.lettering = '';
-          }
-        },
-        deep: true
       }
+      // lettering: {
+      //   handler(val) {
+      //     if(!val.disable) {
+      //       let disable = this.lettering.disable ? '否' : '是';
+      //       this.lettering.lettering = this.lettering.disable ? '' : `刻字 ${this.lettering.text}；要求 ${this.lettering.remarks}`;
+      //     } else {
+      //       this.lettering.lettering = '';
+      //     }
+      //   },
+      //   deep: true
+      // }
     },
     methods: {
       ...mapMutations(['setCart', 'clearPayOrder', 'setPayOrder', 'setCommon', 'setStoneMade', 'setInvoice']),
@@ -619,19 +625,20 @@
             sub_title: this.res.sub_title,
             limit: stock,
             skuLabel: this.sku.selectedSku,
-            has_kezi: this.res.has_kezi,
-            kezi: {
-              kezi: this.lettering.text,
-              yaoqiu: this.lettering.remarks
-            }
+            has_kezi: this.res.has_kezi
+            // kezi: {
+            //   kezi: this.lettering.text,
+            //   yaoqiu: this.lettering.remarks
+            // }
           }]);
           this.clearPayOrder();
           this.setInvoice({ use: '' });
           this.setPayOrder({
             cart_id: this.sku.skuId || this.sku.defaultSKU,
             num: this.sku.count,
-            kezi: this.lettering.text,
-            kezi_yaoqiu: this.lettering.remarks,
+            has_kezi: this.res.has_kezi,
+            // kezi: this.lettering.text,
+            // kezi_yaoqiu: this.lettering.remarks,
             emp_id: this.getCommon.emp_id
           });
           this.$router.push({ name: 'confirmorder' });
@@ -686,8 +693,9 @@
           data: {
             'cart_id': this.sku.skuId || this.sku.defaultSKU,
             num: this.sku.count,
-            kezi: this.lettering.text,
-            yaoqiu: this.lettering.remarks,
+            has_kezi: this.res.has_kezi,
+            // kezi: this.lettering.text,
+            // yaoqiu: this.lettering.remarks,
             emp_id: this.getCommon.emp_id
           }
         }).then(res => {

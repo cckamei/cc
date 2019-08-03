@@ -70,8 +70,9 @@ let api = {
   addInvoice: { url: 'api/v1/add_invoice', method: 'post', isJson: true }, //开票
   viewInvoice: { url: 'api/v1/invoice', method: 'get' }, //查看发票
   getWechatGroup: { url: 'api/v1/marketing_group', method: 'get' }, //商品详情营销群
-  returnMoney: { url: 'api/v1/add_return_amount', method: 'post', isJson: true } //退差价
-
+  returnMoney: { url: 'api/v1/add_return_amount', method: 'post', isJson: true }, //退差价
+  getLettering: { url: 'api/v1/aepict_info', method: 'get' }, //获取刻字列表
+  addLettering: { url: 'api/v1/add_goods_aepict', method: 'post', isJson: true } //订单加入刻字
 };
 
 for (var k in api) {

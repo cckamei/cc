@@ -33,8 +33,15 @@ export default new Vuex.Store({
       params: {},
       query: {}
     },
-    invoice: getSen('invoice') || {}
-
+    invoice: getSen('invoice') || {},
+    letteringValues: getSen('letteringValues') || [{ type: 2 }, { type: 2 }, { type: 2 }],
+    letteringLabels: getSen('letteringLabels') || {
+      type: ['文字', '图案', '无'],
+      font: ['黑体', '宋体'],
+      subject: ['星座', '生肖'],
+      constellation: ['金牛座', '摩羯座'],
+      zodiac: ['牛', '鼠']
+    }
   },
   getters: {
     getCacheData: state => serialize(state.cacheData),
@@ -48,7 +55,9 @@ export default new Vuex.Store({
     getOrderId: state => state.common.orderId,
     getPayOrder: state => serialize(state.payOrder),
     getOrderType: state => state.ordertype,
-    getStoneMade: state => serialize(state.stoneMade)
+    getStoneMade: state => serialize(state.stoneMade),
+    getLetteringValues: state => serialize(state.letteringValues),
+    getLetteringLabels: state => serialize(state.letteringLabels)
   },
   mutations: {
     setCacheData(state, data) {
@@ -113,6 +122,14 @@ export default new Vuex.Store({
     setInvoice(state, data) {
       state.invoice = { ...state.invoice, ...data };
       setSen('invoice', state.invoice);
+    },
+    setLetteringValues(state, data) {
+      state.letteringValues = data;
+      setSen('letteringValues', state.letteringValues);
+    },
+    setLetteringLabels(state, data) {
+      state.letteringLabels = data;
+      setSen('letteringLabels', state.letteringLabels);
     }
   },
   actions: {

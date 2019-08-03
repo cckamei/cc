@@ -8,12 +8,12 @@
           <div class="notes">您的申请已提交成功！</div>
           <div class="notes">请您耐心等候，如有问题请拨打客服热线</div>
         </template>
-        <template v-else-if="type === 2">
+        <template v-else-if="type === 4">
           <img src="@/assets/returndiff/icon_progressing.png" alt="">
           <div class="notes">您的申请正在处理中！</div>
           <div class="notes">请您耐心等候，如有问题请拨打客服热线</div>
         </template>
-        <template v-else>
+        <template v-else-if="type === 3">
           <img src="@/assets/returndiff/icon_deny.png" alt="">
           <div class="notes">十分抱歉，您的申请已被拒绝！</div>
           <div class="notes">如有问题请拨打客服热线</div>
@@ -32,16 +32,16 @@
   export default {
     data() {
       return {
-        type: 3
-      }
+        type: 1
+      };
     },
     created() {
-
+      this.type === this.$route.params.type;
     },
     methods: {
       ...mapActions(['ajax'])
     }
-  }
+  };
 </script>
 
 
