@@ -297,6 +297,7 @@
       color: #fff;
       background-color: @color5;
       border-radius: 34px;
+      font-size: 30px;
     }
   }
 </style>

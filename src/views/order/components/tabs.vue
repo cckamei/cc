@@ -53,7 +53,7 @@
   .tabs-warp {
     position: absolute;
     height: 96px;
-    top: 0;
+    top: 96px;
     left: 0;
     right: 0;
     box-shadow: 0 7px 50px 10px rgba(170, 170, 170, 0.5);

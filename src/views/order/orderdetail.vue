@@ -3,7 +3,7 @@
     <v-header :gocancel="getGoCancel">订单详情</v-header>
     <!-- 订单地址、收货人、物流信息 -->
     <div class="content">
-      <div class="logistics" @click="gotLogistics()">
+      <div v-if="order.kind !== 2" class="logistics" @click="gotLogistics()">
         <div class="logisticsInfo" v-if="order.logistics.info.data.length==0">
           <div class="logitem">
             <div>
@@ -11,6 +11,7 @@
               <span class="logInfo">暂无物流信息</span>
             </div>
           </div>
+          <div v-if="order.kind === 9" class="making">订单等待定制中</div>
         </div>
         <div class="logisticsInfo" v-else>
           <div class="logitem">
@@ -38,35 +39,21 @@
         <div class="itemtitle">
           <div class="titleleft">
             <img src="@/assets/mypage/icon_shop.png" alt="">
-            <span>{{appName}}</span>
+            <span>{{appName}}({{order.kind}})</span>
           </div>
           <div class="listright">{{typename(order.status)}}</div>
         </div>
-        <div class="itemcontent" v-for="(good,i) in order.goods" :key="i" @click="goGoodsDetail(good.goods_id)">
-          <div class="contentleft">
-            <img :src="good.goods_img" alt="">
-          </div>
-          <div class="contentright">
-            <div class="contenttitle">
-              <span>{{good.goods_name}}</span>
-              <span>￥{{good.goods_price}}</span>
-            </div>
-            <div class="contentmessage">
-              <p>{{good.skuLabel}}</p>
-              <div class="messageright">
-                <s>&nbsp;</s>
-                <span>X{{good.goods_count}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <goods-normal v-if="order.kind === 1" :goods="order.goods"></goods-normal>
+        <goods-card v-if="order.kind === 2" :goods="order.goods"></goods-card>
+        <goods-stone v-else-if="order.kind === 3" :goods="order.goods"></goods-stone>
+        <goods-package v-else-if="order.kind === 4" :goods="order.goods[0]"></goods-package>
         <div class="itemprice">
           <ul>
-            <li class="priceType">
+            <li v-if="order.kind !== 2" class="priceType">
               <span>商品总额</span>
               <span>￥{{order.all_money}}</span>
             </li>
-            <li class="priceType">
+            <li v-if="order.kind !== 2" class="priceType">
               <span>运费</span>
               <span>+￥{{order.logistics_money}}</span>
             </li>
@@ -74,12 +61,12 @@
               <span>运费险</span>
               <span>+￥{{order.discount_money}}</span>
             </li> -->
-            <li class="priceType">
+            <li v-if="order.kind === 1" class="priceType">
               <span>优惠券</span>
               <span>-￥{{order.discount_money}}</span>
             </li>
             <li class="priceType realPaymoney">
-              <span>商品总额</span>
+              <span>实付款</span>
               <span class="paymoney">￥{{order.rest_money}}</span>
             </li>
           </ul>
@@ -94,20 +81,20 @@
           <!-- 待发货 -->
           <div class="ordertypeWC" v-if="order.status==1">
             <button class="btngrey btnleft flexleft" @click="goApplyRefund">申请退款</button>
-            <button class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
           </div>
           <!-- 待收货 -->
-          <div class="ordertypeDS" v-if="order.status==2">
+          <div class="ordertypeDS" v-if="order.status == 2 || order.status == 10">
             <button class="btngrey btnleft flexleft" @click="goApplyRefund()">申请退款</button>
-            <button class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
             <button class="btnpink" @click="isConform = true">确认收货</button>
           </div>
           <!-- 已完成 -->
           <div class="ordertypeQX" v-if="order.status==3">
             <button v-if="order.return_flag !== 0" class="btngrey flexleft" @click="applyReturnDiff">退差价</button>
-            <button class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
             <!-- <button class="btngrey" @click="tradeIn">以旧换新</button> -->
           </div>
@@ -135,16 +122,18 @@
           <li><span>下单时间：</span> {{formatDate(order.created_at,'yyyy-MM-dd hh:mm:ss')}}</li>
           <li v-if="order.status==8"><span>取消时间：</span> {{formatDate(order.finish_at,'yyyy-MM-dd hh:mm:ss')}}</li>
         </ul>
-        <ul class="orderInfoItem" v-if="order.status!=8">
+        <ul class="orderInfoItem" v-if="order.kind !== 2 && order.status != 8">
           <li><span>配送方式：</span> 快递运输/顾客自提（TODO）</li>
+          <li><span>配送时间：</span> 显示时间（TODO）</li>
         </ul>
         <!-- 支付方式 -->
         <ul class="orderInfoItem" v-if="getOrderStat(order.status)">
           <li><span>支付方式：</span> 微信支付</li>
-          <li><span>支付时间：</span> {{formatDate(order.pay_time)}}</li>
+          <li v-if="order.kind !== 2"><span>支付时间：</span> {{formatDate(order.pay_time)}}</li>
+          <li v-if="order.kind === 2"><span>完成时间：</span> {{formatDate(order.finish_at)}}</li>
         </ul>
         <!-- 完成时间 -->
-        <ul class="orderInfoItem" v-if="order.status==3||order.status==6">
+        <ul class="orderInfoItem" v-if="order.kind !== 2 && order.status == 3 || order.status == 6">
           <li><span>完成时间：</span> {{formatDate(order.finish_at)}}</li>
         </ul>
       </div>
@@ -165,7 +154,17 @@
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex';
   import { formatDate } from '@/utils';
+  import goodsPackage from './components/package.vue';
+  import goodsCard from './components/card.vue';
+  import goodsNormal from './components/normal.vue';
+  import goodsStone from './components/stone.vue';
   export default {
+    components: {
+      goodsPackage,
+      goodsCard,
+      goodsNormal,
+      goodsStone
+    },
     data() {
       return {
         cancelVisible: false,
@@ -219,15 +218,10 @@
           id: orderId
         }).then(res => {
           this.order = res;
-          this.order.goods.forEach(item => {
-            if(item.good_kind === '0') {
-              item.skuLabel = `${item.zhuzuanfenshu};${item.zuanshijingdu};${item.color};${item.guige}`;
-            } else if(item.good_kind === '1') {
-              item.skuLabel = `${item.zhushimingcheng};${item.zhushipingji};${item.color};${item.guige}`;
-            } else {
-              item.skuLabel = `${item.s_jinleixing};${item.s_jinzhong};${item.guige}`;
-            }
-          });
+
+          // this.order.kind = 2; //# 1: 普通商品, 2: 会员卡,  3: 托石分离定制, 4: 套餐
+          // this.order.status = 0; //0: 待付款, 1:'待发货', 2:'待收货', 3:'已完成', 4:'退款中', '', 6:'已退款', '', 8:'已取消'
+
           if(!this.order.logistics.info || !this.order.logistics.info.result) {
             this.order.logistics = {
               info: {
@@ -250,7 +244,7 @@
         this.$router.push({ name: 'goodslist' });
       },
       typename(type) {
-        let _typenames = ['待付款', '待发货', '待收货', '已完成', '退款中', '', '已退款', '', '已取消'];
+        let _typenames = ['待付款', '待发货', '待收货', '已完成', '退款中', '', '已退款', '', '已取消', '', '待取货'];
         return _typenames[type];
       },
       formatDate,
@@ -381,6 +375,10 @@
       p {
         color: #999999;
       }
+      .making {
+        padding-left: 55px;
+        color: #999999;
+      }
     }
     .receiverInfo {
       padding-bottom: 40px;
@@ -434,6 +432,7 @@
         align-items: center;
         margin-bottom: 8px;
         .contentleft {
+          flex-shrink: 0;
           width: 120px;
           height: 120px;
           margin: 20px 20px 20px 0;
@@ -450,7 +449,6 @@
             display: flex;
             flex-flow: row nowrap;
             justify-content: space-between;
-            margin: 30px 0 10px;
             color: #666666;
             font-size: 24px;
             span:nth-child-of(2) {
@@ -458,22 +456,21 @@
             }
           }
           .contentmessage {
+            padding-top: 10px;
             flex: 1;
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: space-between;
-            font-size: 24px;
-            margin-bottom: 30px;
+            font-size: 20px;
             color: #999999;
+            .line2.flex {
+              justify-content: space-between;
+              .scope {
+                padding-right: 20px;
+              }
+            }
             p {
               width: 360px;
             }
             .messageright {
               text-align: right;
-            }
-            s {
-              color: #cccccc;
-              display: block;
             }
           }
         }
@@ -493,6 +490,7 @@
         }
         li.realPaymoney {
           font-size: 24px;
+          font-weight: bold;
           color: #333333;
           .paymoney {
             color: @color2;
@@ -535,12 +533,15 @@
       margin-bottom: 20px;
       .orderInfoItem {
         border-bottom: 2px solid #cccccc;
+        &:last-child {
+          border-bottom: 0;
+        }
         padding: 30px 30px 0;
         li {
-          margin-bottom: 20px;
+          padding-bottom: 20px;
         }
         li:last-child {
-          margin-bottom: 30px;
+          padding-bottom: 30px;
         }
       }
       .giveMethod {

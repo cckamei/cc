@@ -4,34 +4,29 @@
       <div class="item-title" @click="goDetail(order.order_id)">
         <div class="titleleft">
           <img src="@/assets/mypage/icon_shop.png" alt="">
-          <span>{{appName}}</span>
+          <span>{{appName}}({{order.kind}})</span>
         </div>
         <div class="listright">{{typename(order.status)}}</div>
       </div>
-      <div class="item-content" v-for="(good,j) in order.goods" :key="j" @click="goDetail(order.order_id)">
-        <div class="contentleft">
-          <img :src="good.goods_img" alt="">
-        </div>
-        <div class="contentright">
-          <div class="contenttitle">
-            <span>{{good.goods_name}}</span>
-            <span>￥{{good.goods_price}}</span>
-          </div>
-          <div class="contentmessage">
-            <p>{{good.skuLabel}}</p>
-            <div class="messageright">
-              <s>&nbsp;</s>
-              <span>X{{good.goods_count}}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <goods-normal v-if="order.kind === 1" :goods="order.goods"></goods-normal>
+      <goods-card v-if="order.kind === 2" :goods="order.goods"></goods-card>
+      <goods-stone v-else-if="order.kind === 3" :goods="order.goods"></goods-stone>
+      <goods-package v-else-if="order.kind === 4" :goods="order.goods[0]"></goods-package>
       <div class="item-price">
-        共{{order.goods.length}}件商品 实付款： <span>￥{{order.rest_money}}</span> （含运费￥{{order.logistics_money}}）
+        共{{order.kind === 4 ? order.goods[0].goods_list.length : order.goods.length}}件商品 实付款： <span>￥{{order.rest_money}}</span> <span v-if="order.kind !== 2">（含运费￥{{order.logistics_money}}）</span>
       </div>
       <div class="item-footer">
+        <!-- 待付款 0-->
+        <div class="ordertypeDF" v-if="order.status==0">
+          <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
+          <button class="btnpink" @click="parOrder(order)">立即付款</button>
+        </div>
+        <!-- 待发货 1-->
+        <div class="ordertypeWC" v-if="order.status==1">
+          <button class="btngrey" @click="serviceVisible = true">联系客服</button>
+        </div>
         <!-- 待收货 2-->
-        <div class="ordertypeDF" v-if="order.status==2">
+        <div class="ordertypeDF" v-if="order.status == 2">
           <!-- <button class="btngrey btnleft"> </button>
           <button class="btnpink" @click="$router.push({ name: 'pay' })">确认收货</button> -->
           <button class="btngrey btnleft" @click="gotLogistics(order.order_id)">查看物流</button>
@@ -40,31 +35,31 @@
         <!-- 已完成 3-->
         <div class="ordertypeDF" v-if="order.status==3">
           <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
-          <button class="btngrey" @click="tradeIn">以旧换新</button>
-        </div>
-        <!-- 待付款 0-->
-        <div class="ordertypeDF" v-if="order.status==0">
-          <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
-          <button class="btnpink" @click="parOrder(order)">立即付款</button>
-        </div>
-        <!-- 已取消 8-->
-        <div class="ordertypeDF" v-if="order.status==8">
-          <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
-          <button class="btngrey" @click="goGoodsDetail">再次购买</button>
+          <!-- <button class="btngrey" @click="tradeIn">以旧换新</button> -->
         </div>
         <!-- 退款中 4-->
         <div class="ordertypeDS" v-if="order.status==4">
           <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
           <button class="btngrey" @click="goRefundDetail(order.order_id)">查看退款</button>
         </div>
-        <!-- 待发货 1-->
-        <div class="ordertypeWC" v-if="order.status==1">
-          <button class="btngrey" @click="serviceVisible = true">联系客服</button>
-        </div>
         <!-- 已退款 6-->
         <div class="ordertypeDS" v-if="order.status==6">
           <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
           <button class="btngrey" @click="goRefundDetail(order.order_id)">查看退款</button>
+        </div>
+        <!-- 已取消 8-->
+        <div class="ordertypeDF" v-if="order.status==8">
+          <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
+          <!-- <button class="btngrey" @click="goGoodsDetail">再次购买</button> -->
+        </div>
+        <!-- 定制中 9-->
+        <div class="ordertypeWC" v-if="order.status == 9">
+          <button class="btngrey" @click="serviceVisible = true">联系客服</button>
+        </div>
+        <!-- 待取货 10-->
+        <div class="ordertypeDF" v-if="order.status == 10">
+          <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
+          <button class="btnpink" @click="isConform = true;orderId = order.order_id; ">确认收货</button>
         </div>
       </div>
     </div>
@@ -81,7 +76,18 @@
 
 <script>
   import { mapMutations, mapActions } from 'vuex';
+  import goodsPackage from './package.vue';
+  import goodsCard from './card.vue';
+  import goodsNormal from './normal.vue';
+  import goodsStone from './stone.vue';
+
   export default {
+    components: {
+      goodsPackage,
+      goodsCard,
+      goodsNormal,
+      goodsStone
+    },
     data() {
       return {
         serviceVisible: false,
@@ -121,7 +127,7 @@
         this.$router.push({ name: 'goodslist' });
       },
       typename(type) {
-        let _typenames = ['待付款', '待发货', '待收货', '已完成', '退款中', '', '已退款', '', '已取消'];
+        let _typenames = ['待付款', '待发货', '待收货', '已完成', '退款中', '', '已退款', '', '已取消', '定制中', '待取货'];
         return _typenames[type];
       },
       gotLogistics(orderId) {
@@ -151,12 +157,11 @@
 </script>
 
 <style lang="less" scoped>
-  @import '~@/style/vars.less';
+  @import "~@/style/vars.less";
   .txt-center {
     padding: 30px 0;
   }
   .order-list {
-    margin-top: 112px;
     .item {
       background: #ffffff;
       margin-bottom: 16px;
@@ -178,60 +183,6 @@
         .listright {
           font-size: 24px;
           color: @color4;
-        }
-      }
-      &-content {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-        vertical-align: middle;
-        align-items: center;
-        padding: 0 30px;
-        background: #f5f5f5;
-        margin-bottom: 8px;
-        .contentleft {
-          width: 120px;
-          height: 120px;
-          margin: 20px 20px 20px 0;
-          background: #ffffff;
-          img {
-            display: block;
-            width: 100%;
-            height: auto;
-          }
-        }
-        .contentright {
-          flex: 1;
-          .contenttitle {
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: space-between;
-            margin: 30px 0 20px;
-            color: #666666;
-            font-size: 24px;
-            span:nth-child-of(2) {
-              text-align: right;
-            }
-          }
-          .contentmessage {
-            flex: 1;
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: space-between;
-            font-size: 24px;
-            margin-bottom: 30px;
-            color: #999999;
-            p {
-              width: 360px;
-            }
-            .messageright {
-              text-align: right;
-            }
-            s {
-              color: #cccccc;
-              display: block;
-            }
-          }
         }
       }
       &-price {

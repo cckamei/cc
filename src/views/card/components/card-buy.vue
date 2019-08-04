@@ -18,6 +18,19 @@
     methods: {
       ...mapMutations(['setCard', 'setAddress']),
       buy() {
+        let text = '';
+        if(this.card.use_type_range) {
+          text = this.card.use_type_range.join('、');
+
+          switch(this.card.use_type) {
+            case 0: text = '全部商品'; break;
+            case 1: text += '套系'; break;
+            case 2: text += '款式'; break;
+            case 3: text += '镶嵌方式'; break;
+            default: text = '';
+          }
+        }
+        this.card.scope = text;
         this.setCard(this.card);
         this.setAddress({ type: 0 });
         this.$router.push({ name: 'cardorder' });

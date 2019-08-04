@@ -57,7 +57,7 @@
             </v-form-slide-up>
           </div>
           <div class="row">
-            <v-form-input v-model="invoice.use || ''" label="申请开票" placeholder="(选填) 填写开票信息" :arrow="true" @input-click="$router.push({name: 'invoice'})"></v-form-input>
+            <v-form-input :value="invoice.use || ''" label="申请开票" placeholder="(选填) 填写开票信息" :arrow="true" @input-click="$router.push({name: 'invoice'})"></v-form-input>
           </div>
           <!-- <div class="row">
             <div class="insurance flex">
@@ -459,6 +459,7 @@
       color: #fff;
       background-color: @color5;
       border-radius: 34px;
+      font-size: 30px;
     }
   }
 </style>

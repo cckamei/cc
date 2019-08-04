@@ -11,7 +11,7 @@
           <li>
             <div class="title">字体</div>
             <div class="font flex">
-              <div class="font-item" v-for="(item, index) in letteringLabels.font">
+              <div class="font-item" v-for="(item, index) in letteringLabels.font" :key="index">
                 <img src="" alt="">
                 <button class="btn-txt" :class="{active: reqData.font  === index}" @click="reqData.font = index">{{item}}</button>
               </div>
@@ -20,7 +20,7 @@
           <li>
             <div class="title">内容</div>
             <div class="input-wrapper flex">
-              <input v-model="reqData.content" maxlength="3" placeholder="请填写刻字内容"></input>
+              <input v-model="reqData.content" maxlength="3" placeholder="请填写刻字内容"/>
             </div>
           </li>
         </template>
@@ -32,13 +32,13 @@
           <li>
             <div class="title">内容</div>
             <div class="font" v-if="reqData.subject === 0">
-              <div class="font-item" v-for="(item, index) in letteringLabels.constellation">
+              <div class="font-item" v-for="(item, index) in letteringLabels.constellation" :key="index">
                 <img src="" alt="">
                 <button class="btn-txt" :class="{active: reqData.constellation === index }" @click="reqData.constellation = index">{{item}}</button>
               </div>
             </div>
             <div class="font" v-if="reqData.subject === 1">
-              <div class="font-item" v-for="(item, index) in letteringLabels.zodiac">
+              <div class="font-item" v-for="(item, index) in letteringLabels.zodiac" :key="index">
                 <img src="" alt="">
                 <button class="btn-txt" :class="{active: reqData.zodiac  === index}" @click="reqData.zodiac = index">{{item}}</button>
               </div>

@@ -10,7 +10,7 @@
       <div class="gap"></div>
       <v-split-title>门店实景</v-split-title>
       <ul class="imgs flex">
-        <li v-for="img in shop.store_imgs"><img :src="img.url" alt=""></li>
+        <li v-for="(img, index) in shop.store_imgs" :key="index"><img :src="img.url" alt=""></li>
       </ul>
       <div class="gap"></div>
       <v-split-title>门店地图</v-split-title>
@@ -20,7 +20,7 @@
       <div class="gap"></div>
       <v-split-title>门店资质</v-split-title>
       <ul class="imgs flex">
-        <li v-for="img in shop.store_zizhi_imgs"><img :src="img.url" alt=""></li>
+        <li v-for="(img, index) in shop.store_zizhi_imgs" :key="index"><img :src="img.url" alt=""></li>
       </ul>
     </div>
     <div class="footer">
@@ -46,7 +46,7 @@
         return this.shopList.find(item => item.id === this.$route.params.id);
       },
       mapurl() {
-        return `https://apis.map.qq.com/tools/poimarker?type=0&marker=coord:39.96554,116.26719;title:${this.shop.name};addr:${this.shop.address}&key=S36BZ-DUXCD-VMK4L-HQO4H-SFMAO-7DFFJ&referer=cc`
+        return `https://apis.map.qq.com/tools/poimarker?type=0&marker=coord:39.96554,116.26719;title:${this.shop.name};addr:${this.shop.address}&key=S36BZ-DUXCD-VMK4L-HQO4H-SFMAO-7DFFJ&referer=cc`;
       }
     },
     methods: {

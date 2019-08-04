@@ -6,7 +6,7 @@
         <li class="package-item" v-for="(item, index) in package" :key="index">
           <div class="title">{{item.name}}</div>
           <ul class="imgs flex">
-            <li v-for="(goods, goodsIndex) in item.goods_list" @click="showSku(index, goodsIndex)"><img :src="goods.good.cover_img" alt=""></li>
+            <li v-for="(goods, goodsIndex) in item.goods_list" @click="showSku(index, goodsIndex)" :key="goodsIndex"><img :src="goods.good.cover_img" alt=""></li>
           </ul>
           <div class="package-b flex">
             <div>

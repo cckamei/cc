@@ -1,9 +1,9 @@
 <template>
   <div class="order pt">
-    <v-header :mypage="true">订单列表</v-header>
+    <v-header>订单列表</v-header>
+    <tabs :type="getOrderType" @search-orders="searchOrders"></tabs>
     <div class="content">
       <div class="order-warp">
-        <tabs :type="getOrderType" @search-orders="searchOrders"></tabs>
         <order-list :orders="orders" @reload-orders="reloadOrders"></order-list>
       </div>
     </div>
@@ -47,20 +47,15 @@
           this.orders = res;
           if(this.getOrderType != -1) {
             this.orders = this.orders.filter(order => {
-              return order.status == this.getOrderType;
-            });
-          }
-          this.orders.forEach(order => {
-            order.goods.forEach(item => {
-              if(item.good_kind === '0') {
-                item.skuLabel = `${item.zhuzuanfenshu};${item.zuanshijingdu};${item.color};${item.guige}`;
-              } else if(item.good_kind === '1') {
-                item.skuLabel = `${item.zhushimingcheng};${item.zhushipingji};${item.color};${item.guige}`;
+              if(this.getOrderType == 1) {
+                return order.status == this.getOrderType || order.status == 9;
+              } else if(this.getOrderType == 2) {
+                return order.status == this.getOrderType || order.status == 10;
               } else {
-                item.skuLabel = `${item.s_jinleixing};${item.s_jinzhong};${item.guige}`;
+                return order.status == this.getOrderType;
               }
             });
-          });
+          }
         });
       }
     }
@@ -68,9 +63,11 @@
 </script>
 
 <style lang="less" scoped>
-  .order {
+  .pt {
+    padding-top: 196px;
+    background-color: #fff;
     .header {
-      box-shadow: 0 0 0 0 rgba(170, 170, 170, 0.5) !important;
+      box-shadow: none;
     }
   }
   .order-warp {

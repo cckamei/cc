@@ -300,7 +300,7 @@
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex';
   import $ from 'jquery';
-  import { getParams, browser, formatDate } from '../utils';
+  import { getParams, browser, formatDate, serialize } from '../utils';
 
   export default {
     data() {
@@ -374,6 +374,7 @@
         if(this.res.good_kind === '2') {
           return '选择 金类型；金重；规格；数量';
         }
+        return '';
       },
       placeholder2() {
         if(this.res.good_kind === '0') {
@@ -385,6 +386,7 @@
         if(this.res.good_kind === '2') {
           return '套系；款式；贵金属成色；镶嵌材质；镶嵌方式';
         }
+        return '';
       }
     },
     watch: {
@@ -397,7 +399,8 @@
       skuIndex: {
         handler(val) {
           let selectIndexes = val;
-          this.skuList.forEach((type, typeIndex) => {
+          let tempSkuList = serialize(this.skuList);
+          tempSkuList.forEach((type, typeIndex) => {
             type.forEach((item, index) => {
               let arr = Object.assign([], selectIndexes);
               arr[typeIndex] = index;
@@ -408,6 +411,7 @@
               item.disabled = !result.length;
             });
           });
+          this.skuList = tempSkuList;
           if(!selectIndexes.includes(-1)) {
             let { count, price, sku_id, merchant_code } = this.res.skus.filter(sku => selectIndexes.join('_') === sku.skuIds)[0];
             this.sku.limit = count;
@@ -481,7 +485,6 @@
           const skuIndex = [];
           const skuKeys = [['zhuzuanfenshu', 'zuanshijingdu', 'color', 'guige'], ['zhushimingcheng', 'zhushipingji', 'color', 'guige'], ['s_jinleixing', 's_jinzhong', 'guige']];
 
-
           res.skus.forEach((item, index) => {
             if(!index) {
               this.sku.defaultSKU = item.sku_id; //默认第1条是默认sku
@@ -523,7 +526,6 @@
             skuIndex.push(-1);
           });
           this.skuIndex = skuIndex;
-
           this.res.bannerList = res.slide_img;
 
           this.wxShare();

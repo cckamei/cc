@@ -1,65 +1,20 @@
 <template>
   <div class="pt">
-    <v-header :mypage="true">订单列表</v-header>
+    <v-header>订单列表</v-header>
     <div class="content">
-      <div class="listitem" v-for="(order,i) in orders" :key="i">
-        <div class="itemtitle" @click="goDetail()">
-          <div class="titleleft">
-            <img src="@/assets/mypage/icon_shop.png" alt="">
-            <span>{{htp.appName}}</span>
-          </div>
-          <div class="listright">{{order.status===4?'退款中':(order.status === 8?'已取消':'已退款')}}</div>
-        </div>
-        <div class="itemcontent" v-for="(good,j) in order.goods" :key="j" @click="goDetail(order.order_id)">
-          <div class="contentleft">
-            <img :src="good.goods_img" alt="">
-          </div>
-          <div class="contentright">
-            <div class="contenttitle">
-              <span>{{good.goods_name}}</span>
-              <span>￥{{good.goods_price}}</span>
-            </div>
-            <div class="contentmessage">
-              <p>{{good.skuLabel}}</p>
-              <div class="messageright">
-                <s>&nbsp;</s>
-                <span>X{{good.goods_count}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="itemprice">
-          共{{order.goods.length}}件商品 实付款： <span>￥{{order.rest_money}}</span> （含运费￥{{order.logistics_money}}）
-        </div>
-        <div class="itemfoot">
-          <!-- 已取消 -->
-          <div class="ordertypeQX" v-if="order.status === 8">
-            <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
-            <button class="btngrey" @click="goGoodsDetail">再次购买</button>
-          </div>
-          <div class="ordertypeQX" v-if="order.status === 4">
-            <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
-            <button class="btngrey" @click="goRefundDetail(order.order_id)">查看退款</button>
-          </div>
-          <div class="ordertypeQX" v-if="order.status === 6">
-            <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
-            <button class="btngrey" @click="goRefundDetail(order.order_id)">查看退款</button>
-          </div>
-        </div>
-      </div>
+      <order-list :orders="orders"></order-list>
     </div>
-    <v-popup-confirm title="" v-model="serviceVisible" @confirm="goCustomService">
-      <div class="txt-center">
-        即将离开商城，接通您的专属客服。<br>在公众号中回复“人工服务”与客服进行联系与沟通。
-      </div>
-    </v-popup-confirm>
   </div>
 </template>
 
 <script>
   import { mapActions, mapMutations } from 'vuex';
+  import orderList from './components/orders';
+
   export default {
+    components: {
+      orderList
+    },
     data() {
       return {
         orders: [],
@@ -76,9 +31,6 @@
     },
     methods: {
       ...mapActions(['ajax']),
-      goCustomService() {
-        window.wx.closeWindow();
-      },
       getOrders() {
         this.ajax({
           name: 'getOrders'
@@ -87,30 +39,7 @@
           this.orders = this.orders.filter(order => {
             return order.status == 4 || order.status == 8 || order.status == 6;
           });
-          this.orders.forEach(order => {
-            order.goods.forEach(item => {
-              if(item.good_kind === '0') {
-                item.skuLabel = `${item.zhuzuanfenshu};${item.zuanshijingdu};${item.color};${item.guige}`;
-              } else if(item.good_kind === '1') {
-                item.skuLabel = `${item.zhushimingcheng};${item.zhushipingji};${item.color};${item.guige}`;
-              } else {
-                item.skuLabel = `${item.s_jinleixing};${item.s_jinzhong};${item.guige}`;
-              }
-            });
-          });
         });
-      },
-      ...mapMutations(['setCommon']),
-      goDetail(orderId) {
-        this.setCommon({ orderId: orderId });
-        this.$router.push({ name: 'orderdetail' });
-      },
-      goGoodsDetail() {
-        this.$router.push({ name: 'goodslist' });
-      },
-      goRefundDetail(orderId) {
-        this.setCommon({ orderId: orderId });
-        this.$router.push({ name: 'refunddetail' });
       }
     }
   };
@@ -127,13 +56,14 @@
       padding: 0 30px;
       height: 64px;
       line-height: 64px;
-      margin-top: 20px;
       display: flex;
       flex-flow: row nowrap;
       justify-content: space-between;
       .titleleft {
         img {
-          display: inline;
+          display: inline-block;
+          width: 24px;
+          height: 24px;
           margin-right: 12px;
         }
       }

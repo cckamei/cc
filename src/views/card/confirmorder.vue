@@ -3,49 +3,23 @@
     <v-header>确认订单</v-header>
     <div class="content">
       <ul class="sections">
-        <li class="section">
-          <v-receipt></v-receipt>
-        </li>
         <li class="section flex goods">
           <div class="img">
             <img src="@/assets/card/img_card.png" alt="">
           </div>
           <div class="detail flex-auto flex">
             <span class="name">{{card.name}}</span>
-            <span class="desc"></span>
+            <div class="card-discount"><span>{{card.discount * 10}}</span>&nbsp;折</div>
+            <span class="desc">适用范围：{{card.scope}}</span>
             <div class="line3 flex">
               <span class="price"><span>￥</span>{{card.price | currency}}</span>
               <div class="number">x1</div>
             </div>
           </div>
         </li>
-        <li class="option section">
-          <div class="row">
-            <v-form-slide-up label="配送方式" title="配送方式" confirmText="完成">
-              <template slot="value">
-                <div v-for="(item, index) in delivery" :key="index" v-if="index === deliveryIndex" class="">{{item.name}} {{item.price}}元</div>
-              </template>
-              <ul class="delivery">
-                <li class="flex" v-for="(item, index) in delivery" @click="deliveryIndex = index" :key="index">
-                  <div class="flex-auto">
-                    <p class="name">{{item.name}}</p>
-                    <span class="desc">{{item.desc}}</span>
-                  </div>
-                  <img v-show="index === deliveryIndex" src="@/assets/goods/icon_selected.png" alt="">
-                </li>
-              </ul>
-            </v-form-slide-up>
-          </div>
-          <div class="row">
-            <v-form-input class="remark" label="留言" v-model="reqData.yaoqiu" placeholder="（选填）建议留言前先与卖家沟通确认"></v-form-input>
-          </div>
-        </li>
         <li class="summary section">
           <div class="row">
             <v-form-input label="商品总额" :value="'￥' + goodsMoney" :readonly="true"></v-form-input>
-          </div>
-          <div class="row" v-if="delivery.length">
-            <v-form-input class="freight" label="运费" :value="'+￥' + delivery[deliveryIndex].price" :readonly="true"></v-form-input>
           </div>
         </li>
       </ul>
@@ -77,50 +51,28 @@
         deliveryIndex: 0,
         delivery: [], //快递
         reqData: {
-          address_id: '', //地址id
-          logitics_id: '', //快递id
+          address_id: '5bed19f4a2154f5303a38d36', //地址id
+          logitics_id: '5be148b4a2154f6a3731a5f8', //快递id
           yaoqiu: '',
           vipcard_id: ''
         }
       };
     },
     created() {
-      if(this.getAddress) {
-        this.reqData.address_id = this.getAddress.id;
-      }
-
       this.goodsMoney = this.card.price;
-      this.fetchLogitics();
     },
     computed: {
       ...mapState(['card']),
       ...mapGetters(['getAddress']),
       totalMoney() {
-        let deliveryMoney = 0;
-        if(this.delivery.length) {
-          deliveryMoney = this.delivery[this.deliveryIndex].price;
-        }
-
-        return this.goodsMoney + deliveryMoney;
+        return this.goodsMoney;
       }
     },
     methods: {
       ...mapMutations(['clearPayOrder', 'setPayOrder']),
       ...mapActions(['ajax']),
-      fetchLogitics() {
-        this.ajax({ name: 'getLogitics' }).then(res => {
-          this.delivery = res;
-        });
-      },
       addOrder() {
-        this.reqData.logitics_id = this.delivery[this.deliveryIndex].id;
         this.reqData.vipcard_id = this.card.card_id;
-
-        if(!this.reqData.address_id) {
-          this.toast('亲，您还未设置收货地址！');
-          return false;
-        }
-
         this.ajax({ name: 'buyCard', data: this.reqData }).then(res => {
           this.clearPayOrder();
           this.setPayOrder(res);
@@ -167,10 +119,14 @@
             color: #666;
             padding-top: 10px;
           }
-          .desc {
+          .card-discount {
             font-size: 20px;
             color: #999;
             padding-top: 24px;
+          }
+          .desc {
+            font-size: 20px;
+            color: #999;
           }
           .kezi {
             font-size: 20px;
@@ -257,6 +213,7 @@
       color: #fff;
       background-color: @color5;
       border-radius: 34px;
+      font-size: 30px;
     }
   }
 </style>

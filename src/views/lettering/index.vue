@@ -8,7 +8,7 @@
       </div>
       <div class="gap"></div>
       <ul class="section">
-        <li v-for="(item, index) in letteringValues">
+        <li v-for="(item, index) in letteringValues" :key="index">
           <div class="row">
             <v-form-input v-if="item.type === 2" v-model="value1" :arrow="true" :label="'刻字元素' + ['（左）','（中）','（右）'][index]" placeholder="添加刻字元素（可选）" @input-click="$router.push({name: 'letteringedit', params: {index}})"></v-form-input>
             <v-form-input v-else v-model="value1" :arrow="true" :label="'刻字元素' + ['（左）','（中）','（右）'][index]" placeholder="修改" @input-click="$router.push({name: 'letteringedit', params: {index}})"></v-form-input>
