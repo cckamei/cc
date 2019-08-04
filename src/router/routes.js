@@ -349,7 +349,7 @@ const router = [{
   },
   {
     name: 'shopdetail',
-    path: '/shoplist/shopdetail/:id',
+    path: '/shoplist/:id',
     component: () => import('@/views/shop/shopdetail')
   },
   {

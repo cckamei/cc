@@ -446,7 +446,7 @@
       // }
     },
     methods: {
-      ...mapMutations(['setCart', 'clearPayOrder', 'setPayOrder', 'setCommon', 'setStoneMade', 'setInvoice']),
+      ...mapMutations(['setCart', 'clearPayOrder', 'setPayOrder', 'setCommon', 'setStoneMade', 'setInvoice', 'setAddress']),
       ...mapActions(['ajax']),
       init() {
         if(this.$route.params.openSKU) {
@@ -633,6 +633,7 @@
           }]);
           this.clearPayOrder();
           this.setInvoice({ use: '' });
+          this.setAddress({ shopId: '' });
           this.setPayOrder({
             cart_id: this.sku.skuId || this.sku.defaultSKU,
             num: this.sku.count,
@@ -749,6 +750,7 @@
 
         if(this.res.skus.length) {
           this.setStoneMade({ gsmh: this.res.skus[0].gsmh, goods_id: this.res.goods_id, goods_title: this.res.goods_title, img: this.res.img });
+          this.clearPayOrder();
           this.$router.push({ name: 'cusstone' });
         } else {
           this.toast('公司模号为空！');

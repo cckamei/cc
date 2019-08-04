@@ -445,7 +445,7 @@
 <style lang="less">
   .selectstone {
     .fixwidth {
-      width: 144px;
+      min-width: 144px;
     }
   }
   .ant-slider {

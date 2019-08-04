@@ -46,9 +46,14 @@
   export default {
     beforeRouteEnter(to, from, next) {
       next(vm => {
-        if(['confirmorder', 'package'].includes(from.name)) {
+        if(['confirmorder', 'packageorder'].includes(from.name)) {
           const { type, index } = vm.$route.params;
-          const goods = vm[type][index];
+          let goods = {};
+          if(type === 'package') {
+            goods = vm.package.goods_list[index];
+          } else {
+            goods = vm.cart[index];
+          }
           if(goods.lettering) {
             vm.setLetteringValues(goods.lettering);
           } else {
@@ -68,28 +73,20 @@
         return this.letteringValues.some(item => item.type !== 2);
       }
     },
-    created() {
-      const { type, index } = this.$route.params;
-      const goods = this[type][index];
-      if(this.$route.name === 'confirmorder' || this.$route.name === 'package') {
-        if(goods.lettering) {
-          this.setLetteringValues(this[type][index]);
-        } else {
-          this.setLetteringValues([{ type: 2 }, { type: 2 }, { type: 2 }]);
-        }
-      }
-    },
     methods: {
       ...mapMutations(['setLetteringValues', 'setCart', 'setPackage']),
       ...mapActions(['ajax']),
       handleConfirm() {
         const { type, index } = this.$route.params;
-        const goods = this[type];
-        goods[index].lettering = this.letteringValues;
-        if(type === 'cart') {
-          this.setCart(goods);
-        } else if(type === 'package') {
+        let goods = {};
+        if(type === 'package') {
+          goods = this.package;
+          goods.goods_list[index].lettering = this.letteringValues;
           this.setPackage(goods);
+        } else {
+          goods = this.cart;
+          goods[index].lettering = this.letteringValues;
+          this.setCart(goods);
         }
         this.$router.go(-1);
       }

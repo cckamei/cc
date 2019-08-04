@@ -60,6 +60,9 @@
     components: {
       datetimePicker
     },
+    created() {
+      this.text = this.value;
+    },
     watch: {
       value() {
         if(this.value) {

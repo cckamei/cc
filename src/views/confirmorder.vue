@@ -18,9 +18,6 @@
                   <div class="lettering" @click="$router.push({name: 'lettering', params: {type: 'cart', index}})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
                 </div>
                 <span class="desc">{{item.skuLabel}}</span>
-                <!-- <div class="kezi">
-                  <span v-if="item.has_kezi" @click="openKezi(item)">刻字&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span>库存：{{item.limit}}</span>
-                </div> -->
                 <div class="line3 flex">
                   <span class="price"><span>￥</span>{{item.price | currency}}</span>
                   <div class="number">X{{item.count}}</div>
@@ -41,7 +38,7 @@
             <v-form-input v-else label="优惠券" class="coupon" :arrow="true" value="没有可用的优惠券" @input-click="$router.push({name: 'selectcoupon'})"></v-form-input>
           </div>
           <div v-if="getAddress.type" class="row">
-            <v-form-datepicker label="自提时间" title="自提时间" v-model="reqData.ziti" format="yyyy-MM-dd" placeholder="选择自提时间" :startDate="startDate" :endDate="new Date('2050/01/01')" :arrow="true"></v-form-datepicker>
+            <v-form-datepicker label="自提时间" title="自提时间" v-model="reqData.ziti_time" format="yyyy-MM-dd" placeholder="选择自提时间" :startDate="startDate" :endDate="new Date('2050/01/01')" :arrow="true"></v-form-datepicker>
           </div>
           <div class="row">
             <v-form-slide-up label="配送方式" title="配送方式" confirmText="完成">
@@ -97,22 +94,6 @@
       <div class="price">￥{{totalMoney | currency}}</div>
       <button class="btn settlement" @click="addOrder">提交订单</button>
     </div>
-    <!-- <v-slide-up v-model="lettering.keziVisible" title="刻字定制">
-      <ul class="lettering">
-        <li class="lettering-enable">
-          <div class="title">是否刻字</div>
-          <v-button-radio :disabled="true" v-model="lettering.disable" :list="['是', '否']"></v-button-radio>
-        </li>
-        <li>
-          <div class="title">刻字內容</div>
-          <input :disabled="true" v-model="lettering.text" class="lettering-text" type="text" maxlength="50" placeholder="请填写您的刻字内容（详细描述不超过50个字）">
-        </li>
-        <li>
-          <div class="title">要求</div>
-          <input :disabled="true" v-model="lettering.remarks" class="lettering-text" type="text" maxlength="50" placeholder="请填写您的要求（不超过50个字）">
-        </li>
-      </ul>
-    </v-slide-up> -->
   </div>
 </template>
 
@@ -132,6 +113,14 @@
         next();
       }
     },
+    beforeRouteLeave(to, from, next) {
+      if(['goodsdetail', 'cart'].includes(to.name)) {
+        next();
+      } else {
+        this.setPayOrder({ ziti_time: this.reqData.ziti_time, yaoqiu: this.reqData.yaoqiu });
+        next();
+      }
+    },
     data() {
       return {
         shopMoney: 0, //商品总额
@@ -140,60 +129,59 @@
         cart: [],
         deliveryIndex: 0,
         delivery: [], //快递
-        // lettering: { //刻字
-        //   keziVisible: false,
-        //   disable: 1,
-        //   text: '',
-        //   remarks: '',
-        //   lettering: '',
-        //   skuId: ''
-        // },
+        activityLength: 0,
+        couponLength: 0,
         reqData: {
           pslx: 0, //0快递， 1自提
           address_id: '', //地址id
           store_id: '', //自提门店id
-          ziti: '', //自提时间
-          skus: [],
+          ziti_time: '', //自提时间
           coupon_id: '', //优惠券id
           yaoqiu: '', //备注
           logitics_id: '', //快递id
           active_type: 1, //优惠活动类型 1: 购物卡优惠 2: 店铺优惠
           active_id: '', // 当active_type 为店铺优惠时，传指定的活动ID
           liquan_id: '' // 优惠礼券ID 即会员礼遇
-        },
-        activityLength: 0,
-        couponLength: 0
+        }
       };
     },
     created() {
       this.cart = this.getCart;
-      this.reqData.skus = this.cart.map(res => res.cart_id);
       this.shopMoney = this.cart.reduce((sum, item) => {
         return sum + item.price * +item.count;
       }, 0);
+
+      // 回填要求、自提时间
+      this.reqData.yaoqiu = this.getPayOrder.yaoqiu || '';
+      this.reqData.ziti_time = this.getPayOrder.ziti_time || '';
+
+      // 回填地址、自提相关
       if(this.getAddress) {
         this.reqData.address_id = this.getAddress.id;
+        if(this.getAddress.type) {
+          this.reqData.pslx = this.getAddress.type;
+          if(this.getAddress.shopId) {
+            this.reqData.store_id = this.getAddress.shopId;
+          }
+        }
       }
 
-      //从支付页面返回时，回填数据
-      // if(this.getPayOrder.order_id) {
-      //   // this.reqData.coupon_id = this.getPayOrder.coupon_id;
-      //   this.reqData.yaoqiu = this.getPayOrder.yaoqiu;
-      //   this.reqData.logitics_id = this.getPayOrder.logitics_id;
-      // }
-
-      //优惠活动
-      if(this.payOrder.activity) {
-        this.activityMoney = formatPrice(this.payOrder.activity.discount_money);
-      }
-
-      //优惠券
+      //回填优惠券、礼券
       if(this.payOrder.coupon) {
         this.couponMoney = formatPrice(this.payOrder.coupon.discount_money);
         if(this.payOrder.coupon.type === 1) {
           this.reqData.liquan_id = this.payOrder.coupon.id;
         } else {
           this.reqData.coupon_id = this.payOrder.coupon.coupon_id;
+        }
+      }
+
+      // 回填优惠活动
+      if(this.payOrder.activity) {
+        this.activityMoney = formatPrice(this.payOrder.activity.discount_money);
+        if(this.payOrder.activity.kind === 1) {
+          this.reqData.active_type = 2;
+          this.reqData.active_id = this.payOrder.activity.id;
         }
       }
 
@@ -265,12 +253,6 @@
       },
       addOrder() {
         this.reqData.logitics_id = this.delivery[this.deliveryIndex].id;
-        if(this.payOrder.activity) {
-          if(this.payOrder.activity.kind === 1) {
-            this.reqData.active_type = 2;
-            this.reqData.active_id = this.payOrder.activity.id;
-          }
-        }
 
         if(this.cart.filter(item => item.limit == 0).length) {
           this.toast('商品库存不足');
@@ -282,44 +264,31 @@
           return false;
         }
 
-        this.reqData.pslx = this.getAddress.type;
-        if(this.getAddress.type) {
-          this.reqData.store_id = ''; // TODO
-        }
-
         if(this.reqData.pslx) {
           if(!this.reqData.store_id) {
             this.toast('请选择自提门店！');
             return false;
           }
 
-          if(!this.reqData.ziti) {
+          if(!this.reqData.ziti_time) {
             this.toast('请选择自提时间');
             return false;
           }
         }
 
-        //修改
-        // if(this.getPayOrder.order_id) {
-        //   this.ajax({
-        //     name: 'updateOrder',
-        //     data: {
-        //       order_id: this.getPayOrder.order_id,
-        //       coupon_id: this.reqData.coupon_id,
-        //       logitics_id: this.reqData.logitics_id,
-        //       yaoqiu: this.reqData.yaoqiu
-        //     }
-        //   }).then(res => {
-        //     Object.assign(res, this.reqData);
-        //     this.setPayOrder(res);
-        //     this.$router.push({ name: 'pay' });
-        //   }).catch(() => {
-        //     this.setGoodsStock();
-        //   });
-        // } else {
         if(!this.getPayOrder.num) {
           //购物车支付
-          this.ajax({ name: 'addOrder', data: this.reqData }).then(res => {
+          this.ajax({
+            name: 'addOrder',
+            data: {
+              ...this.reqData,
+              // pslx: this.reqData.pslx + '',
+              skus: this.cart.map(res => res.cart_id)
+            }
+          }).then(res => {
+            if(this.invoice.use) {
+              this.applyInvock(res.order_id);
+            }
             Object.assign(res, this.reqData);
             this.setPayOrder(res);
             this.$router.push({ name: 'pay' });
@@ -331,18 +300,10 @@
           this.ajax({
             name: 'buyNow',
             data: {
-              coupon_id: this.reqData.coupon_id, //优惠券id
-              address_id: this.reqData.address_id, //地址id
-              yaoqiu: this.reqData.yaoqiu,
-              logitics_id: this.reqData.logitics_id, //快递id
-              sku: this.getPayOrder.cart_id,
+              ...this.reqData,
+              sku: this.cart.map(res => res.cart_id)[0],
               num: this.getPayOrder.num,
-              // kezi: this.getPayOrder.kezi,
-              // kezi_yaoqiu: this.getPayOrder.kezi_yaoqiu,
-              emp_id: this.getPayOrder.emp_id,
-              active_type: this.reqData.active_type,
-              active_id: this.reqData.active_id,
-              liquan_id: this.reqData.liquan_id
+              emp_id: this.getPayOrder.emp_id
             }
           }).then(res => {
             if(this.invoice.use) {
@@ -353,14 +314,7 @@
             this.$router.push({ name: 'pay' });
           });
         }
-        // }
       }
-      // openKezi(val) {
-      //   this.lettering.keziVisible = true;
-      //   this.lettering.disable = Number(!val.kezi.kezi);
-      //   this.lettering.text = val.kezi.kezi;
-      //   this.lettering.remarks = val.kezi.yaoqiu;
-      // }
     }
   };
 </script>

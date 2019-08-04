@@ -104,7 +104,7 @@
       }
     },
     methods: {
-      ...mapMutations(['setCommon', 'setCart', 'clearPayOrder']),
+      ...mapMutations(['setCommon', 'setCart', 'clearPayOrder', 'setInvoice', 'setAddress']),
       ...mapActions(['ajax']),
       fetchCart() {
         this.ajax({
@@ -169,6 +169,8 @@
         }
         this.setCart(this.cart.filter(item => item.checked));
         this.clearPayOrder();
+        this.setInvoice({ use: '' });
+        this.setAddress({ shopId: '' });
         this.$router.push({ name: 'confirmorder' });
       },
       getRecommend() {

@@ -13,7 +13,10 @@
                 <img :src="item.good.cover_img" alt="">
               </div>
               <div class="detail flex-auto flex">
-                <span class="name">{{item.good.title}}</span>
+                <div class="line1">
+                  <span class="name">{{item.good.title}}</span>
+                  <div class="lettering" @click="$router.push({name: 'lettering', params: {type: 'package', index}})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
+                </div>
                 <span class="desc">{{skuLabel(item)}}</span>
                 <div class="line3 flex">
                   <span class="price"><span>￥</span>{{item.price | currency}}</span>
@@ -190,10 +193,18 @@
             flex-direction: column;
             align-items: flex-start;
             position: relative;
-            .name {
-              font-size: 24px;
-              color: #666;
-              padding-top: 10px;
+            .line1 {
+              width: 100%;
+              .name {
+                font-size: 24px;
+                color: #666;
+                padding-top: 10px;
+              }
+              .lettering {
+                width: 30px;
+                height: 30px;
+                float: right;
+              }
             }
             .desc {
               font-size: 20px;

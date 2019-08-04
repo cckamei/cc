@@ -41,7 +41,8 @@ export default new Vuex.Store({
       subject: ['星座', '生肖'],
       constellation: ['金牛座', '摩羯座'],
       zodiac: ['牛', '鼠']
-    }
+    },
+    shopList: getSen('shopList') || []
   },
   getters: {
     getCacheData: state => serialize(state.cacheData),
@@ -130,6 +131,10 @@ export default new Vuex.Store({
     setLetteringLabels(state, data) {
       state.letteringLabels = data;
       setSen('letteringLabels', state.letteringLabels);
+    },
+    setShopList(state, data) {
+      state.shopList = data;
+      setSen('shopList', state.shopList);
     }
   },
   actions: {

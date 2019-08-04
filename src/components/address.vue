@@ -29,7 +29,7 @@
         city: '北京市',//市
         district: '朝阳区',//区
         chIndex: 1, //省市区选择下划线
-        adList: [],
+        adList: [],//省市区列表
         selectedIndex: -1, //选中的省市区在列表中的index
         cityId: '', //选择的市id
         addId: 1 //1:省份选择; 2:市区； 3：地区
@@ -41,6 +41,7 @@
         this.visible = true;
 
         this.chIndex = 1;
+        this.addId = 1;
         this.province = province;
         this.city = city;
         this.district = district;

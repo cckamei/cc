@@ -3,53 +3,58 @@
     <v-header>门店详情</v-header>
     <div class="content">
       <section class="shop-info">
-        <div class="name">{{shopInfo.name}}</div>
-        <div class="time">营业时间：{{shopInfo.starttime}} - {{shopInfo.endtime}}</div>
-        <div class="address">门店地址：{{shopInfo.address}}</div>
+        <div class="name">{{shop.name}}</div>
+        <div class="time">营业时间：{{shop.business_hours}}</div>
+        <div class="address">门店地址：{{shop.address}}</div>
       </section>
       <div class="gap"></div>
       <v-split-title>门店实景</v-split-title>
       <ul class="imgs flex">
-        <li v-for="img in goods"><img :src="img" alt=""></li>
+        <li v-for="img in shop.store_imgs"><img :src="img.url" alt=""></li>
       </ul>
       <div class="gap"></div>
       <v-split-title>门店地图</v-split-title>
       <div class="map-container">
-        <iframe src="https://apis.map.qq.com/tools/poimarker?type=0&marker=coord:39.96554,116.26719;title:成都;addr:北京市海淀区复兴路32号院&key=S36BZ-DUXCD-VMK4L-HQO4H-SFMAO-7DFFJ&referer=cc" frameborder="0"></iframe>
+        <iframe :src="mapurl" frameborder="0"></iframe>
       </div>
       <div class="gap"></div>
       <v-split-title>门店资质</v-split-title>
       <ul class="imgs flex">
-        <li v-for="img in goods"><img :src="img" alt=""></li>
+        <li v-for="img in shop.store_zizhi_imgs"><img :src="img.url" alt=""></li>
       </ul>
     </div>
     <div class="footer">
       <div class="btns">
-        <button class="btn active">选择</button>
+        <button class="btn active" @click="handleConfirm">选择</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { mapActions, mapMutations } from 'vuex';
+  import { mapActions, mapMutations, mapState } from 'vuex';
   import { setTimeout } from 'timers';
 
   export default {
     data() {
       return {
-        longitude: 0,//经度
-        latitude: 0,//纬度
-        city: '',
-        shopInfo: {
-          shopId: 2,
-          name: '钟楼开元商城店',
-          starttime: '08:00',
-          endtime: '21:00',
-          address: '西安市碑林区解放市场6号开元商城F1'
-        },
-        goods: ['http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132', 'http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132', 'http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132', 'http://thirdwx.qlogo.cn/mmopen/vi_32/36FdUeKvJ8swzzucXukduqibhLI5huXtKs0icvqj3QEl12lPbQ9FCg8iatwPjJDx7NnBI1uibiaW4VlSOvXFN9IZUeg/132']
       };
+    },
+    computed: {
+      ...mapState(['shopList']),
+      shop() {
+        return this.shopList.find(item => item.id === this.$route.params.id);
+      },
+      mapurl() {
+        return `https://apis.map.qq.com/tools/poimarker?type=0&marker=coord:39.96554,116.26719;title:${this.shop.name};addr:${this.shop.address}&key=S36BZ-DUXCD-VMK4L-HQO4H-SFMAO-7DFFJ&referer=cc`
+      }
+    },
+    methods: {
+      ...mapMutations(['setAddress']),
+      handleConfirm() {
+        this.setAddress({ shopId: this.shop.id, shopAddress: this.shop.address });
+        this.$router.go(-2);
+      }
     }
   };
 </script>
