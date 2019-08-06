@@ -12,8 +12,8 @@
             <div class="title">字体</div>
             <div class="font flex">
               <div class="font-item" v-for="(item, index) in letteringLabels.font" :key="index">
-                <img src="" alt="">
-                <button class="btn-txt" :class="{active: reqData.font  === index}" @click="reqData.font = index">{{item}}</button>
+                <img :src="item.list_img" alt="">
+                <button class="btn-txt" :class="{active: reqData.font  === index}" @click="reqData.font = index">{{item.name}}</button>
               </div>
             </div>
           </li>
@@ -33,14 +33,14 @@
             <div class="title">内容</div>
             <div class="font" v-if="reqData.subject === 0">
               <div class="font-item" v-for="(item, index) in letteringLabels.constellation" :key="index">
-                <img src="" alt="">
-                <button class="btn-txt" :class="{active: reqData.constellation === index }" @click="reqData.constellation = index">{{item}}</button>
+                <img :src="item.list_img" alt="">
+                <button class="btn-txt" :class="{active: reqData.constellation === index }" @click="reqData.constellation = index">{{item.name}}</button>
               </div>
             </div>
             <div class="font" v-if="reqData.subject === 1">
               <div class="font-item" v-for="(item, index) in letteringLabels.zodiac" :key="index">
-                <img src="" alt="">
-                <button class="btn-txt" :class="{active: reqData.zodiac  === index}" @click="reqData.zodiac = index">{{item}}</button>
+                <img :src="item.list_img" alt="">
+                <button class="btn-txt" :class="{active: reqData.zodiac  === index}" @click="reqData.zodiac = index">{{item.name}}</button>
               </div>
             </div>
           </li>
@@ -72,7 +72,7 @@
     },
     computed: {
       ...mapState(['letteringLabels']),
-      ...mapGetters(['getLetteringValues']),
+      ...mapGetters(['getLetteringValues', 'getLetteringLabels']),
       isActive() {
         if(this.reqData.type === 0 && !this.reqData.content.length) {
           return false;
@@ -86,10 +86,21 @@
     methods: {
       ...mapMutations(['setLetteringValues', 'setLetteringLabels']),
       ...mapActions(['ajax']),
-      handleConfirm() {
+      async handleConfirm() {
+        let img = '';
+        if(this.reqData.type === 0) {
+          const response = await this.ajax({ name: 'getMixinsPic', data: { content: this.reqData.content, classify: this.getLetteringLabels.font[this.reqData.font].name } });
+          img = response.img;
+        } else if(this.reqData.type === 1) {
+          if(this.reqData.subject === 0) {
+            img = this.getLetteringLabels.constellation[this.reqData.constellation].show_img;
+          } else {
+            img = this.getLetteringLabels.zodiac[this.reqData.zodiac].show_img;
+          }
+        }
         const index = this.$route.params.index;
         const letteringValues = this.getLetteringValues;
-        letteringValues[index] = { ...letteringValues[index], ...this.reqData };
+        letteringValues[index] = { ...letteringValues[index], ...this.reqData, img };
         this.setLetteringValues(letteringValues);
         this.$router.go(-1);
       },
@@ -99,10 +110,10 @@
         }).then(res => {
           this.setLetteringLabels({
             type: ['文字', '图案', '无'],
-            font: ['黑体', '宋体'],
+            font: res.typeface,
             subject: ['星座', '生肖'],
-            constellation: ['金牛座', '摩羯座'],
-            zodiac: ['牛', '鼠']
+            constellation: res.constellation,
+            zodiac: res.chinese_zodiac
           });
 
           const index = this.$route.params.index;

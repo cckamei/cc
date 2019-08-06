@@ -3,7 +3,7 @@
 
   export default {
     computed: {
-      ...mapState(['invoice'])
+      ...mapState(['invoice', 'letteringLabels'])
     },
     methods: {
       applyInvock(id) {
@@ -37,6 +37,96 @@
             erp_type: 1 //1 下单开发票 2 补开发票
           }
         });
+      },
+      addLettering(res) {
+        let result = [];
+        const { type, font, subject, constellation, zodiac } = this.letteringLabels;
+        const orderInfo = {
+          order_id: res.order_id// # 订单id
+        };
+
+        this.cart.forEach((item, index) => {
+          const goods = res.goods[index];
+          const goodsInfo = {
+            "goods_id": goods.goods_id,// # 商品id
+            "sku_id": goods.sku_id,//  # 套系id TODO
+            "goods_name": goods.goods_name,// # 商品名称
+            "goods_merchant_code": goods.goods_merchant_code,//; #"商品货号" # 商品货号
+            "sku_merchant_code": goods.sku_merchant_code,//  #按商品编号搜索 # 商品货号
+            "mode_code": goods.mode_code // # 公司模号
+          };
+          if(item.lettering) {
+            item.lettering.forEach((l, index) => {
+              if(l.type !== 2) {
+                let letteringInfo = {};
+                if(l.type === 0) {
+                  letteringInfo.name_type = '文字';
+                  letteringInfo.classify = '艺术字';
+                  letteringInfo.classify_content = font[l.font].name;
+                  letteringInfo.content = l.content;
+                } else if(l.type === 1) {
+                  letteringInfo.name_type = '图案';
+                  if(l.subject === 0) {
+                    letteringInfo.classify = '星座';
+                    letteringInfo.classify_content = constellation[l.constellation].name;
+                  } else {
+                    letteringInfo.classify = '生肖';
+                    letteringInfo.classify_content = zodiac[l.zodiac].name;
+                  }
+                  letteringInfo.content = l.img;
+                }
+                letteringInfo.nums = index + 1;
+                result.push({ ...orderInfo, ...goodsInfo, ...letteringInfo });
+              }
+            });
+          }
+        });
+        this.ajax({ name: 'addLettering', data: result });
+      },
+      addPackageLettering(res) {
+        let result = [];
+        const { type, font, subject, constellation, zodiac } = this.letteringLabels;
+        const orderInfo = {
+          order_id: res.order_id// # 订单id
+        };
+
+        this.package.goods_list.forEach((item, index) => {
+          const goods = res.goods[0].goods_list[index];
+          const goodsInfo = {
+            "goods_id": goods.id,// # 商品id #TODO
+            "sku_id": goods.sku.sku_id,//  # 套系id
+            "goods_name": goods.good.title,// # 商品名称
+            "goods_merchant_code": goods.sku.goods_merchant_code,//; #"商品货号" # 商品货号 #TODO
+            "sku_merchant_code": goods.sku.sku_merchant_code,//  #按商品编号搜索 # 商品货号 #TODO
+            "mode_code": goods.sku.mode_code // # 公司模号 #TODO
+          };
+          if(item.lettering) {
+            item.lettering.forEach((l, index) => {
+              if(l.type !== 2) {
+                let letteringInfo = {};
+                if(l.type === 0) {
+                  letteringInfo.name_type = '文字';
+                  letteringInfo.classify = '艺术字';
+                  letteringInfo.classify_content = font[l.font].name;
+                  letteringInfo.content = l.content;
+                } else if(l.type === 1) {
+                  letteringInfo.name_type = '图案';
+                  if(l.subject === 0) {
+                    letteringInfo.classify = '星座';
+                    letteringInfo.classify_content = constellation[l.constellation].name;
+                  } else {
+                    letteringInfo.classify = '生肖';
+                    letteringInfo.classify_content = zodiac[l.zodiac].name;
+                  }
+                  letteringInfo.content = l.img;
+                }
+                letteringInfo.nums = index + 1;
+                result.push({ ...orderInfo, ...goodsInfo, ...letteringInfo });
+              }
+            });
+          }
+        });
+        this.ajax({ name: 'addLettering', data: result });
       }
     }
   };

@@ -3,7 +3,8 @@
     <v-header>刻字定制</v-header>
     <div class="content">
       <div class="preview">
-        <img src="@/assets/lettering/pic_ring_i.png" alt="">
+        <img :src="item.img" v-for="(item, index) in letteringValues" :key="index" v-if="item.type !== 2 && item.img" alt="">
+        <!-- <img src="@/assets/lettering/pic_ring_i.png" alt=""> -->
         <span class="notes">※图片效果仅供参考，请以实物为准</span>
       </div>
       <div class="gap"></div>
@@ -18,13 +19,13 @@
             <div class="detail flex-auto flex">
               <div class="detail-row flex">
                 <div class="col">类型：{{letteringLabels.type[item.type]}}</div>
-                <div class="col" v-if="item.type === 0">字体：{{letteringLabels.font[item.font]}}</div>
+                <div class="col" v-if="item.type === 0">字体：{{letteringLabels.font[item.font].name}}</div>
                 <div class="col" v-else>主题：{{letteringLabels.subject[item.subject]}}</div>
               </div>
               <div class="detail-row flex">
                 <div class="col" v-if="item.type === 0">内容：{{item.content}}</div>
-                <div class="col" v-else-if="item.subject === 0">内容：{{letteringLabels.constellation[item.constellation]}}</div>
-                <div class="col" v-else>内容：{{letteringLabels.zodiac[item.zodiac]}}</div>
+                <div class="col" v-else-if="item.subject === 0">内容：{{letteringLabels.constellation[item.constellation].name}}</div>
+                <div class="col" v-else>内容：{{letteringLabels.zodiac[item.zodiac].name}}</div>
               </div>
             </div>
           </div>
@@ -34,7 +35,7 @@
     </div>
     <div class="footer">
       <div class="btns">
-        <button class="btn" :class="{active: isActive}" @click="isActive && handleConfirm()">确定</button>
+        <button class="btn active" @click="handleConfirm()">确定</button>
       </div>
     </div>
   </div>
@@ -68,10 +69,7 @@
       };
     },
     computed: {
-      ...mapState(['cart', 'package', 'letteringValues', 'letteringLabels']),
-      isActive() {
-        return this.letteringValues.some(item => item.type !== 2);
-      }
+      ...mapState(['cart', 'package', 'letteringValues', 'letteringLabels'])
     },
     methods: {
       ...mapMutations(['setLetteringValues', 'setCart', 'setPackage']),
@@ -96,9 +94,17 @@
 
 <style lang="less" scoped>
   .preview {
+    background-color: #fff;
     position: relative;
     height: 400px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      padding: 0 10px;
+      width: 160px;
+    }
     .notes {
       position: absolute;
       bottom: 30px;

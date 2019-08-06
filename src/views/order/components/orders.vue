@@ -4,7 +4,7 @@
       <div class="item-title" @click="goDetail(order.order_id)">
         <div class="titleleft">
           <img src="@/assets/mypage/icon_shop.png" alt="">
-          <span>{{appName}}({{order.kind}})</span>
+          <span>{{appName}}</span>
         </div>
         <div class="listright">{{typename(order.status)}}</div>
       </div>

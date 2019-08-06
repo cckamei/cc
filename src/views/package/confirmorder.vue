@@ -15,7 +15,7 @@
               <div class="detail flex-auto flex">
                 <div class="line1">
                   <span class="name">{{item.good.title}}</span>
-                  <div class="lettering" @click="$router.push({name: 'lettering', params: {type: 'package', index}})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
+                  <div v-if="item.good.has_kezi" class="lettering" @click="$router.push({name: 'lettering', params: {type: 'package', index}})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
                 </div>
                 <span class="desc">{{skuLabel(item)}}</span>
                 <div class="line3 flex">
@@ -147,6 +147,9 @@
         this.ajax({ name: 'buyPackage', data: this.reqData }).then(res => {
           if(this.invoice.use) {
             this.applyInvock(res.order_id);
+          }
+          if(this.package.goods_list.some(item => item.lettering && item.lettering.some(l => l.type !== 2))) {
+            this.addPackageLettering(res);
           }
           this.clearPayOrder();
           this.setPayOrder(res);

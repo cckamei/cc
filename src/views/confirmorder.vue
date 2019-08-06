@@ -15,7 +15,7 @@
               <div class="detail flex-auto flex">
                 <div class="line1">
                   <span class="name">{{item.goods_title}}</span>
-                  <div class="lettering" @click="$router.push({name: 'lettering', params: {type: 'cart', index}})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
+                  <div v-if="item.has_kezi" class="lettering" @click="$router.push({name: 'lettering', params: {type: 'cart', index}})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
                 </div>
                 <span class="desc">{{item.skuLabel}}</span>
                 <div class="line3 flex">
@@ -155,17 +155,6 @@
       this.reqData.yaoqiu = this.getPayOrder.yaoqiu || '';
       this.reqData.ziti_time = this.getPayOrder.ziti_time || '';
 
-      // 回填地址、自提相关
-      if(this.getAddress) {
-        this.reqData.address_id = this.getAddress.id;
-        if(this.getAddress.type) {
-          this.reqData.pslx = this.getAddress.type;
-          if(this.getAddress.shopId) {
-            this.reqData.store_id = this.getAddress.shopId;
-          }
-        }
-      }
-
       //回填优惠券、礼券
       if(this.payOrder.coupon) {
         this.couponMoney = formatPrice(this.payOrder.coupon.discount_money);
@@ -254,6 +243,17 @@
       addOrder() {
         this.reqData.logitics_id = this.delivery[this.deliveryIndex].id;
 
+        // 回填地址、自提相关
+        if(this.getAddress) {
+          this.reqData.address_id = this.getAddress.id;
+          if(this.getAddress.type) {
+            this.reqData.pslx = this.getAddress.type;
+            if(this.getAddress.shopId) {
+              this.reqData.store_id = this.getAddress.shopId;
+            }
+          }
+        }
+
         if(this.cart.filter(item => item.limit == 0).length) {
           this.toast('商品库存不足');
           return false;
@@ -289,6 +289,9 @@
             if(this.invoice.use) {
               this.applyInvock(res.order_id);
             }
+            if(this.cart.some(item => item.lettering && item.lettering.some(l => l.type !== 2))) {
+              this.addLettering(res);
+            }
             Object.assign(res, this.reqData);
             this.setPayOrder(res);
             this.$router.push({ name: 'pay' });
@@ -308,6 +311,9 @@
           }).then(res => {
             if(this.invoice.use) {
               this.applyInvock(res.order_id);
+            }
+            if(this.cart.some(item => item.lettering && item.lettering.some(l => l.type !== 2))) {
+              this.addLettering(res);
             }
             Object.assign(res, this.reqData);
             this.setPayOrder(res);

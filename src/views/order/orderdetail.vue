@@ -4,16 +4,19 @@
     <!-- 订单地址、收货人、物流信息 -->
     <div class="content">
       <div v-if="order.kind !== 2" class="logistics" @click="gotLogistics()">
-        <div class="logisticsInfo" v-if="order.logistics.info.data.length==0">
+        <div class="logisticsInfo" v-if="order.pslx === '0' && order.logistics.info.data.length==0">
           <div class="logitem">
             <div>
               <img src="@/assets/mypage/icon_exp.png" alt="">
               <span class="logInfo">暂无物流信息</span>
             </div>
           </div>
-          <div v-if="order.kind === 9" class="making">订单等待定制中</div>
+          <div v-if="order.status === 0" class="order-status-notes">订单等待付款中</div>
+          <div v-else-if="order.status === 1" class="order-status-notes">订单等待发货中</div>
+          <div v-else-if="order.status === 8" class="order-status-notes">订单已取消</div>
+          <div v-else-if="order.status === 9" class="order-status-notes">订单等待定制中</div>
         </div>
-        <div class="logisticsInfo" v-else>
+        <div class="logisticsInfo" v-else-if="order.pslx === '0'">
           <div class="logitem">
             <div>
               <img src="@/assets/mypage/icon_exp.png" alt="">
@@ -24,13 +27,21 @@
           <p>{{order.logistics.info.data[0].time}}</p>
         </div>
         <!-- 收货地址 -->
-        <div class="receiverInfo">
+        <div class="receiverInfo" v-if="order.pslx === '0'">
           <div>
             <img src="@/assets/mypage/icon_package.png" alt="">
             <span>收货人：{{order.address.name}}</span>
             <span class="phone">{{order.address.phone}}</span>
           </div>
           <p>收货地址：{{order.address.province+order.address.city+order.address.district+order.address.street}}</p>
+        </div>
+        <div class="receiverInfo ziti" v-else>
+          <div>
+            <img src="@/assets/mypage/icon_package.png" alt="">
+            <span>取货人：{{order.address.name}}</span>
+            <span class="phone">{{order.address.phone}}</span>
+          </div>
+          <p>门店地址：{{order.ziti_info.address}}</p>
         </div>
       </div>
 
@@ -39,7 +50,7 @@
         <div class="itemtitle">
           <div class="titleleft">
             <img src="@/assets/mypage/icon_shop.png" alt="">
-            <span>{{appName}}({{order.kind}})</span>
+            <span>{{appName}}</span>
           </div>
           <div class="listright">{{typename(order.status)}}</div>
         </div>
@@ -53,7 +64,7 @@
               <span>商品总额</span>
               <span>￥{{order.all_money}}</span>
             </li>
-            <li v-if="order.kind !== 2" class="priceType">
+            <li v-if="order.kind !== 2 && order.pslx === '0'" class="priceType">
               <span>运费</span>
               <span>+￥{{order.logistics_money}}</span>
             </li>
@@ -113,6 +124,19 @@
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
             <!-- <button class="btngrey" @click="goGoods">再次购买</button> -->
           </div>
+          <!-- 定制中 -->
+          <div class="ordertypeQX" v-if="order.status == 9">
+            <button class="btngrey btnleft flexleft" @click="goApplyRefund">申请退款</button>
+            <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button class="btngrey" @click="serviceVisible = true">联系客服</button>
+          </div>
+          <!-- 待取货 -->
+          <div class="ordertypeQH" v-if="order.status == 10">
+            <button class="btngrey btnleft flexleft" @click="goApplyRefund()">申请退款</button>
+            <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
+            <button class="btnpink" @click="isConform = true">确认收货</button>
+          </div>
         </div>
       </div>
       <!-- 订单信息 -->
@@ -123,8 +147,8 @@
           <li v-if="order.status==8"><span>取消时间：</span> {{formatDate(order.finish_at,'yyyy-MM-dd hh:mm:ss')}}</li>
         </ul>
         <ul class="orderInfoItem" v-if="order.kind !== 2 && order.status != 8">
-          <li><span>配送方式：</span> 快递运输/顾客自提（TODO）</li>
-          <li><span>配送时间：</span> 显示时间（TODO）</li>
+          <li><span>配送方式：</span> {{order.pslx === '0' ? '快递运输' : '顾客自提'}}</li>
+          <li v-if="order.pslx === '1'"><span>自提时间：</span> {{order.ziti_info.ziti_time}}</li>
         </ul>
         <!-- 支付方式 -->
         <ul class="orderInfoItem" v-if="getOrderStat(order.status)">
@@ -219,8 +243,9 @@
         }).then(res => {
           this.order = res;
 
-          // this.order.kind = 2; //# 1: 普通商品, 2: 会员卡,  3: 托石分离定制, 4: 套餐
-          // this.order.status = 0; //0: 待付款, 1:'待发货', 2:'待收货', 3:'已完成', 4:'退款中', '', 6:'已退款', '', 8:'已取消'
+          // this.order.kind = 3; //# 1: 普通商品, 2: 会员卡,  3: 托石分离定制, 4: 套餐
+          // this.order.status = 9; //0: 待付款, 1:'待发货', 2:'待收货', 3:'已完成', 4:'退款中', '', 6:'已退款', '', 8:'已取消' 9:'定制中' 10:'待取货'
+          // this.order.pslx = '0';
 
           if(!this.order.logistics.info || !this.order.logistics.info.result) {
             this.order.logistics = {
@@ -244,7 +269,7 @@
         this.$router.push({ name: 'goodslist' });
       },
       typename(type) {
-        let _typenames = ['待付款', '待发货', '待收货', '已完成', '退款中', '', '已退款', '', '已取消', '', '待取货'];
+        let _typenames = ['待付款', '待发货', '待收货', '已完成', '退款中', '', '已退款', '', '已取消', '定制中', '待取货'];
         return _typenames[type];
       },
       formatDate,
@@ -362,8 +387,9 @@
         margin-right: 20px;
       }
       p {
-        margin-left: 62px;
+        margin-left: 56px;
         margin-top: 10px;
+        color: #333;
       }
     }
     .logisticsInfo {
@@ -375,7 +401,7 @@
       p {
         color: #999999;
       }
-      .making {
+      .order-status-notes {
         padding-left: 55px;
         color: #999999;
       }
@@ -383,6 +409,10 @@
     .receiverInfo {
       padding-bottom: 40px;
       margin-top: 60px;
+      &.ziti {
+        margin: 0;
+        padding-top: 40px;
+      }
       span {
         color: #666666;
         font-weight: bold;
@@ -392,7 +422,7 @@
         margin-left: 100px;
       }
       p {
-        color: #999999;
+        color: #666;
       }
       img {
         width: 36px;
