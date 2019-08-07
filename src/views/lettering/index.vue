@@ -15,7 +15,7 @@
             <v-form-input v-else v-model="value1" :arrow="true" :label="'刻字元素' + ['（左）','（中）','（右）'][index]" placeholder="修改" @input-click="$router.push({name: 'letteringedit', params: {index}})"></v-form-input>
           </div>
           <div class="item-wrapper flex" v-if="item.type !== 2">
-            <div class="img"><img src="@/assets/stone/pic_dia.png" alt=""></div>
+            <div class="img"><img :src="item.list_img" alt=""></div>
             <div class="detail flex-auto flex">
               <div class="detail-row flex">
                 <div class="col">类型：{{letteringLabels.type[item.type]}}</div>

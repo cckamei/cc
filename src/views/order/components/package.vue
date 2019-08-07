@@ -8,6 +8,7 @@
         <div class="contenttitle">
           <span>{{item.good.title}}</span>
           <span>￥{{item.price}}</span>
+          <div v-if="!orderlist && item.haz_kezi" class="lettering" @click="$router.push({name: 'orderlettering'})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
         </div>
         <div class="contentmessage">
           <p>{{skuLabel(item)}}</p>
@@ -26,6 +27,10 @@
       goods: {
         type: Object,
         default: () => { }
+      },
+      orderlist: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -76,6 +81,11 @@
         font-size: 24px;
         span:nth-child-of(2) {
           text-align: right;
+        }
+        .lettering {
+          width: 30px;
+          height: 30px;
+          float: right;
         }
       }
       .contentmessage {

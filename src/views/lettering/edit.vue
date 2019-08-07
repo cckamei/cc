@@ -87,20 +87,23 @@
       ...mapMutations(['setLetteringValues', 'setLetteringLabels']),
       ...mapActions(['ajax']),
       async handleConfirm() {
-        let img = '';
+        let img = '', list_img = '';
         if(this.reqData.type === 0) {
           const response = await this.ajax({ name: 'getMixinsPic', data: { content: this.reqData.content, classify: this.getLetteringLabels.font[this.reqData.font].name } });
           img = response.img;
+          list_img = this.getLetteringLabels.font[this.reqData.font].list_img;
         } else if(this.reqData.type === 1) {
           if(this.reqData.subject === 0) {
             img = this.getLetteringLabels.constellation[this.reqData.constellation].show_img;
+            list_img = this.getLetteringLabels.constellation[this.reqData.constellation].list_img;
           } else {
             img = this.getLetteringLabels.zodiac[this.reqData.zodiac].show_img;
+            list_img = this.getLetteringLabels.zodiac[this.reqData.zodiac].list_img;
           }
         }
         const index = this.$route.params.index;
         const letteringValues = this.getLetteringValues;
-        letteringValues[index] = { ...letteringValues[index], ...this.reqData, img };
+        letteringValues[index] = { ...letteringValues[index], ...this.reqData, img, list_img };
         this.setLetteringValues(letteringValues);
         this.$router.go(-1);
       },

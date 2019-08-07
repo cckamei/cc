@@ -63,10 +63,10 @@
 
 <script>
   import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
-  import confirmOrderMixins from '../mixins/confirmorder.vue';
+  import orderMixins from '../mixins/order.vue';
 
   export default {
-    mixins: [confirmOrderMixins],
+    mixins: [orderMixins],
     beforeRouteEnter(to, from, next) {
       if(from.name === 'pay') {
         next(vm => {

@@ -218,7 +218,7 @@
         </v-form-slide-up>
       </div>
       <div class="row" v-if="res.has_kezi">
-        <v-form-slide-up label="刻字定制" title="刻字定制" placeholder="填写您的刻字信息">
+        <v-form-slide-up label="刻字定制" title="刻字定制" placeholder="刻字服务">
           <ul class="service">
             <li>
               <div class="flex"><img src="@/assets/goods/icon_hook_mini.png" alt=""><span>本商品支持刻字服务</span></div>

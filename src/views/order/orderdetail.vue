@@ -35,7 +35,7 @@
           </div>
           <p>收货地址：{{order.address.province+order.address.city+order.address.district+order.address.street}}</p>
         </div>
-        <div class="receiverInfo ziti" v-else>
+        <div class="receiverInfo ziti" v-else-if="order.pslx === '0'">
           <div>
             <img src="@/assets/mypage/icon_package.png" alt="">
             <span>取货人：{{order.address.name}}</span>
@@ -244,7 +244,7 @@
           this.order = res;
 
           // this.order.kind = 3; //# 1: 普通商品, 2: 会员卡,  3: 托石分离定制, 4: 套餐
-          // this.order.status = 9; //0: 待付款, 1:'待发货', 2:'待收货', 3:'已完成', 4:'退款中', '', 6:'已退款', '', 8:'已取消' 9:'定制中' 10:'待取货'
+          // this.order.status = 1; //0: 待付款, 1:'待发货', 2:'待收货', 3:'已完成', 4:'退款中', '', 6:'已退款', '', 8:'已取消' 9:'定制中' 10:'待取货'
           // this.order.pslx = '0';
 
           if(!this.order.logistics.info || !this.order.logistics.info.result) {
@@ -286,9 +286,12 @@
         this.cancelVisible = true;
       },
       applyInvoice() {
-        this.$router.push({ name: 'viewinvoice' });
+        // TODO 没有开票时跳转到开票页面
+        // this.$router.push({ name: 'viewinvoice' });
+        this.$router.push({ name: 'invoice' });
       },
       applyReturnDiff() {
+        // TODO 退拆家状态字段
         // 0:不退款 1:已经打开退款 2:已经完成退款 3:退款被拒绝 4:退款中
         if(this.order.return_flag === 1) {
           this.$router.push({ name: 'returndiffapply', params: { type: 1 } });

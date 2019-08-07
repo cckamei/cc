@@ -6,7 +6,7 @@
         <li>
           <div class="row flex">
             <div class="label">发票抬头：</div>
-            <div class="value">{{res.user_type === 1 ? '个人' : '单位'}}</div>
+            <div class="value">{{res.user_type === 0 ? '个人' : '单位'}}</div>
           </div>
         </li>
         <li>

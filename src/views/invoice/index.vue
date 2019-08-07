@@ -54,8 +54,20 @@
 </template>
 
 <script>
-  import { mapMutations, mapState } from 'vuex';
+  import { mapMutations, mapState, mapGetters, mapActions } from 'vuex';
+  import orderMixins from '../mixins/order.vue';
+
   export default {
+    mixins: [orderMixins],
+    beforeRouteLeave(to, from, next) {
+      if(to.name === 'orderdetail') {
+        this.applyInvock(this.getOrderId).then(() => {
+          next();
+        });
+      } else {
+        next()
+      }
+    },
     data() {
       return {
         reqData: {
@@ -73,6 +85,7 @@
     },
     computed: {
       ...mapState(['invoice']),
+      ...mapGetters(['getOrderId']),
       isActive() {
         const {
           invoiceType,
@@ -114,6 +127,7 @@
     },
     methods: {
       ...mapMutations(['setInvoice']),
+      ...mapActions(['ajax']),
       selectAddress() {
         this.setInvoice(this.reqData);
         this.$router.push({ name: 'myaddress' });

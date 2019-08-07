@@ -22,7 +22,7 @@
             // ticketCompanyName: '',
             // ticketId: ''
 
-            user_type: invoice.invoiceType, //# 1个人 2 单位
+            user_type: invoice.invoiceType, //# 0个人 1 单位
             name,  //# 姓名或者单位名称
             duty_paragraph: invoice.ticketId || '', //# 单位税号,只有单位有税号
             addr_name: invoice.invoiceName, //# 收票人姓名

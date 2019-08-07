@@ -8,10 +8,10 @@
         </div>
         <div class="listright">{{typename(order.status)}}</div>
       </div>
-      <goods-normal v-if="order.kind === 1" :goods="order.goods"></goods-normal>
+      <goods-normal :orderlist="true" v-if="order.kind === 1" :goods="order.goods"></goods-normal>
       <goods-card v-if="order.kind === 2" :goods="order.goods"></goods-card>
       <goods-stone v-else-if="order.kind === 3" :goods="order.goods"></goods-stone>
-      <goods-package v-else-if="order.kind === 4" :goods="order.goods[0]"></goods-package>
+      <goods-package :orderlist="true" v-else-if="order.kind === 4" :goods="order.goods[0]"></goods-package>
       <div class="item-price">
         共{{order.kind === 4 ? order.goods[0].goods_list.length : order.goods.length}}件商品 实付款： <span>￥{{order.rest_money}}</span> <span v-if="order.kind !== 2">（含运费￥{{order.logistics_money}}）</span>
       </div>

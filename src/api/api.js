@@ -73,6 +73,7 @@ let api = {
   returnMoney: { url: 'api/v1/add_return_amount', method: 'post', isJson: true }, //退差价
   getLettering: { url: 'api/v1/aepict_info', method: 'get' }, //获取刻字列表
   getMixinsPic: { url: 'api/v1/show_aepict_info', method: 'get' }, //获取组合图片
+  showLettering: { url: 'api/v1/show_goods_aepict_list', method: 'get' }, //订单查询刻字
   addLettering: { url: 'api/v1/add_goods_aepict', method: 'post', isJson: true }, //订单加入刻字
   shopList: { url: 'api/v1/store_list', method: 'get' } //店铺列表
 };

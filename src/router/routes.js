@@ -179,6 +179,11 @@ const router = [{
     }
   },
   {
+    name: 'orderlettering',
+    path: '/my/orderdetail/orderlettering',
+    component: () => import('@/views/lettering/show')
+  },
+  {
     name: 'viewinvoice',
     path: '/orderlist/orderdetail/invoice',
     component: () => import('@/views/invoice/viewinvoice'),
