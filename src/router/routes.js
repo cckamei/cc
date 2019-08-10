@@ -180,7 +180,7 @@ const router = [{
   },
   {
     name: 'orderlettering',
-    path: '/my/orderdetail/orderlettering',
+    path: '/my/orderdetail/orderlettering/:id',
     component: () => import('@/views/lettering/show')
   },
   {

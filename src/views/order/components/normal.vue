@@ -8,7 +8,7 @@
         <div class="contenttitle">
           <span>{{item.goods_name}}</span>
           <span>￥{{item.goods_price}}</span>
-          <div v-if="!orderlist && item.has_kezi" class="lettering" @click="$router.push({name: 'orderlettering'})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
+          <div v-if="!orderlist && item.has_kezi" class="lettering" @click="$router.push({name: 'orderlettering', params: {id: item.goods_id}})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
         </div>
         <div class="contentmessage">
           <p>{{skuLabel(item)}}</p>
@@ -81,6 +81,11 @@
         font-size: 24px;
         span:nth-child-of(2) {
           text-align: right;
+        }
+        .lettering {
+          width: 30px;
+          height: 30px;
+          float: right;
         }
       }
       .contentmessage {

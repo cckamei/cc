@@ -294,7 +294,6 @@
         }
       },
       applyReturnDiff() {
-        // TODO 退差价状态字段
         // 0:不退款 1:已经打开退款 2:已经完成退款 3:退款被拒绝 4:退款中
         if(this.order.return_flag === 1) {
           this.$router.push({ name: 'returndiffapply', params: { type: 1 } });

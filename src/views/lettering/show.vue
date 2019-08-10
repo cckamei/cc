@@ -3,8 +3,7 @@
     <v-header>刻字定制</v-header>
     <div class="content">
       <div class="preview">
-        <img :src="item.content" v-for="(item, index) in letteringList" :key="index" v-if="item.content" alt="">
-        <!-- <img src="@/assets/lettering/pic_ring_i.png" alt=""> -->
+        <img :src="item.show_img" v-for="(item, index) in letteringList" :key="index" v-if="item.show_img" alt="">
         <span class="notes">※图片效果仅供参考，请以实物为准</span>
       </div>
       <div class="gap"></div>
@@ -23,7 +22,7 @@
                 <div class="col" v-else>主题：{{item.classify}}</div>
               </div>
               <div class="detail-row flex">
-                <div class="col">内容：{{item.classify_content}}</div>
+                <div class="col">内容：{{item.name_type === '文字' ? item.content : item.classify_content}}</div>
               </div>
             </div>
           </div>
@@ -61,13 +60,14 @@
         this.ajax({
           name: 'showLettering',
           data: {
-            order_id: this.getOrder
+            order_id: this.getOrderId,
+            goods_id: this.$route.params.id
           }
         }).then(res => {
           res.aepict_order.sort((item1, item2) => {
             return item1.nums - item2.nums;
           }).forEach(item => {
-            this.letteringList[item.nums - 1] = item;
+            this.letteringList.splice(item.nums - 1, 1, item);
           });
         });
       },

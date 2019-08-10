@@ -3,8 +3,7 @@
     <v-header>刻字定制</v-header>
     <div class="content">
       <div class="preview">
-        <img :src="item.img" v-for="(item, index) in letteringValues" :key="index" v-if="item.type !== 2 && item.img" alt="">
-        <!-- <img src="@/assets/lettering/pic_ring_i.png" alt=""> -->
+        <img :src="item.show_img" v-for="(item, index) in letteringValues" :key="index" v-if="item.type !== 2 && item.show_img" alt="">
         <span class="notes">※图片效果仅供参考，请以实物为准</span>
       </div>
       <div class="gap"></div>

@@ -73,9 +73,11 @@
                     letteringInfo.classify = '生肖';
                     letteringInfo.classify_content = zodiac[l.zodiac].name;
                   }
-                  letteringInfo.content = l.img;
+                  letteringInfo.content = l.show_img;
                 }
                 letteringInfo.nums = index + 1;
+                letteringInfo.list_img = l.list_img;
+                letteringInfo.show_img = l.show_img;
                 result.push({ ...orderInfo, ...goodsInfo, ...letteringInfo });
               }
             });
@@ -118,9 +120,11 @@
                     letteringInfo.classify = '生肖';
                     letteringInfo.classify_content = zodiac[l.zodiac].name;
                   }
-                  letteringInfo.content = l.img;
+                  letteringInfo.content = l.show_img;
                 }
                 letteringInfo.nums = index + 1;
+                letteringInfo.list_img = l.list_img;
+                letteringInfo.show_img = l.show_img;
                 result.push({ ...orderInfo, ...goodsInfo, ...letteringInfo });
               }
             });
