@@ -78,7 +78,6 @@
           this.weightMin = res.min_weight;
           this.weightMax = res.max_weight;
           this.weight = this.weightMin;
-          res.zhus_jd.unshift('全部');
           this.cleaness = res.zhus_jd;
           this.colors = res.zhus_color;
           this.cuts = res.zhus_qg;

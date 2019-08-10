@@ -96,7 +96,7 @@
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
           </div>
           <!-- 待收货 -->
-          <div class="ordertypeDS" v-if="order.status == 2 || order.status == 10">
+          <div class="ordertypeDS" v-if="order.status == 2">
             <button class="btngrey btnleft flexleft" @click="goApplyRefund()">申请退款</button>
             <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
@@ -286,8 +286,8 @@
         this.cancelVisible = true;
       },
       applyInvoice() {
-        // 1 未开票 2 已经申请发票
-        if(this.order.invoice === 1) {
+        // invoice 1 未开票 2 已经申请发票
+        if(this.order.invoice === 2) {
           this.$router.push({ name: 'viewinvoice' });
         } else {
           this.$router.push({ name: 'invoice' });
