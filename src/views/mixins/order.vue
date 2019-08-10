@@ -49,7 +49,7 @@
           const goods = res.goods[index];
           const goodsInfo = {
             "goods_id": goods.goods_id,// # 商品id
-            "sku_id": goods.sku_id,//  # 套系id TODO
+            // "sku_id": goods.sku_id,//  # 套系id 
             "goods_name": goods.goods_name,// # 商品名称
             "goods_merchant_code": goods.goods_merchant_code,//; #"商品货号" # 商品货号
             "sku_merchant_code": goods.sku_merchant_code,//  #按商品编号搜索 # 商品货号
@@ -93,12 +93,12 @@
         this.package.goods_list.forEach((item, index) => {
           const goods = res.goods[0].goods_list[index];
           const goodsInfo = {
-            "goods_id": goods.id,// # 商品id #TODO
+            // "goods_id": goods.id,// # 商品id 
             "sku_id": goods.sku.sku_id,//  # 套系id
             "goods_name": goods.good.title,// # 商品名称
-            "goods_merchant_code": goods.sku.goods_merchant_code,//; #"商品货号" # 商品货号 #TODO
-            "sku_merchant_code": goods.sku.sku_merchant_code,//  #按商品编号搜索 # 商品货号 #TODO
-            "mode_code": goods.sku.mode_code // # 公司模号 #TODO
+            // "goods_merchant_code": goods.sku.goods_merchant_code,//; #"商品货号" # 商品货号 
+            // "sku_merchant_code": goods.sku.sku_merchant_code,//  #按商品编号搜索 # 商品货号 
+            // "mode_code": goods.sku.mode_code // # 公司模号 
           };
           if(item.lettering) {
             item.lettering.forEach((l, index) => {

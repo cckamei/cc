@@ -5,13 +5,13 @@
       <ul class="lettering-content">
         <li>
           <div class="title">类型</div>
-          <v-button-radio className="fixwidth" v-model="reqData.type" :list="letteringLabels.type"></v-button-radio>
+          <v-button-radio className="fixwidth" v-model="reqData.type" :list="getLetteringLabels.type"></v-button-radio>
         </li>
         <template v-if="reqData.type === 0">
           <li>
             <div class="title">字体</div>
             <div class="font flex">
-              <div class="font-item" v-for="(item, index) in letteringLabels.font" :key="index">
+              <div class="font-item" v-for="(item, index) in getLetteringLabels.font" :key="index">
                 <img :src="item.list_img" alt="">
                 <button class="btn-txt" :class="{active: reqData.font  === index}" @click="reqData.font = index">{{item.name}}</button>
               </div>
@@ -20,25 +20,26 @@
           <li>
             <div class="title">内容</div>
             <div class="input-wrapper flex">
-              <input v-model="reqData.content" maxlength="3" placeholder="请填写刻字内容"/>
+              <input v-model="reqData.content" pattern="^[a-zA-Z0-9]+$" maxlength="3" placeholder="请填写刻字内容"/>
+              <button class="btn-txt" @click="isActive && preview()">预览</button>
             </div>
           </li>
         </template>
         <template v-else-if="reqData.type === 1">
           <li>
             <div class="title">主题</div>
-            <v-button-radio className="fixwidth" v-model="reqData.subject" :list="letteringLabels.subject"></v-button-radio>
+            <v-button-radio className="fixwidth" v-model="reqData.subject" :list="getLetteringLabels.subject"></v-button-radio>
           </li>
           <li>
             <div class="title">内容</div>
             <div class="font" v-if="reqData.subject === 0">
-              <div class="font-item" v-for="(item, index) in letteringLabels.constellation" :key="index">
+              <div class="font-item" v-for="(item, index) in getLetteringLabels.constellation" :key="index">
                 <img :src="item.list_img" alt="">
                 <button class="btn-txt" :class="{active: reqData.constellation === index }" @click="reqData.constellation = index">{{item.name}}</button>
               </div>
             </div>
             <div class="font" v-if="reqData.subject === 1">
-              <div class="font-item" v-for="(item, index) in letteringLabels.zodiac" :key="index">
+              <div class="font-item" v-for="(item, index) in getLetteringLabels.zodiac" :key="index">
                 <img :src="item.list_img" alt="">
                 <button class="btn-txt" :class="{active: reqData.zodiac  === index}" @click="reqData.zodiac = index">{{item.name}}</button>
               </div>
@@ -50,6 +51,7 @@
     <div class="footer">
       <div class="btns">
         <button class="btn" :class="{active: isActive}" @click="isActive && handleConfirm()">完成</button>
+        <!-- <button class="btn" :class="{active: isActive}" @click="isActive && preview()">预览</button> -->
       </div>
     </div>
   </div>
@@ -71,7 +73,6 @@
       };
     },
     computed: {
-      ...mapState(['letteringLabels']),
       ...mapGetters(['getLetteringValues', 'getLetteringLabels']),
       isActive() {
         if(this.reqData.type === 0 && !this.reqData.content.length) {
@@ -86,12 +87,29 @@
     methods: {
       ...mapMutations(['setLetteringValues', 'setLetteringLabels']),
       ...mapActions(['ajax']),
+      async preview() {
+        if(!this.reqData.content.length) {
+          return false;
+        }
+        if(!/[a-zA-Z0-9]+/g.test(this.reqData.content)) {
+          this.toast('只支持字母数字');
+          return false;
+        }
+        const mixinsPics = await this.ajax({ name: 'getMixinsPic', data: { content: this.reqData.content, classify: this.getLetteringLabels.font[this.reqData.font].name } });
+        const font = this.getLetteringLabels.font.map((item, index) => {
+          return {
+            ...item,
+            list_img: mixinsPics[index].list_img
+          }
+        })
+        this.setLetteringLabels({ font });
+      },
       async handleConfirm() {
         let img = '', list_img = '';
         if(this.reqData.type === 0) {
-          const response = await this.ajax({ name: 'getMixinsPic', data: { content: this.reqData.content, classify: this.getLetteringLabels.font[this.reqData.font].name } });
-          img = response.img;
-          list_img = this.getLetteringLabels.font[this.reqData.font].list_img;
+          const mixinsPics = await this.ajax({ name: 'getMixinsPic', data: { content: this.reqData.content, classify: this.getLetteringLabels.font[this.reqData.font].name } });
+          img = mixinsPics[this.reqData.font].show_img;
+          list_img = mixinsPics[this.reqData.font].list_img;
         } else if(this.reqData.type === 1) {
           if(this.reqData.subject === 0) {
             img = this.getLetteringLabels.constellation[this.reqData.constellation].show_img;

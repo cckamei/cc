@@ -104,7 +104,7 @@
           </div>
           <!-- 已完成 -->
           <div class="ordertypeQX" v-if="order.status==3">
-            <button v-if="order.return_flag !== 0" class="btngrey flexleft" @click="applyReturnDiff">退差价</button>
+            <button v-if="order.return_flag === 1 || order.return_flag === 3" class="btngrey flexleft" @click="applyReturnDiff">退差价</button>
             <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
             <!-- <button class="btngrey" @click="tradeIn">以旧换新</button> -->
@@ -286,12 +286,15 @@
         this.cancelVisible = true;
       },
       applyInvoice() {
-        // TODO 没有开票时跳转到开票页面
-        // this.$router.push({ name: 'viewinvoice' });
-        this.$router.push({ name: 'invoice' });
+        // 1 未开票 2 已经申请发票
+        if(this.order.invoice === 1) {
+          this.$router.push({ name: 'viewinvoice' });
+        } else {
+          this.$router.push({ name: 'invoice' });
+        }
       },
       applyReturnDiff() {
-        // TODO 退拆家状态字段
+        // TODO 退差价状态字段
         // 0:不退款 1:已经打开退款 2:已经完成退款 3:退款被拒绝 4:退款中
         if(this.order.return_flag === 1) {
           this.$router.push({ name: 'returndiffapply', params: { type: 1 } });

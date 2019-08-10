@@ -15,7 +15,7 @@
               <div class="detail flex-auto flex">
                 <div class="line1">
                   <span class="name">{{item.good.title}}</span>
-                  <div v-if="item.good.has_kezi" class="lettering" @click="$router.push({name: 'lettering', params: {type: 'package', index}})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
+                  <div v-if="item.good.kezi" class="lettering" @click="$router.push({name: 'lettering', params: {type: 'package', index}})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
                 </div>
                 <span class="desc">{{skuLabel(item)}}</span>
                 <div class="line3 flex">

@@ -129,7 +129,7 @@ export default new Vuex.Store({
       setSen('letteringValues', state.letteringValues);
     },
     setLetteringLabels(state, data) {
-      state.letteringLabels = data;
+      state.letteringLabels = { ...state.letteringLabels, ...data };
       setSen('letteringLabels', state.letteringLabels);
     },
     setShopList(state, data) {
