@@ -5,8 +5,10 @@
       <ul class=" refunditem refundGoods">
         <li>
           <span>订单内容：</span>
-          <p>
-            <i v-for="(good,i) in order.goods" :key="i">{{good.goods_name}}<span>共{{good.goods_count}}件</span></i><br>
+          <p v-if="order.goods">
+            <i v-if="order.kind === 4">{{order.goods[0].name}}{{order.goods[0].goods_list.length > 1 ? '等' : ''}} 共{{order.goods[0].goods_list.length}}件</i>
+            <i v-else-if="order.kind === 3">{{order.goods[0].good_name}} 共1件</i>
+            <i v-else>{{order.goods[0].goods_name}}{{order.goods.length > 1 ? '等' : ''}} 共{{order.goods.length}}件</i>
           </p>
         </li>
         <li>
@@ -136,7 +138,8 @@
           }
         }).then(res => {
           this.setCommon({ orderId: this.getOrderId });
-          this.$router.push({ name: 'orderdetail' });
+          // this.$router.push({ name: 'orderdetail' });
+          this.$router.go(-1);
         });
       }
     }

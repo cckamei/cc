@@ -35,7 +35,7 @@
           <div v-if="item.zhanshifangan && item.zhanshifangan.length" class="diy-stone flex">
             <img src="@/assets/goods/icon_dia.png" alt="">
             <span>定制你的专属钻戒</span>
-            <button class="btn-txt" v-for="(diy, index) in item.zhanshifangan" :key="index">{{diy.score}}分 ￥{{diy.price}}</button>
+            <button class="btn-txt" v-for="(diy, index) in item.zhanshifangan" :key="index">{{diy.score * 10}}分 ￥{{diy.price}}</button>
           </div>
         </li>
       </ul>

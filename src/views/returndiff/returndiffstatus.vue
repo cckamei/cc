@@ -18,6 +18,11 @@
           <div class="notes">十分抱歉，您的申请已被拒绝！</div>
           <div class="notes">如有问题请拨打客服热线</div>
         </template>
+        <template v-else-if="type === 2">
+          <img src="@/assets/returndiff/icon_ok_b.png" alt="">
+          <div class="notes">已为您办理退差价</div>
+          <div class="notes">请及时查阅您提交的银行账户</div>
+        </template>
         <div class="notes phone">客服热线：400-1691-118</div>
         <div class="notes txt-lightgray">（周一至周五09:00 - 18:00）</div>
         <button v-if="type === 1" class="btn-txt" @click="$router.go(-1)">回到订单详情</button>
@@ -36,7 +41,7 @@
       };
     },
     created() {
-      this.type === this.$route.params.type;
+      this.type = this.$route.params.type;
     },
     methods: {
       ...mapActions(['ajax'])

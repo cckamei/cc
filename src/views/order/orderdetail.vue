@@ -1,6 +1,6 @@
 <template>
   <div class="orderdetailpage pt">
-    <v-header :gocancel="getGoCancel">订单详情</v-header>
+    <v-header>订单详情</v-header>
     <!-- 订单地址、收货人、物流信息 -->
     <div class="content">
       <div v-if="order.kind !== 2" class="logistics" @click="gotLogistics()">
@@ -73,8 +73,12 @@
               <span>+￥{{order.discount_money}}</span>
             </li> -->
             <li v-if="order.kind === 1" class="priceType">
+              <span>优惠活动</span>
+              <span>-￥{{order.active_discount_fee}}</span>
+            </li>
+            <li v-if="order.kind === 1" class="priceType">
               <span>优惠券</span>
-              <span>-￥{{order.discount_money}}</span>
+              <span>-￥{{order.discount_money + order.liquan_discount_fee}}</span>
             </li>
             <li class="priceType realPaymoney">
               <span>实付款</span>
@@ -104,7 +108,7 @@
           </div>
           <!-- 已完成 -->
           <div class="ordertypeQX" v-if="order.status==3">
-            <button v-if="order.return_flag === 1 || order.return_flag === 3" class="btngrey flexleft" @click="applyReturnDiff">退差价</button>
+            <button v-if="order.return_flag !== 0" class="btngrey flexleft" @click="applyReturnDiff">退差价</button>
             <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
             <!-- <button class="btngrey" @click="tradeIn">以旧换新</button> -->
