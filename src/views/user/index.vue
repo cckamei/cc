@@ -4,7 +4,7 @@
       <user-header></user-header>
       <user-tabs></user-tabs>
       <order-menu></order-menu>
-      <commission v-if="getUserInfo.is_distributor"></commission>
+      <!-- <commission v-if="getUserInfo.is_distributor"></commission> -->
       <card />
     </div>
     <div class="footer">
