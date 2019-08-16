@@ -8,7 +8,7 @@
         <div class="contenttitle">
           <span>{{item.good.title}}</span>
           <span>￥{{item.price}}</span>
-          <div v-if="!orderlist && item.good.has_kezi" class="lettering" @click="$router.push({name: 'orderlettering', params: {id: item.good.good_id}})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
+          <div v-if="!orderlist && item.good.has_kezi" class="lettering" @click="$router.push({name: 'orderlettering', params: {id: item.good.good_id, sku_id: item.sku.sku_id}})"><img src="@/assets/lettering/icon_inscribe.png" alt=""></div>
         </div>
         <div class="contentmessage">
           <p>{{skuLabel(item)}}</p>

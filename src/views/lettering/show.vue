@@ -61,7 +61,8 @@
           name: 'showLettering',
           data: {
             order_id: this.getOrderId,
-            goods_id: this.$route.params.id
+            goods_id: this.$route.params.id,
+            sku_id: this.$route.params.sku_id || ''
           }
         }).then(res => {
           res.aepict_order.sort((item1, item2) => {
