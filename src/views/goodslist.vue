@@ -1,6 +1,6 @@
 <template>
   <div class="pt">
-    <v-header-menus home>
+    <v-header-menus :back="getCommon.isTradein" :home="!getCommon.isTradein">
       <input type="text" @click="$router.push({name: 'goodssearch'})" placeholder="请选择您要搜索的作品类型" readonly>
       <div slot="menus" class="menus">
         <div class="menu" @click="$router.push({name: 'goodssearch'})"><img src="@/assets/goods/icon_search.png" alt=""></div>
@@ -32,7 +32,7 @@
               </div>
             </div>
           </div>
-          <div v-if="item.zhanshifangan && item.zhanshifangan.length" class="diy-stone flex">
+          <div v-if="!getCommon.isTradein && item.zhanshifangan && item.zhanshifangan.length" class="diy-stone flex">
             <img src="@/assets/goods/icon_dia.png" alt="">
             <span>定制你的专属钻戒</span>
             <button class="btn-txt" v-for="(diy, index) in item.zhanshifangan" :key="index">{{diy.score * 10}}分 ￥{{diy.price}}</button>
@@ -57,6 +57,13 @@
   import { mapActions, mapMutations, mapGetters } from 'vuex';
 
   export default {
+    beforeRouteLeave(to, from, next) {
+      if(to.name === 'tradeinaddnew') {
+        this.setCommon({ isTradein: false });
+      }
+      this.setCommon({ category: '' });
+      next();
+    },
     data() {
       return {
         filterVisible: false,
@@ -74,7 +81,7 @@
       };
     },
     created() {
-      this.category = this.$route.params;
+      this.category = { category: this.getCommon.category };
       this.fetchSeries();
     },
     computed: {

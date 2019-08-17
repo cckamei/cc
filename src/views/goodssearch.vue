@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapActions, mapMutations } from 'vuex';
 
   export default {
     data() {
@@ -29,6 +29,7 @@
       this.fetchCategory();
     },
     methods: {
+      ...mapMutations(['setCommon']),
       ...mapActions(['ajax']),
       fetchCategory() {
         this.ajax({
@@ -38,7 +39,8 @@
         });
       },
       search() {
-        this.$router.push({ name: 'goodslist', params: { category: this.searches[this.searchIndex] } });
+        this.setCommon({ category: this.searches[this.searchIndex] });
+        this.$router.push({ name: 'goodslist' });
       }
     }
   };

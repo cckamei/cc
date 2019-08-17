@@ -1,7 +1,7 @@
 <template>
   <ul class="flex">
     <li v-for="(item, index) in list2" @click="!disabled && switchBtn(item)" :key="index">
-      <button :class="[className, {active: item.selected, disabled: item.disabled}]">{{typeof item === 'object' ? item[keyName] : item}}</button>
+      <button :class="[className, {active: item.selected, disabled: item.disabled}, {smallFontSize: (typeof item === 'object' ? item[keyName] : item).length > smallFS}]">{{typeof item === 'object' ? item[keyName] : item}}</button>
     </li>
   </ul>
 </template>
@@ -40,6 +40,10 @@
       className: {
         type: String,
         default: ''
+      },
+      smallFS: {
+        type: Number,
+        default: Infinity
       }
     },
     data() {
@@ -99,7 +103,7 @@
         font-size: 24px;
         color: #666;
         border: 1px solid #eee; /*no*/
-        padding: 0 30px;
+        padding: 0 10px;
         height: 40px;
         &.active {
           background-color: @color3;
@@ -110,6 +114,9 @@
           color: #999 !important;
           border: 1px dashed #999; /*no*/
           background-color: #fff !important;
+        }
+        &.smallFontSize {
+          font-size: 20px;
         }
       }
     }

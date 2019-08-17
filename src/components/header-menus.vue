@@ -13,10 +13,10 @@
   export default {
     props: {
       back: {
-        type: String
+        type: [String, Boolean]
       },
       home: {
-        type: String
+        type: [String, Boolean]
       },
       shadow: {
         type: String
@@ -24,6 +24,9 @@
     },
     methods: {
       isDefined(val) {
+        if(typeof this[val] === 'boolean') {
+          return this[val] === true;
+        }
         return this[val] !== undefined;
       },
       isFunction(val) {

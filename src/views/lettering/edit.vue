@@ -100,8 +100,8 @@
           return {
             ...item,
             list_img: mixinsPics[index].list_img
-          }
-        })
+          };
+        });
         this.setLetteringLabels({ font });
       },
       async handleConfirm() {

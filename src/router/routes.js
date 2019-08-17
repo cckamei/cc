@@ -303,6 +303,36 @@ const router = [{
     component: () => import('@/views/freebuy')
   },
   {
+    name: 'tradeinconfirmold',
+    path: '/freebuy/confirmold',
+    component: () => import('@/views/tradein/confirmold')
+  },
+  {
+    name: 'tradeinaddold',
+    path: '/freebuy/confirmold/addold',
+    component: () => import('@/views/tradein/addold')
+  },
+  {
+    name: 'tradeinagreement',
+    path: '/freebuy/confirmold/addold/agreement',
+    component: () => import('@/views/tradein/agreement')
+  },
+  {
+    name: 'tradeinorderdetail',
+    path: '/freebuy/confirmold/addold/agreement/orderdetail',
+    component: () => import('@/views/tradein/orderdetail')
+  },
+  {
+    name: 'tradeindelivery',
+    path: '/freebuy/confirmold/addold/agreement/orderdetail/delivery',
+    component: () => import('@/views/tradein/delivery')
+  },
+  {
+    name: 'tradeinaddnew',
+    path: '/freebuy/confirmold/addold/agreement/orderdetail/addnew',
+    component: () => import('@/views/tradein/addnew')
+  },
+  {
     name: 'mycard',
     path: '/card/mycard',
     component: () => import('@/views/card/mycard')

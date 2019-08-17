@@ -1,7 +1,7 @@
 <template>
   <div class="goods-detail pb" @click.stop="menusVisible = false">
     <v-header-goods v-show="top <= 10">
-      <div slot="menus" class="menus">
+      <div v-if="!getCommon.isTradein" slot="menus" class="menus">
         <div @click="goCart" class="menu"><img src="@/assets/goods/button_cart_r.png" alt=""></div>
         <div class="menu" @click.stop="menusVisible = !menusVisible"><img src="@/assets/goods/button_option.png" alt=""></div>
       </div>
@@ -10,7 +10,7 @@
       <span class="sub-title" :class="{active: top < offsetTops[1]}" @click="setTop(0)">商品</span>
       <span class="sub-title" :class="{active: top >= offsetTops[1] && top < offsetTops[2]}" @click="setTop(1)">详情</span>
       <span class="sub-title" :class="{active: top >= offsetTops[2]}" @click="setTop(2)">推荐</span>
-      <div slot="menus" class="menus">
+      <div v-if="!getCommon.isTradein" slot="menus" class="menus">
         <div @click="goCart" class="menu"><img src="@/assets/goods/button_cart_g.png" alt=""></div>
         <div class="menu" @click.stop="menusVisible = !menusVisible"><img src="@/assets/goods/button_option_g.png" alt=""></div>
       </div>
@@ -29,7 +29,7 @@
         <div class="flex tag" v-if="res.tag">
           <button class="tag-btn" v-for="(item, index) in res.tag.split(',')" :key="index">{{item}}</button>
         </div>
-        <div class="shoppig-card flex" v-if="cards.length"><img src="@/assets/goods/icon_gift_p.png" alt="">您持有可优惠本商品的购物卡</div>
+        <div class="shoppig-card flex" v-if="!getCommon.isTradein && cards.length"><img src="@/assets/goods/icon_gift_p.png" alt="">您持有可优惠本商品的购物卡</div>
         <div class="name">{{res.goods_title}}</div>
         <div class="desc">{{res.sub_title}}</div>
         <ul class="mark flex">
@@ -41,7 +41,7 @@
           <span class="right">{{res.cangku}}</span>
         </div>
       </div>
-      <template v-if="benifit.length">
+      <template v-if="!getCommon.isTradein && benifit.length">
         <div class="gap"></div>
         <div class="row">
           <v-form-slide-up label="领取优惠" title="领取优惠">
@@ -57,7 +57,7 @@
         </div>
       </template>
       <template></template>
-      <template v-if="activity.length">
+      <template v-if="!getCommon.isTradein && activity.length">
         <div class="row">
           <v-form-slide-up label="优惠活动" title="店铺优惠">
             <template slot="value">
@@ -79,7 +79,7 @@
         </div>
       </template>
       <div class="gap"></div>
-      <div class="row" v-if="res.has_dingzhi">
+      <div class="row" v-if="!getCommon.isTradein && res.has_dingzhi">
         <div class="list-item flex arrow" @click="goStoneCusMade">
           <div class="label">主石定制</div>
           <div class="input ellipsis flex">
@@ -241,8 +241,8 @@
           </ul> -->
         </v-form-slide-up>
       </div>
-      <div class="gap"></div>
-      <div class="package-wrapper">
+      <div class="gap" v-if="!getCommon.isTradein"></div>
+      <div class="package-wrapper" v-if="!getCommon.isTradein">
         <v-split-title>搭配套餐</v-split-title>
         <div class="package flex" @click="$router.push({name: 'package'});">
           <div class="img">
@@ -257,17 +257,22 @@
           </div>
         </div>
       </div>
-      <div class="gap"></div>
-      <v-wechat-group :type="1"></v-wechat-group>
+      <div class="gap" v-if="!getCommon.isTradein"></div>
+      <v-wechat-group :type="1" v-if="!getCommon.isTradein"></v-wechat-group>
       <div class="gap"></div>
       <div ref="image-text" class="section image-text">
         <div class="title flex"><span>图文详情</span></div>
         <div class="image-text-content" v-html="res.detail"></div>
       </div>
       <div class="gap"></div>
-      <v-recommend class="section" ref="recommend" title="为您推荐" :list="recommend"></v-recommend>
+      <v-recommend v-if="!getCommon.isTradein" class="section" ref="recommend" title="为您推荐" :list="recommend"></v-recommend>
     </div>
-    <div class="footer flex">
+    <div v-if="getCommon.isTradein" class="footer">
+      <div class="btns">
+        <button class="btn active" @click="handleConfirmSelect()">选择规格</button>
+      </div>
+    </div>
+    <div v-else class="footer buy flex">
       <div class="fun-btns" @click="serviceVisible = true">
         <img src="@/assets/goods/button_service.png" alt="">
         <span>客服</span>
@@ -757,6 +762,16 @@
         } else {
           this.toast('公司模号为空！');
         }
+      },
+      handleConfirmSelect() {
+        if(!this.sku.skuId) {
+          this.autoOpenSKU = true;
+          return false;
+        }
+
+        this.getGoodsStock(this.sku.skuId || this.sku.defaultSKU, stock => {
+          this.$router.go(-2);
+        });
       }
     }
   };
@@ -1071,36 +1086,41 @@
   }
 
   .footer {
-    padding: 0 20px 0 15px;
     height: 96px;
-    box-shadow: 0 -10px 50px 10px rgba(170, 170, 170, 0.5);
-    .fun-btns {
-      padding: 0 43px;
-      font-size: 20px;
-      color: #999;
-      img {
-        width: 40px;
-        height: 40px;
-        display: block;
-      }
+    .btns {
+      padding: 14px 20px;
     }
-    .btn-group {
-      font-size: 30px;
-      height: 68px;
-      width: 440px;
-      margin-left: auto;
-      .btn {
-        color: #fff;
-        width: 50%;
-        height: 100%;
-        font-size: 30px;
-        &.cart {
-          background: url("~@/assets/goods/button_cart.png") no-repeat;
-          background-size: 100% 100%;
+    box-shadow: 0 -10px 50px 10px rgba(170, 170, 170, 0.5);
+    &.buy {
+      padding: 0 20px 0 15px;
+      .fun-btns {
+        padding: 0 43px;
+        font-size: 20px;
+        color: #999;
+        img {
+          width: 40px;
+          height: 40px;
+          display: block;
         }
-        &.purchase {
-          background: url("~@/assets/goods/button_buynow.png") no-repeat;
-          background-size: 100% 100%;
+      }
+      .btn-group {
+        font-size: 30px;
+        height: 68px;
+        width: 440px;
+        margin-left: auto;
+        .btn {
+          color: #fff;
+          width: 50%;
+          height: 100%;
+          font-size: 30px;
+          &.cart {
+            background: url("~@/assets/goods/button_cart.png") no-repeat;
+            background-size: 100% 100%;
+          }
+          &.purchase {
+            background: url("~@/assets/goods/button_buynow.png") no-repeat;
+            background-size: 100% 100%;
+          }
         }
       }
     }

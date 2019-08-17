@@ -6,6 +6,7 @@
     <div class="instalments" @click="goPage">
       <img :src="getUserInfo.fenqi" alt="" srcset="">
     </div>
+    <button @click="$router.push({name: 'tradeinconfirmold'})">以旧换新</button>
     <v-footer></v-footer>
   </div>
 </template>

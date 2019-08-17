@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="receipt">
     <div v-if="ziti" class="tabs flex">
       <span class="tab" @click="setAddressType(0)" :class="{active: address.type === 0}">配送</span>
       <span class="tab" @click="setAddressType(1)" :class="{active: address.type === 1}">自提</span>
@@ -52,6 +52,9 @@
 </script>
 
 <style lang="less" scoped>
+  .receipt {
+    background-color: #fff;
+  }
   .tabs {
     height: 60px;
     background-color: #e6e6e6;

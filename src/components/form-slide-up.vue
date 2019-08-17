@@ -62,6 +62,7 @@
     width: 100%;
     height: 100%;
     font-size: 30px;
+    padding: 0 16px;
     .label {
       flex-shrink: 0;
       min-width: 30%;

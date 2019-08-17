@@ -1,0 +1,254 @@
+<template>
+  <div class="pt pb confirm-old">
+    <v-header>以旧换新</v-header>
+    <div class="content">
+      <div class="content-wrapper">
+        <section>
+          <v-receipt></v-receipt>
+        </section>
+        <section class="old-goods">
+          <div class="row old-title">
+            <v-form-input v-model="value1" :arrow="true" label="旧品信息" placeholder="添加旧品" @input-click="$router.push({name: 'tradeinaddold'})"></v-form-input>
+          </div>
+          <ul class="goods">
+            <li v-for="(item, index) in tradein" :key="index">
+              <div class="item-wrapper flex">
+                <div class="img"><img :src="item.list_img" alt=""></div>
+                <div class="detail flex-auto flex">
+                  <div class="detail-row flex">
+                    <div class="col">品牌：{{item.brand}}</div>
+                  </div>
+                  <div class="detail-row flex">
+                    <div class="col">预估价：{{item.price}}</div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </section>
+        <section class="summary">
+          <div class="row pre-price">
+            <v-form-input class="pr-0" label="预估旧品总额" :value="'￥' + goodsMoney" :readonly="true"></v-form-input>
+          </div>
+          <!-- <div class="row" v-if="delivery.length">
+            <v-form-input class="freight" label="运费" :value="'+￥' + delivery[deliveryIndex].price" :readonly="true"></v-form-input>
+          </div> -->
+        </section>
+        <section class="option">
+          <div class="row">
+            <v-form-slide-up label="配送方式" title="配送方式" confirmText="完成">
+              <template slot="value">
+                <div v-for="(item, index) in delivery" :key="index" v-if="index === deliveryIndex" class="">{{item.name}} {{item.price}}元</div>
+              </template>
+              <ul class="delivery">
+                <li class="flex" v-for="(item, index) in delivery" @click="deliveryIndex = index" :key="index">
+                  <div class="flex-auto">
+                    <p class="name">{{item.name}}</p>
+                    <span class="desc">{{item.desc}}</span>
+                  </div>
+                  <img v-show="index === deliveryIndex" src="@/assets/goods/icon_selected.png" alt="">
+                </li>
+              </ul>
+            </v-form-slide-up>
+          </div>
+          <div class="row">
+            <v-form-input class="pr-0" label="留言" v-model="yaoqiu" placeholder="（选填）建议留言前先与卖家沟通确认"></v-form-input>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="btns">
+        <button class="btn" :class="{active: isActive}" @click="isActive && handleConfirm()">提交订单</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
+
+  export default {
+    data() {
+      return {
+        yaoqiu: '',
+        value1: '',
+        goodsMoney: 0, //商品总额
+        deliveryIndex: 0,
+        delivery: [], //快递
+        tradein: [
+          {
+            brand: 'CC卡美',
+            price: 4000
+          },
+          {
+            brand: 'CC卡美',
+            price: 4000
+          }
+        ]
+      };
+    },
+    created() {
+      this.fetchLogitics();
+    },
+    computed: {
+      ...mapState(['stoneMade']),
+      ...mapGetters(['getAddress']),
+      totalMoney() {
+        let deliveryMoney = 0;
+        if(this.delivery.length) {
+          deliveryMoney = this.delivery[this.deliveryIndex].price;
+        }
+
+        return this.goodsMoney + deliveryMoney;
+      },
+      isActive() {
+        return true;
+      }
+    },
+    methods: {
+      ...mapMutations(['clearPayOrder', 'setPayOrder']),
+      ...mapActions(['ajax']),
+      fetchLogitics() {
+        this.ajax({ name: 'getLogitics' }).then(res => {
+          this.delivery = res;
+        });
+      },
+      handleConfirm() {
+        this.$router.push({ name: 'tradeinagreement' });
+      }
+    }
+  };
+</script>
+
+<style lang="less" scoped>
+  @import "~@/style/vars.less";
+  .content-wrapper {
+    position: relative;
+    margin: 20px;
+    section {
+      background-color: #fff;
+      margin-bottom: 16px;
+      border-radius: 10px;
+      overflow: hidden;
+      .row {
+        height: 84px;
+        padding: 0 20px;
+        &.pre-price {
+          height: 104px;
+        }
+      }
+      &.option {
+        .insurance {
+          height: 84px;
+          justify-content: space-between;
+          color: #666;
+          .label {
+            color: #999;
+          }
+          .select {
+            margin-left: 6px;
+            background: url("~@/assets/payment/button_select_off.png") no-repeat;
+            background-size: 100% 100%;
+            width: 24px;
+            height: 24px;
+            &.active {
+              background: url("~@/assets/payment/button_select_on.png") no-repeat;
+              background-size: 100% 100%;
+            }
+          }
+        }
+      }
+      .goods {
+        .item-wrapper {
+          background-color: #fff;
+          padding: 30px 40px;
+          align-items: stretch;
+          border-top: 1px solid #f0f0f0;
+          border-bottom: 1px solid #f0f0f0;
+          .img {
+            width: 120px;
+            height: 120px;
+            margin-right: 40px;
+            flex-shrink: 0;
+            background-color: #f5f5f5;
+            img {
+              height: 100%;
+            }
+          }
+          .detail {
+            flex-direction: column;
+            position: relative;
+            align-items: flex-start;
+            justify-content: center;
+            .detail-row {
+              font-size: 24px;
+              color: #333;
+              width: 100%;
+              &:last-child {
+                padding-top: 10px;
+              }
+              .col {
+                width: 50%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .footer {
+    height: 96px;
+    background-color: #fff;
+    .btns {
+      padding: 14px 20px;
+    }
+  }
+</style>
+
+<style lang="less">
+  @import "~@/style/vars.less";
+  .confirm-old {
+    .row {
+      &.old-title .label {
+        color: #666;
+      }
+      > .flex {
+        padding-left: 0;
+      }
+    }
+    .freight {
+      input {
+        color: @color2;
+      }
+    }
+    .pr-0 {
+      padding-right: 0;
+    }
+    .delivery {
+      li {
+        font-size: 24px;
+        color: #666;
+        padding: 30px 16px;
+        border-bottom: 1px solid #f0f0f0; /*no*/
+        justify-content: space-between;
+        &:last-child {
+          border-bottom: 0;
+        }
+        img {
+          width: 36px;
+          height: 36px;
+        }
+        .name {
+          color: #666;
+          padding-bottom: 10px;
+        }
+        .desc {
+          color: #999;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+</style>

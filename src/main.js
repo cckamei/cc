@@ -1,7 +1,7 @@
 import 'ant-design-vue/dist/antd.css';
 import Vue from 'vue';
 import MintUI from 'mint-ui';
-import { Slider } from 'ant-design-vue';
+import { Slider, Upload, Modal, Icon } from 'ant-design-vue';
 import FastClick from 'fastclick';
 import VueI18n from 'vue-i18n';
 import VueClipboard from 'vue-clipboard2';
@@ -17,12 +17,13 @@ if (window.htp.mock) {
   require('./mock');
 }
 
-Vue.component(Slider.name, Slider);
-
 Vue.use(MintUI);
 Vue.use(VueI18n);
 Vue.use(VueClipboard);
 Vue.use(Slider);
+Vue.use(Upload);
+Vue.use(Modal);
+Vue.use(Icon);
 
 Vue.prototype.toast = MintUI.Toast;
 

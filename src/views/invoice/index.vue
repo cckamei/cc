@@ -65,7 +65,7 @@
           next();
         });
       } else {
-        next()
+        next();
       }
     },
     data() {
