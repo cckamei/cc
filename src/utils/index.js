@@ -210,7 +210,7 @@ export function formatDate(nS, format) {
 
 //验证手机号码
 export function checkPhone(phone) {
-  return Boolean(/^1[3578]\d{9}$/.test(phone));
+  return Boolean(/^1\d{10}$/.test(phone));
 }
 
 //验证密码
