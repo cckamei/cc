@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-split-title>旧品信息</v-split-title>
+    <v-split-title v-if="showTitle">旧品信息</v-split-title>
     <ul class="goods">
       <li v-for="(item, index) in tradein" :key="index">
         <div class="item-wrapper flex">
@@ -10,7 +10,7 @@
               <div class="col">品牌：{{item.brand}}</div>
             </div>
             <div class="detail-row flex">
-              <div class="col">预估价：{{item.price}}</div>
+              <div class="col">预估价：￥{{item.price}}</div>
             </div>
           </div>
         </div>
@@ -25,6 +25,10 @@
       goods: {
         type: Array,
         default: () => []
+      },
+      showTitle: {
+        type: Boolean,
+        default: false
       }
     },
     data() {

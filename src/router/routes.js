@@ -304,33 +304,38 @@ const router = [{
   },
   {
     name: 'tradeinconfirmold',
-    path: '/freebuy/confirmold',
+    path: '/tradein/confirmold',
     component: () => import('@/views/tradein/confirmold')
   },
   {
     name: 'tradeinaddold',
-    path: '/freebuy/confirmold/addold',
+    path: '/tradein/confirmold/addold',
     component: () => import('@/views/tradein/addold')
   },
   {
     name: 'tradeinagreement',
-    path: '/freebuy/confirmold/addold/agreement',
+    path: '/tradein/confirmold/addold/agreement',
     component: () => import('@/views/tradein/agreement')
   },
   {
     name: 'tradeinorderdetail',
-    path: '/freebuy/confirmold/addold/agreement/orderdetail',
+    path: '/tradein/confirmold/addold/agreement/orderdetail',
     component: () => import('@/views/tradein/orderdetail')
   },
   {
     name: 'tradeindelivery',
-    path: '/freebuy/confirmold/addold/agreement/orderdetail/delivery',
+    path: '/tradein/confirmold/addold/agreement/orderdetail/delivery',
     component: () => import('@/views/tradein/delivery')
   },
   {
     name: 'tradeinaddnew',
-    path: '/freebuy/confirmold/addold/agreement/orderdetail/addnew',
+    path: '/tradein/confirmold/addold/agreement/orderdetail/addnew',
     component: () => import('@/views/tradein/addnew')
+  },
+  {
+    name: 'tradeinorderlist',
+    path: '/mypage/tradein/orderlist',
+    component: () => import('@/views/tradein/orderlist')
   },
   {
     name: 'mycard',

@@ -6,6 +6,13 @@
       <order-menu></order-menu>
       <!-- <commission v-if="getUserInfo.is_distributor"></commission> -->
       <card />
+      <div class="panel-header" @click="$router.push({ name: 'tradeinorderlist'})">
+        <span>以旧换新</span>
+        <div class="more">
+          <span>查看全部订单</span>
+          <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
+        </div>
+      </div>
       <div class="panel-header" @click="$router.push({ name: 'wechatgroup'})">
         <span>会员微群</span>
         <div class="more">

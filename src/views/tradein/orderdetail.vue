@@ -15,6 +15,7 @@
           <div v-else-if="order.status === 1" class="order-status-notes">订单等待付款中</div>
           <div v-else-if="order.status === 2" class="order-status-notes">订单等待发货中</div>
           <div v-else-if="order.status === 5" class="order-status-notes">订单等待发货中</div>
+          <div v-else-if="order.status === 8" class="order-status-notes">订单已关闭</div>
         </div>
         <div class="logisticsInfo" v-else>
           <div class="logitem">
@@ -46,7 +47,7 @@
           </div>
           <div class="listright">{{typename(order.status)}}</div>
         </div>
-        <goods-old :goods="order.goods"></goods-old>
+        <goods-old :showTitle="true" :goods="order.goods"></goods-old>
         <goods-new :goods="order.goods" v-if="[1, 2, 3, 4].includes(order.status)"></goods-new>
         <div class="itemprice" v-if="[1, 2, 3, 4].includes(order.status)">
           <ul>
@@ -101,6 +102,10 @@
           </div>
           <!-- 已取消 -->
           <div class="ordertypeDF" v-if="order.status === 7">
+            <button class="btngrey" @click="serviceVisible = true">联系客服</button>
+          </div>
+          <!-- 已关闭 -->
+          <div class="ordertypeDF" v-if="order.status === 8">
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
           </div>
         </div>
@@ -182,7 +187,7 @@
         }).then(res => {
           this.order = res;
 
-          // this.order.status = 7; //0'待验货', 1'待付款', 2'新品待发货', 3'新品待收货', 4'已完成', 5'旧品待发货', 6'旧品待收货', 7'已取消', 8'已关闭'
+          this.order.status = 8; //0'待验货', 1'待付款', 2'新品待发货', 3'新品待收货', 4'已完成', 5'旧品待发货', 6'旧品待收货', 7'已取消', 8'已关闭'
 
           if(!this.order.logistics.info || !this.order.logistics.info.result) {
             this.order.logistics = {
@@ -194,7 +199,7 @@
         });
       },
       typename(type) {
-        let _typenames = ['待验货', '待付款', '新品待发货', '新品待收货', '已完成', '旧品待发货', '旧品待收货', '已取消'];
+        let _typenames = ['待验货', '待付款', '新品待发货', '新品待收货', '已完成', '旧品待发货', '旧品待收货', '已取消', '已关闭'];
         return _typenames[type];
       },
       formatDate,
