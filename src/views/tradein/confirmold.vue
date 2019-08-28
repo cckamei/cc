@@ -93,7 +93,7 @@
     },
     computed: {
       ...mapState(['stoneMade']),
-      ...mapGetters(['getAddress']),
+      ...mapGetters(['getAddress', 'getTradeinOld']),
       totalMoney() {
         let deliveryMoney = 0;
         if(this.delivery.length) {

@@ -44,7 +44,9 @@ export default new Vuex.Store({
       constellation: ['金牛座', '摩羯座'],
       zodiac: ['牛', '鼠']
     },
-    shopList: getSen('shopList') || []
+    shopList: getSen('shopList') || [],
+    tradeinOld: getSen('tradeinOld') || [],
+    tradeinOptions: getSen('tradeinOptions') || {}
   },
   getters: {
     getCacheData: state => serialize(state.cacheData),
@@ -60,7 +62,8 @@ export default new Vuex.Store({
     getOrderType: state => state.ordertype,
     getStoneMade: state => serialize(state.stoneMade),
     getLetteringValues: state => serialize(state.letteringValues),
-    getLetteringLabels: state => serialize(state.letteringLabels)
+    getLetteringLabels: state => serialize(state.letteringLabels),
+    getTradeinOld: state => serialize(state.tradeinOld)
   },
   mutations: {
     setCacheData(state, data) {
@@ -137,6 +140,14 @@ export default new Vuex.Store({
     setShopList(state, data) {
       state.shopList = data;
       setSen('shopList', state.shopList);
+    },
+    setTradeinOld(state, data) {
+      state.tradeinOld = data;
+      setSen('tradeinOld', state.tradeinOld);
+    },
+    setTradeinOptions(state, data) {
+      state.tradeinOptions = data;
+      setSen('tradeinOptions', state.tradeinOptions);
     }
   },
   actions: {

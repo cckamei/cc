@@ -5,19 +5,19 @@
       <ul class="filter-content">
         <li>
           <div class="title">品牌</div>
-          <v-button-radio className="fixwidth" v-model="brandIndex" :cancel="true" :list="brands"></v-button-radio>
+          <v-button-radio v-if="brands.length" className="fixwidth" v-model="brandIndex" :cancel="true" :list="brands" keyName="title"></v-button-radio>
         </li>
         <li>
           <div class="title">金信息</div>
-          <v-button-radio className="fixwidth" v-model="goldIndex" :cancel="true" :list="golds"></v-button-radio>
+          <v-button-radio v-if="golds.length" className="fixwidth" v-model="goldIndex" :cancel="true" :list="golds" keyName="title"></v-button-radio>
         </li>
         <li>
           <div class="title">石信息</div>
-          <v-button-radio :smallFS="4" className="fixwidth" v-model="stoneIndex" :cancel="true" :list="stones"></v-button-radio>
+          <v-button-radio v-if="stones.length" :smallFS="4" className="fixwidth" v-model="stoneIndex" :cancel="true" :list="stones" keyName="title"></v-button-radio>
         </li>
         <li>
           <div class="title">佩戴分类</div>
-          <v-button-radio className="fixwidth" v-model="wearIndex" :cancel="true" :list="wears"></v-button-radio>
+          <v-button-radio v-if="wears.length" className="fixwidth" v-model="wearIndex" :cancel="true" :list="wears" keyName="title"></v-button-radio>
         </li>
         <li>
           <div class="title">商品照片</div>
@@ -47,27 +47,27 @@
     </div>
     <div class="footer">
       <div class="btns">
-        <button class="btn" :class="{active: isActive}" @click="isActive && handleConfirmFilter()">确定</button>
+        <button class="btn" :class="{active: isActive}" @click="isActive && handleConfirm()">确定</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { mapActions, mapState, mapMutations } from 'vuex';
+  import { mapActions, mapState, mapMutations, mapGetters } from 'vuex';
   import $ from 'jquery';
 
   export default {
     data() {
       return {
         brandIndex: 0,
-        brands: ['CC卡美', '其它'],
+        brands: [],
         goldIndex: 0,
-        golds: ['黄金', 'K金', '铂金'],
+        golds: [],
         stoneIndex: 0,
-        stones: ['钻石总重<0.5ct', '钻石总重0.5ct-1ct', '钻石总重1ct-0.99ct', '珍珠'],
+        stones: [],
         wearIndex: 0,
-        wears: ['戒指', '耳饰'],
+        wears: [],
         goodsPicList: [],
         certifyPicList: [],
         otherPicList: []
@@ -75,13 +75,15 @@
     },
     computed: {
       ...mapState(['stoneMade']),
+      ...mapGetters(['getTradeinOld']),
       isActive() {
         return this.brandIndex !== -1 && this.goldIndex !== -1 && this.stoneIndex !== -1 && this.wearIndex !== -1;
+        // && this.goodsPicList.length >= 3 && this.certifyPicList.length >= 3 && this.otherPicList.length >= 3
       }
     },
 
     created() {
-      // this.getStoneOptions();
+      this.getTradeinOptions();
     },
     mounted() {
       this.$nextTick(() => {
@@ -94,34 +96,34 @@
       });
     },
     methods: {
-      ...mapMutations(['setStoneMade']),
+      ...mapMutations(['setStoneMade', 'setTradeinOld']),
       ...mapActions(['ajax']),
-      // getStoneOptions() {
-      //   return this.ajax({
-      //     name: 'getStoneOptions',
-      //     data: {
-      //       gsmh: this.stoneMade.gsmh
-      //     }
-      //   }).then(res => {
-      //     this.weightMin = res.min_weight;
-      //     this.weightMax = res.max_weight;
-      //     this.weight = this.weightMin;
-      //     this.cleaness = res.zhus_jd;
-      //     this.colors = res.zhus_color;
-      //     this.cuts = res.zhus_qg;
-      //     this.certificates = res.zslx;
-      //   });
-      // },
-      handleConfirmFilter() {
-        // this.setStoneMade({
-        //   S: {
-        //     zhusjd: this.cleaness[this.cleanessIndex],
-        //     zhusys: this.colors[this.colorIndex],
-        //     zhusz: this.weight,
-        //     zhusqg: this.cuts[this.cutIndex],
-        //     zslx: this.certificates[this.certificateIndex]
-        //   }
-        // });
+      getTradeinOptions() {
+        return this.ajax({
+          name: 'getTradeinOptions'
+        }).then(res => {
+          this.brands = res.brands;
+          this.wears = res.pdlx;
+          this.golds = res.jlx;
+          this.stones = res.stones;
+        });
+      },
+      handleConfirm() {
+        if(this.$route.params.index >= 0) {
+
+        } else {
+          const tradeinOld = this.getTradeinOld;
+          tradeinOld.push({
+            brandIndex: this.brandIndex,
+            goldIndex: this.goldIndex,
+            stoneIndex: this.stoneIndex,
+            wearIndex: this.wearIndex,
+            goodsPicList: this.goodsPicList,
+            certifyPicList: this.certifyPicList,
+            otherPicList: this.otherPicList
+          });
+          this.setTradeinOld(tradeinOld);
+        }
         this.$router.go(-1);
       },
       handleGoodsPicChange({ fileList }) {
