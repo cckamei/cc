@@ -21,7 +21,7 @@
         </li>
         <li>
           <div class="title">商品照片</div>
-          <a-upload ref="goods-pic" class="picture" accept="image/*" action="https://www.mocky.io/v2/5cc8019d300000980a055e76" listType="picture-card" :fileList="goodsPicList" @change="handleGoodsPicChange">
+          <a-upload ref="goods-pic" class="picture" accept="image/*" action="/api/v1/img_upload_v2" listType="picture-card" :fileList="goodsPicList" @change="handleGoodsPicChange">
             <div v-if="goodsPicList.length <= 9">
               <div class="pic_add"></div>
             </div>
@@ -29,7 +29,7 @@
         </li>
         <li>
           <div class="title">鉴定证书</div>
-          <a-upload ref="certify-pic" class="picture" accept="image/*" action="https://www.mocky.io/v2/5cc8019d300000980a055e76" listType="picture-card" :fileList="certifyPicList" @change="handleCertifyPicChange">
+          <a-upload ref="certify-pic" class="picture" accept="image/*" action="/api/v1/img_upload_v2" listType="picture-card" :fileList="certifyPicList" @change="handleCertifyPicChange">
             <div v-if="certifyPicList.length <= 9">
               <div class="pic_add"></div>
             </div>
@@ -37,7 +37,7 @@
         </li>
         <li>
           <div class="title">其他票据<span class="txt-lightgray">（保证单/发票/标签）</span></div>
-          <a-upload ref="other-pic" class="picture" accept="image/*" action="https://www.mocky.io/v2/5cc8019d300000980a055e76" listType="picture-card" :fileList="otherPicList" @change="handleOtherPicChange">
+          <a-upload ref="other-pic" class="picture" accept="image/*" action="/api/v1/img_upload_v2" listType="picture-card" :fileList="otherPicList" @change="handleOtherPicChange">
             <div v-if="otherPicList.length <= 9">
               <div class="pic_add"></div>
             </div>
@@ -55,35 +55,35 @@
 
 <script>
   import { mapActions, mapState, mapMutations, mapGetters } from 'vuex';
+  import { serialize } from '@/utils';
   import $ from 'jquery';
 
   export default {
     data() {
       return {
         brandIndex: 0,
-        brands: [],
+        brands: [], //品牌
         goldIndex: 0,
-        golds: [],
+        golds: [], //金信息
         stoneIndex: 0,
-        stones: [],
+        stones: [], //石信息
         wearIndex: 0,
-        wears: [],
-        goodsPicList: [],
-        certifyPicList: [],
-        otherPicList: []
+        wears: [], //佩戴分类
+        goodsPicList: [], //商品照片
+        certifyPicList: [], //鉴定证书
+        otherPicList: [] //其他票据
       };
     },
     computed: {
       ...mapState(['stoneMade']),
       ...mapGetters(['getTradeinOld']),
       isActive() {
-        return this.brandIndex !== -1 && this.goldIndex !== -1 && this.stoneIndex !== -1 && this.wearIndex !== -1;
-        // && this.goodsPicList.length >= 3 && this.certifyPicList.length >= 3 && this.otherPicList.length >= 3
+        return this.brandIndex !== -1 && this.goldIndex !== -1 && this.stoneIndex !== -1 && this.wearIndex !== -1 && this.goodsPicList.length >= 1 && this.certifyPicList.length >= 1 && this.otherPicList.length >= 1;
+        // this.goodsPicList.length >= 3 && this.certifyPicList.length >= 3 && this.otherPicList.length >= 3 #TODO 3个
       }
     },
-
     created() {
-      this.getTradeinOptions();
+      this.reqTradeinOptions();
     },
     mounted() {
       this.$nextTick(() => {
@@ -96,31 +96,34 @@
       });
     },
     methods: {
-      ...mapMutations(['setStoneMade', 'setTradeinOld']),
+      ...mapMutations(['setStoneMade', 'setTradeinOld', 'setTradeinOptions']),
       ...mapActions(['ajax']),
-      getTradeinOptions() {
+      reqTradeinOptions() {
         return this.ajax({
-          name: 'getTradeinOptions'
+          name: 'tradeinOptions'
         }).then(res => {
           this.brands = res.brands;
           this.wears = res.pdlx;
           this.golds = res.jlx;
           this.stones = res.stones;
+          this.setTradeinOptions({ brands: this.brands, wears: this.wears, golds: this.golds, stones: this.stones });
         });
       },
       handleConfirm() {
         if(this.$route.params.index >= 0) {
+          // 编辑
 
         } else {
+          // 新增
           const tradeinOld = this.getTradeinOld;
           tradeinOld.push({
             brandIndex: this.brandIndex,
             goldIndex: this.goldIndex,
             stoneIndex: this.stoneIndex,
             wearIndex: this.wearIndex,
-            goodsPicList: this.goodsPicList,
-            certifyPicList: this.certifyPicList,
-            otherPicList: this.otherPicList
+            goodsPicList: this.goodsPicList.filter(item => item.response).map(item => item.response.url),
+            certifyPicList: this.certifyPicList.filter(item => item.response).map(item => item.response.url),
+            otherPicList: this.otherPicList.filter(item => item.response).map(item => item.response.url)
           });
           this.setTradeinOld(tradeinOld);
         }
@@ -132,7 +135,7 @@
       handleCertifyPicChange({ fileList }) {
         this.certifyPicList = fileList;
       },
-      handleOtherPicChange({ fileList }) {
+      handleOtherPicChange({ file, fileList }) {
         this.otherPicList = fileList;
       }
     }

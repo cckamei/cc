@@ -11,11 +11,11 @@
               <span class="logInfo">暂无物流信息</span>
             </div>
           </div>
-          <div v-if="order.status === 0" class="order-status-notes">订单等待验货中</div>
-          <div v-else-if="order.status === 1" class="order-status-notes">订单等待付款中</div>
-          <div v-else-if="order.status === 2" class="order-status-notes">订单等待发货中</div>
-          <div v-else-if="order.status === 5" class="order-status-notes">订单等待发货中</div>
-          <div v-else-if="order.status === 8" class="order-status-notes">订单已关闭</div>
+          <div v-if="order.status === 11" class="order-status-notes">订单等待验货中</div>
+          <div v-else-if="order.status === 0" class="order-status-notes">订单等待付款中</div>
+          <div v-else-if="order.status === 12" class="order-status-notes">订单等待发货中</div>
+          <div v-else-if="order.status === 13" class="order-status-notes">订单等待发货中</div>
+          <div v-else-if="order.status === 7" class="order-status-notes">订单已关闭</div>
         </div>
         <div class="logisticsInfo" v-else>
           <div class="logitem">
@@ -38,6 +38,25 @@
         </div>
       </div>
 
+      <!-- 旧品地址 TODO-->
+      <div class="logistics">
+        <div class="logisticsInfo">
+          <div class="logitem">
+            <div>
+              <img src="@/assets/tradein/icon_add.png" alt="">
+              <span class="oldlogInfo">请将旧品寄往此地址</span>
+            </div>
+          </div>
+        </div>
+        <div class="oldReceiverInfo">
+          <p>
+            <span>收货人：{{order.address.name}}</span>
+            <span class="phone">{{order.address.phone}}</span>
+          </p>
+          <p>收货地址：{{order.address.province+order.address.city+order.address.district+order.address.street}}</p>
+        </div>
+      </div>
+
       <!-- 商品信息 -->
       <div class="listitem">
         <div class="itemtitle">
@@ -47,9 +66,9 @@
           </div>
           <div class="listright">{{typename(order.status)}}</div>
         </div>
-        <goods-old :showTitle="true" :goods="order.goods"></goods-old>
-        <goods-new :goods="order.goods" v-if="[1, 2, 3, 4].includes(order.status)"></goods-new>
-        <div class="itemprice" v-if="[1, 2, 3, 4].includes(order.status)">
+        <goods-old :showTitle="true" :goods="order.old_goods"></goods-old>
+        <goods-new :goods="order.goods" v-if="[0, 12, 14, 3].includes(order.status) && order.goods.length"></goods-new>
+        <div class="itemprice" v-if="[0, 12, 14, 3].includes(order.status) && order.goods.length">
           <ul>
             <li class="priceType">
               <span>补差价额</span>
@@ -67,45 +86,45 @@
         </div>
         <div class="itemfoot">
           <!-- 待验货 -->
-          <div class="ordertypeDF" v-if="order.status === 0">
+          <div class="ordertypeDF" v-if="order.status === 11">
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
-            <button class="btnpink" @click="$router.push({name: 'tradeindelivery'})">填写快递</button>
+            <button class="btnpink" @click="$router.push({name: 'tradeindelivery', params: {orderId: order.logistics.old_id, brand: order.logistics.old_name}})">填写快递</button>
           </div>
           <!-- 待付款 -->
-          <div class="ordertypeDF" v-if="order.status === 1">
+          <div class="ordertypeDF" v-if="order.status === 0">
             <button class="btngrey btnleft flexleft" @click="cancelOrder">取消换新</button>
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
-            <button class="btngrey btnleft" @click="$router.push({name: 'tradeinaddnew'})">选择新品</button>
-            <button class="btnpink" @click="parOrder(order)">立即付款</button>
+            <button class="btngrey btnleft" @click="goTradeinNew">选择新品</button>
+            <button :class="order.ok ? 'btnpink' : 'disabled'" @click="order.ok && parOrder(order)">立即付款</button>
           </div>
           <!-- 新品待发货 -->
-          <div class="ordertypeDF" v-if="order.status === 2">
+          <div class="ordertypeDF" v-if="order.status === 12">
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
           </div>
           <!-- 新品待收货 -->
-          <div class="ordertypeDS" v-if="order.status == 3">
+          <div class="ordertypeDS" v-if="order.status == 14">
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
             <button class="btnpink" @click="isConform = true">确认收货</button>
           </div>
           <!-- 已完成 -->
-          <div class="ordertypeDF" v-if="order.status === 4">
+          <div class="ordertypeDF" v-if="order.status === 3">
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
           </div>
           <!-- 旧品待发货 -->
-          <div class="ordertypeDF" v-if="order.status === 5">
+          <div class="ordertypeDF" v-if="order.status === 13">
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
           </div>
           <!-- 旧品待收货 -->
-          <div class="ordertypeDS" v-if="order.status == 6">
+          <div class="ordertypeDS" v-if="order.status === 15">
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
             <button class="btnpink" @click="isConform = true">确认收货</button>
           </div>
           <!-- 已取消 -->
-          <div class="ordertypeDF" v-if="order.status === 7">
+          <div class="ordertypeDF" v-if="order.status === 8">
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
           </div>
           <!-- 已关闭 -->
-          <div class="ordertypeDF" v-if="order.status === 8">
+          <div class="ordertypeDF" v-if="order.status === 7">
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
           </div>
         </div>
@@ -115,13 +134,13 @@
         <ul class="orderInfoItem">
           <li><span>订单编号：</span> {{order.orderid}}</li>
           <li><span>下单时间：</span> {{formatDate(order.created_at,'yyyy-MM-dd hh:mm:ss')}}</li>
-          <li v-if="order.status === 7"><span>取消时间：</span> {{formatDate(order.finish_at,'yyyy-MM-dd hh:mm:ss')}}</li>
+          <li v-if="order.status === 8"><span>取消时间：</span> {{formatDate(order.finish_at,'yyyy-MM-dd hh:mm:ss')}}</li>
         </ul>
-        <ul class="orderInfoItem" v-if="order.status != 8">
+        <ul class="orderInfoItem" v-if="order.status !== 8">
           <li><span>配送方式：</span> 快递运输</li>
         </ul>
         <!-- 支付方式 -->
-        <ul class="orderInfoItem" v-if="[2, 3, 4].includes(order.status)">
+        <ul class="orderInfoItem" v-if="[12, 14, 3].includes(order.status)">
           <li><span>支付方式：</span> 微信支付</li>
           <li><span>支付时间：</span> {{formatDate(order.pay_time)}}</li>
         </ul>
@@ -171,35 +190,33 @@
       };
     },
     created() {
-      let orderId = this.getOrderId;
-      this.getorderDetail(orderId);
+      this.getOrderDetail();
     },
     computed: {
-      ...mapGetters(['getOrderId'])
+      ...mapGetters(['getOrderId', 'getTradeinNew'])
     },
     methods: {
-      ...mapMutations(['setCommon', 'setPayOrder', 'setOrderType', 'setAppointment']),
+      ...mapMutations(['setCommon', 'setPayOrder', 'setOrderType', 'setAppointment', 'setTradeinNew']),
       ...mapActions(['ajax']),
-      getorderDetail(orderId) {
+      getOrderDetail() {
         this.ajax({
           name: 'getOrder',
-          id: orderId
+          id: this.getOrderId
         }).then(res => {
           this.order = res;
 
-          this.order.status = 8; //0'待验货', 1'待付款', 2'新品待发货', 3'新品待收货', 4'已完成', 5'旧品待发货', 6'旧品待收货', 7'已取消', 8'已关闭'
+          this.order.ok = true;
+          this.order.status = 0;
+          //0'待验货', 1'待付款', 2'新品待发货', 3'新品待收货', 4'已完成', 5'旧品待发货', 6'旧品待收货', 7'已取消', 8'已关闭'
+          //0: 待付款, 1:'待发货', 2:'待收货', 3:'已完成', 4:'退款中', '', 6:'已退款', 7:'已关闭', 8:'已取消' 9:'定制中' 10:'待取货', 11:'待验货', 12:'新品待发货', 13:'旧品待发货', 14:'新品待收货', 15:'旧品待收货'
 
           if(!this.order.logistics.info || !this.order.logistics.info.result) {
-            this.order.logistics = {
-              info: {
-                data: []
-              }
-            };
+            this.order.logistics.info = { data: [] };
           }
         });
       },
       typename(type) {
-        let _typenames = ['待验货', '待付款', '新品待发货', '新品待收货', '已完成', '旧品待发货', '旧品待收货', '已取消', '已关闭'];
+        let _typenames = ['待付款', '待发货', '待收货', '已完成', '退款中', '', '已退款', '已关闭', '已取消', '定制中', '待取货', '待验货', '新品待发货', '旧品待发货', '新品待收货', '旧品待收货'];
         return _typenames[type];
       },
       formatDate,
@@ -212,11 +229,11 @@
       // 确认签收
       handleSConfirm() {
         this.ajax({
-          name: 'changeOrder',
+          name: 'tradeinUpdateOrder',
           data: {
-            order_id: this.getOrderId,
             action: 'affirm'
-          }
+          },
+          id: this.getOrderId
         }).then(res => {
           this.setOrderType(3);
           this.$router.push({ name: 'orderlist' });
@@ -225,14 +242,13 @@
       // 取消订单
       handleConfirm() {
         this.ajax({
-          name: 'changeOrder',
+          name: 'tradeinUpdateOrder',
           data: {
-            order_id: this.getOrderId,
             action: 'cancel'
-          }
+          },
+          id: this.getOrderId
         }).then(res => {
-          this.setOrderType(0);
-          this.$router.push({ name: 'orderlist' });
+          window.location.reload();
         });
       },
       goCustomService() {
@@ -242,6 +258,28 @@
       parOrder(order) {
         this.setPayOrder(order);
         this.$router.push({ name: 'pay' });
+      },
+      goTradeinNew() {
+        const tradeinNew = this.order.goods.map(item => {
+          let skuLabel = '';
+          if(item.good_kind === '0') {
+            skuLabel = `${item.zhuzuanfenshu};${item.zuanshijingdu};${item.color};${item.guige}`;
+          } else if(item.good_kind === '1') {
+            skuLabel = `${item.zhushimingcheng};${item.zhushipingji};${item.color};${item.guige}`;
+          } else {
+            skuLabel = `${item.s_jinleixing};${item.s_jinzhong};${item.guige}`;
+          }
+          return {
+            skuId: item.sku_id,
+            goods_title: item.goods_name,
+            img: item.goods_img,
+            price: item.goods_price,
+            skuLabel
+          }
+        });
+
+        this.setTradeinNew(tradeinNew);
+        this.$router.push({ name: 'tradeinaddnew' });
       }
     }
   };
@@ -290,6 +328,9 @@
       .logInfo {
         max-width: 500px;
       }
+      .oldlogInfo {
+        color: @color2;
+      }
       img {
         display: inline;
         margin-right: 20px;
@@ -304,7 +345,6 @@
       padding-top: 34px;
       span {
         color: #666666;
-        padding-top: 6px;
       }
       p {
         color: #999999;
@@ -336,6 +376,9 @@
         width: 36px;
         height: 36px;
       }
+    }
+    .oldReceiverInfo {
+      padding-bottom: 40px;
     }
     .listitem {
       background: #ffffff;

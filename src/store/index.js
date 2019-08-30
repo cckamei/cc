@@ -46,6 +46,7 @@ export default new Vuex.Store({
     },
     shopList: getSen('shopList') || [],
     tradeinOld: getSen('tradeinOld') || [],
+    tradeinNew: getSen('tradeinNew') || [],
     tradeinOptions: getSen('tradeinOptions') || {}
   },
   getters: {
@@ -63,7 +64,9 @@ export default new Vuex.Store({
     getStoneMade: state => serialize(state.stoneMade),
     getLetteringValues: state => serialize(state.letteringValues),
     getLetteringLabels: state => serialize(state.letteringLabels),
-    getTradeinOld: state => serialize(state.tradeinOld)
+    getTradeinOld: state => serialize(state.tradeinOld),
+    getTradeinNew: state => serialize(state.tradeinNew),
+    getTradeinOptions: state => serialize(state.tradeinOptions)
   },
   mutations: {
     setCacheData(state, data) {
@@ -144,6 +147,10 @@ export default new Vuex.Store({
     setTradeinOld(state, data) {
       state.tradeinOld = data;
       setSen('tradeinOld', state.tradeinOld);
+    },
+    setTradeinNew(state, data) {
+      state.tradeinNew = data;
+      setSen('tradeinNew', state.tradeinNew);
     },
     setTradeinOptions(state, data) {
       state.tradeinOptions = data;

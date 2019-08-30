@@ -6,20 +6,25 @@
     <div class="instalments" @click="goPage">
       <img :src="getUserInfo.fenqi" alt="" srcset="">
     </div>
-    <button class="btn-txt" @click="$router.push({name: 'tradeinconfirmold'})">以旧换新</button>
+    <button class="btn-txt" @click="goTradein">以旧换新</button>
     <v-footer></v-footer>
   </div>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapMutations } from 'vuex';
   export default {
     computed: {
       ...mapGetters(['getUserInfo'])
     },
     methods: {
+      ...mapMutations(['setTradeinOld']),
       goPage() {
         window.location.href = 'https://mp.weixin.qq.com/s/14P5TU2BtwRwEwyLKI1H1A';
+      },
+      goTradein() {
+        this.setTradeinOld([]);
+        this.$router.push({ name: 'tradeinconfirmold' });
       }
     }
   };

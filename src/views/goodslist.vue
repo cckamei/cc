@@ -3,7 +3,7 @@
     <v-header-menus :back="getCommon.isTradein" :home="!getCommon.isTradein">
       <input type="text" @click="$router.push({name: 'goodssearch'})" placeholder="请选择您要搜索的作品类型" readonly>
       <div slot="menus" class="menus">
-        <div class="menu" @click="$router.push({name: 'goodssearch'})"><img src="@/assets/goods/icon_search.png" alt=""></div>
+        <div class="menu" @click="$router.push({name: 'goodssearch'})">{{getCommon.isTradein}}<img src="@/assets/goods/icon_search.png" alt=""></div>
       </div>
     </v-header-menus>
     <div class="condition">
@@ -20,7 +20,7 @@
     </div>
     <div class="content">
       <ul class="list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="50" infinite-scroll-immediate-check="true">
-        <li v-for="(item, index) in goodsList" :key="index" @click="goDetail(item)">
+        <li v-for="(item, index) in goodsList" :key="index" @click="!getTradeinNew.some(g => g.goods_id === item.goods_id) && goDetail(item)">
           <div class="goods flex">
             <div class="img"><img :src="item.img" alt=""></div>
             <div class="detail flex-auto flex">
@@ -28,7 +28,9 @@
               <span class="desc">{{item.sub_title}}</span>
               <div class="line3 flex">
                 <div class="price"><span>￥</span>{{item.price || 0 | currency}}</div>
-                <div class="cart" @click.stop="addToCart(item)"></div>
+                <div class="cart" @click.stop="!getTradeinNew.some(g => g.goods_id === item.goods_id) && addToCart(item)">
+                  <div v-if="getTradeinNew.some(g => g.goods_id === item.goods_id)" class="dot"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -85,7 +87,7 @@
       this.fetchSeries();
     },
     computed: {
-      ...mapGetters(['getCommon'])
+      ...mapGetters(['getCommon', 'getTradeinNew'])
     },
     methods: {
       ...mapMutations(['setCommon']),
@@ -290,5 +292,15 @@
         }
       }
     }
+  }
+
+  .dot {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background-color: #fa7878;
+    border-radius: 30px;
   }
 </style>

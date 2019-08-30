@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
 
   export default {
     data() {
@@ -28,14 +28,31 @@
       };
     },
     computed: {
+      ...mapGetters(['getOrderId']),
       isActive() {
         return this.brand.length && this.orderId.length;
       }
     },
+    created() {
+      console.log(this.$route.params);
+      const { brand, orderId } = this.$route.params;
+      this.brand = brand || '';
+      this.orderId = orderId || '';
+    },
     methods: {
       ...mapActions(['ajax']),
       handleConfirm() {
-        this.$router.go(-1);
+        this.ajax({
+          name: 'tradeinUpdateOrder',
+          data: {
+            action: 'send',
+            logistic_num: this.orderId,
+            logistic_name: this.brand
+          },
+          id: this.getOrderId
+        }).then(() => {
+          this.$router.go(-1);
+        });
       }
     }
   };

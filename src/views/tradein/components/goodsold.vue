@@ -2,15 +2,15 @@
   <div>
     <v-split-title v-if="showTitle">旧品信息</v-split-title>
     <ul class="goods">
-      <li v-for="(item, index) in tradein" :key="index">
+      <li v-for="(item, index) in goods" :key="index">
         <div class="item-wrapper flex">
-          <div class="img"><img :src="item.list_img" alt=""></div>
+          <div class="img"><img :src="item.goods_imgs[0]" alt=""></div>
           <div class="detail flex-auto flex">
             <div class="detail-row flex">
-              <div class="col">品牌：{{item.brand}}</div>
+              <div class="col">品牌：{{item.pp_info.title}}</div>
             </div>
             <div class="detail-row flex">
-              <div class="col">预估价：￥{{item.price}}</div>
+              <div class="col">预估价：{{item.auto_cal_price === 'UNKNOW' ? '该类型商品仅支持人工估值' :  '￥' + item.auto_cal_price}}</div>
             </div>
           </div>
         </div>
@@ -30,20 +30,6 @@
         type: Boolean,
         default: false
       }
-    },
-    data() {
-      return {
-        tradein: [
-          {
-            brand: 'CC卡美',
-            price: 4000
-          },
-          {
-            brand: 'CC卡美',
-            price: 4000
-          }
-        ]
-      };
     }
   };
 </script>

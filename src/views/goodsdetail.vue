@@ -147,7 +147,7 @@
                 <v-button-radio v-model="skuIndex[2]" :list="skuList[2]" :cancel="true"></v-button-radio>
               </li>
             </template>
-            <li class="count flex">
+            <li class="count flex" v-if="!getCommon.isTradein">
               <span>数量</span>
               <div class="flex">
                 <div @click="sku.count > 1 && sku.count--" class="btn minus" :class="{active: sku.count > 1}"></div>
@@ -368,7 +368,7 @@
       }, 1000);
     },
     computed: {
-      ...mapGetters(['getCommon', 'token', 'userId', 'getUserInfo']),
+      ...mapGetters(['getCommon', 'token', 'userId', 'getUserInfo', 'getTradeinNew']),
       placeholder() {
         if(this.res.good_kind === '0') {
           return '选择 主钻分数；钻石净度；颜色；规格；数量';
@@ -455,7 +455,7 @@
       // }
     },
     methods: {
-      ...mapMutations(['setCart', 'clearPayOrder', 'setPayOrder', 'setCommon', 'setStoneMade', 'setInvoice', 'setAddress']),
+      ...mapMutations(['setCart', 'clearPayOrder', 'setPayOrder', 'setCommon', 'setStoneMade', 'setInvoice', 'setAddress', 'setTradeinNew']),
       ...mapActions(['ajax']),
       init() {
         if(this.$route.params.openSKU) {
@@ -770,6 +770,15 @@
         }
 
         this.getGoodsStock(this.sku.skuId || this.sku.defaultSKU, stock => {
+          const tradeinNew = this.getTradeinNew;
+          tradeinNew.push({
+            skuId: this.sku.skuId || this.sku.defaultSKU,
+            goods_title: this.res.goods_title,
+            img: this.res.img,
+            price: this.sku.price || this.res.price,
+            skuLabel: this.sku.selectedSku
+          });
+          this.setTradeinNew(tradeinNew);
           this.$router.go(-2);
         });
       }

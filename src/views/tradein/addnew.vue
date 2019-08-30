@@ -8,21 +8,21 @@
             <v-form-input v-model="value1" :arrow="true" label="新品信息" placeholder="添加新品" @input-click="handleAddNew"></v-form-input>
           </div>
           <ul class="goods">
-            <li class="flex" v-for="(item, index) in cart" :key="index">
+            <li class="flex" v-for="(item, index) in getTradeinNew" :key="index">
               <div class="img">
                 <img :src="item.img" alt="">
               </div>
               <div class="detail flex-auto flex">
                 <div class="line1 flex">
                   <span class="name">{{item.goods_title}}</span>
-                  <img class="delete" @click="handleOpenDelete" src="@/assets/tradein/button_delete.png" alt="">
+                  <img class="delete" @click="handleOpenDelete(index)" src="@/assets/tradein/button_delete.png" alt="">
                 </div>
                 <div class="line2">
                   <span class="desc">{{item.skuLabel}}</span>
                 </div>
                 <div class="line3 flex">
                   <span class="price">价格：<span>￥</span>{{item.price | currency}}</span>
-                  <div class="number">x{{item.count}}</div>
+                  <div class="number">x1</div>
                 </div>
               </div>
             </li>
@@ -33,14 +33,14 @@
             <v-form-input class="pr-0" label="新品总额" :value="'￥' + newPrice" :readonly="true"></v-form-input>
           </div>
           <div class="row pre-price">
-            <v-form-input class="freight pr-0" label="补差价额" :value="'￥' + diffPrice" :readonly="true"></v-form-input>
+            <v-form-input class="freight pr-0" label="补差价额" :value="isGoodsEnough ? '￥' + diffPrice : '所选商品价值较低，请添加新品'" :readonly="true"></v-form-input>
           </div>
         </section>
       </div>
     </div>
     <div class="footer">
       <div class="btns">
-        <button class="btn" :class="{active: isActive}" @click="isActive && handleConfirm()">确定</button>
+        <button class="btn" :class="{active: isGoodsEnough}" @click="isGoodsEnough && handleConfirm()">确定</button>
       </div>
     </div>
     <v-popup-confirm title="" v-model="deleteConfirmVisible" @confirm="handleDelete">
@@ -58,28 +58,20 @@
     data() {
       return {
         value1: '',
-        newPrice: 1000,
-        diffPrice: 2000,
+        newPrice: 0,
+        diffPrice: 0,
         deleteConfirmVisible: false,
-        cart: [{
-          goods_title: 'CHIC 女戒',
-          skuLabel: '25分； vs暇',
-          price: 2,
-          count: 2
-        }, {
-          goods_title: 'CHIC 女戒',
-          skuLabel: '25分； vs暇',
-          price: 2,
-          count: 2
-        }]
+        deleteIndex: -1,
+        isGoodsEnough: false
       };
     },
     created() {
       this.fetchLogitics();
+      this.reqTradeinCalNew();
     },
     computed: {
       ...mapState(['stoneMade']),
-      ...mapGetters(['getAddress']),
+      ...mapGetters(['getAddress', 'getTradeinNew', 'getOrderId']),
       totalMoney() {
         let deliveryMoney = 0;
         if(this.delivery.length) {
@@ -87,31 +79,60 @@
         }
 
         return this.goodsMoney + deliveryMoney;
-      },
-      isActive() {
-        return true;
       }
     },
     methods: {
-      ...mapMutations(['clearPayOrder', 'setPayOrder', 'setCommon']),
+      ...mapMutations(['clearPayOrder', 'setPayOrder', 'setCommon', 'setTradeinNew']),
       ...mapActions(['ajax']),
       fetchLogitics() {
         this.ajax({ name: 'getLogitics' }).then(res => {
           this.delivery = res;
         });
       },
-      handleOpenDelete() {
+      handleOpenDelete(index) {
         this.deleteConfirmVisible = true;
+        this.deleteIndex = index;
       },
       handleConfirm() {
-        this.$router.go(-1);
+        this.ajax({
+          name: 'tradeinAddNew',
+          data: {
+            skus: this.getTradeinNew.map(item => item.skuId),
+            order_id: this.getOrderId
+          }
+        }).then(res => {
+          this.$router.go(-1);
+        });
       },
       handleAddNew() {
         this.setCommon({ isTradein: true });
         this.$router.push({ name: 'goodslist' });
       },
+      reqTradeinCalNew() {
+        if(this.getTradeinNew.length) {
+          this.ajax({
+            name: 'tradeinCalNew',
+            data: {
+              skus: this.getTradeinNew.map(item => item.skuId),
+              order_id: this.getOrderId
+            }
+          }).then(res => {
+            // TODO
+            this.newPrice = 1000;
+            this.diffPrice = 2000;
+            this.isGoodsEnough = true;
+          });
+        } else {
+          this.newPrice = 0;
+          this.diffPrice = 0;
+          this.isGoodsEnough = false;
+        }
+      },
       handleDelete() {
-
+        const tradeinNew = this.getTradeinNew;
+        tradeinNew.splice(this.deleteIndex, 1);
+        this.setTradeinNew(tradeinNew);
+        this.reqTradeinCalNew();
       }
     }
   };

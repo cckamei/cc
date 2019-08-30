@@ -11,15 +11,15 @@
             <v-form-input v-model="value1" :arrow="true" label="旧品信息" placeholder="添加旧品" @input-click="$router.push({name: 'tradeinaddold'})"></v-form-input>
           </div>
           <ul class="goods">
-            <li v-for="(item, index) in tradein" :key="index">
+            <li v-for="(item, index) in tradeinList" :key="index">
               <div class="item-wrapper flex">
-                <div class="img"><img :src="item.list_img" alt=""></div>
+                <div class="img"><img :src="item.goodsPicList[0]" alt=""></div>
                 <div class="detail flex-auto flex">
                   <div class="detail-row flex">
-                    <div class="col">品牌：{{item.brand}}</div>
+                    <div class="col">品牌：{{getTradeinOptions.brands[item.brandIndex].title}}</div>
                   </div>
                   <div class="detail-row flex">
-                    <div class="col">预估价：{{item.price}}</div>
+                    <div class="col">预估价：{{item.price === 'UNKNOW' ? '该类型商品仅支持人工估值' :  '￥' + item.price}}</div>
                   </div>
                 </div>
               </div>
@@ -28,7 +28,7 @@
         </section>
         <section class="summary">
           <div class="row pre-price">
-            <v-form-input class="pr-0" label="预估旧品总额" :value="'￥' + goodsMoney" :readonly="true"></v-form-input>
+            <v-form-input class="pr-0" label="预估旧品总额" :value="goodsMoney === 'UNKNOW' ? '包含仅支持人工估值的商品' : '￥' + goodsMoney" :readonly="true"></v-form-input>
           </div>
           <!-- <div class="row" v-if="delivery.length">
             <v-form-input class="freight" label="运费" :value="'+￥' + delivery[deliveryIndex].price" :readonly="true"></v-form-input>
@@ -76,46 +76,100 @@
         goodsMoney: 0, //商品总额
         deliveryIndex: 0,
         delivery: [], //快递
-        tradein: [
-          {
-            brand: 'CC卡美',
-            price: 4000
-          },
-          {
-            brand: 'CC卡美',
-            price: 4000
-          }
-        ]
+        tradeinList: []
       };
     },
     created() {
       this.fetchLogitics();
+      this.reqTradeinCalOld();
     },
     computed: {
       ...mapState(['stoneMade']),
-      ...mapGetters(['getAddress', 'getTradeinOld']),
-      totalMoney() {
-        let deliveryMoney = 0;
-        if(this.delivery.length) {
-          deliveryMoney = this.delivery[this.deliveryIndex].price;
-        }
+      ...mapGetters(['getAddress', 'getTradeinOld', 'getTradeinOptions']),
+      // totalMoney() {
+      //   let deliveryMoney = 0;
+      //   if(this.delivery.length) {
+      //     deliveryMoney = this.delivery[this.deliveryIndex].price;
+      //   }
 
-        return this.goodsMoney + deliveryMoney;
-      },
+      //   return this.goodsMoney + deliveryMoney;
+      // },
       isActive() {
-        return true;
+        return this.tradeinList.length;
       }
     },
     methods: {
-      ...mapMutations(['clearPayOrder', 'setPayOrder']),
+      ...mapMutations(['setCommon']),
       ...mapActions(['ajax']),
       fetchLogitics() {
         this.ajax({ name: 'getLogitics' }).then(res => {
           this.delivery = res;
         });
       },
+      reqTradeinCalOld() {
+        // jlx_key
+        // pdlx_key
+        // stone_key
+        // pp_key
+        // goods_imgs
+        // cert_imgs
+        // other_imgs_info
+
+        // brandIndex: 0,
+        // brands: [], //品牌
+        // goldIndex: 0,
+        // golds: [], //金信息
+        // stoneIndex: 0,
+        // stones: [], //石信息
+        // wearIndex: 0,
+        // wears: [], //佩戴分类
+        // goodsPicList: [], //商品照片
+        // certifyPicList: [], //鉴定证书
+        // otherPicList: [] //其他票据
+        if(this.getTradeinOld.length) {
+          this.ajax({ name: 'tradeinCalOld', data: { old_goods: this._getOldGoods() } }).then(res => {
+            this.tradeinList = this.getTradeinOld.map((item, index) => {
+              return {
+                ...item,
+                price: res.goods[index].auto_cal_price
+              }
+            });
+            this.goodsMoney = res.auto_cal;
+          });
+        }
+      },
       handleConfirm() {
-        this.$router.push({ name: 'tradeinagreement' });
+        const reqData = {
+          old_goods: this._getOldGoods(),
+          address_id: this.getAddress.id,
+          logitics_id: this.delivery[this.deliveryIndex].id,
+          yaoqiu: this.yaoqiu
+        }
+
+        if(!reqData.address_id) {
+          this.toast('亲，您还未设置收货地址！');
+          return false;
+        }
+
+        this.ajax({ name: 'tradeinAddOld', data: reqData }).then(res => {
+          this.setCommon({ orderId: res.order_id });
+          this.$router.push({ name: 'tradeinagreement' });
+        });
+      },
+      _getOldGoods() {
+        const { brands, golds, stones, wears } = this.getTradeinOptions;
+        const oldGoods = this.getTradeinOld.map((item, index) => {
+          return {
+            jlx_key: golds[item.goldIndex].key,
+            pdlx_key: wears[item.goldIndex].key,
+            stone_key: stones[item.wearIndex].key,
+            pp_key: brands[item.brandIndex].key,
+            goods_imgs: item.goodsPicList,
+            cert_imgs: item.certifyPicList,
+            other_imgs_info: item.otherPicList
+          }
+        });
+        return JSON.stringify(oldGoods);
       }
     }
   };
@@ -189,7 +243,7 @@
                 padding-top: 10px;
               }
               .col {
-                width: 50%;
+                // width: 50%;
               }
             }
           }

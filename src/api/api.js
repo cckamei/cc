@@ -76,10 +76,12 @@ let api = {
   showLettering: { url: 'api/v1/show_goods_aepict', method: 'get' }, //订单查询刻字
   addLettering: { url: 'api/v1/add_goods_aepict', method: 'post', isJson: true }, //订单加入刻字
   shopList: { url: 'api/v1/store_list', method: 'get' }, //店铺列表
-  getTradeinOptions: { url: 'api/v1/yjhx_options', method: 'get' }, //以旧换新选项
+  tradeinOptions: { url: 'api/v1/yjhx_options', method: 'get' }, //以旧换新选项
   tradeinAddOld: { url: 'api/v1/add_yjhx_order', method: 'post' }, //以旧换新添加旧品商品
-  tradeinAddNew: { url: 'api/v1/add_new_goods', method: 'post' }, //以旧换新添加新品
-  tradeinUpdateOrder: { url: 'api/v1/update_yjhx_order/:id', method: 'post' } //以旧换新旧品发货订单？？？/以旧换新取消订单/以旧换新确认收货
+  tradeinAddNew: { url: 'api/v1/add_new_goods', method: 'post', isJson: true }, //以旧换新添加新品
+  tradeinUpdateOrder: { url: 'api/v1/update_yjhx_order/:id', method: 'post' }, //以旧换新旧品发货订单？？？/以旧换新取消订单/以旧换新确认收货
+  tradeinCalOld: { url: 'api/v1/auto_cal_price', method: 'post' }, //估算旧品价格
+  tradeinCalNew: { url: 'api/v1/check_new_goods_price', method: 'post', isJson: true } //估算新品价格
 };
 
 for (var k in api) {
