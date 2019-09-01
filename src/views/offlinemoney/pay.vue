@@ -1,0 +1,105 @@
+<template>
+  <div class="pt offline-pay">
+    <v-header>线下补款</v-header>
+    <div class="content">
+      <div class="row">
+        <v-form-input v-model="name" label="姓名" placeholder="请填写姓名"></v-form-input>
+      </div>
+      <div class="row">
+        <v-form-input v-model="vipCard" label="VIP卡号" placeholder="请填写VIP卡号"></v-form-input>
+      </div>
+      <div class="row">
+        <v-form-input v-model="phone" label="手机号" placeholder="请填写手机号"></v-form-input>
+      </div>
+      <div class="tips">请核对您的账户信息，确保无误再付款</div>
+      <div class="paid">已支付额：<span class="￥">￥</span><span class="price">{{paid}}</span></div>
+      <div class="topaid">待支付额：<span class="￥">￥</span><span class="price">{{topaid}}</span></div>
+    </div>
+    <div class="footer">
+      <div class="btns">
+        <button class="btn" :class="{active: isActive}" @click="isActive && handleConfirm()">支付</button>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+  import { mapActions } from 'vuex';
+
+  export default {
+    data() {
+      return {
+        name: '',
+        vipCard: '',
+        phone: '',
+        paid: 2000,
+        topaid: 3000
+      };
+    },
+    computed: {
+      isActive() {
+        return this.name.length && this.vipCard.length && this.phone.length;
+      }
+    },
+    methods: {
+      ...mapActions(['ajax']),
+      handleConfirm() {
+        this.$router.replace({ name: 'offlinemoneypaysuccess', params: { price: this.topaid } });
+      }
+    }
+  };
+</script>
+
+<style lang="less" scoped>
+  @import "~@/style/vars.less";
+  .pt {
+    background-color: #fff;
+  }
+  .row {
+    height: 84px;
+    border-bottom: 1px solid #f0f0f0; /*no*/
+    margin: 0 24px;
+  }
+  .tips {
+    color: @color2;
+    text-align: center;
+    padding-top: 30px;
+  }
+  .paid {
+    padding-top: 168px;
+    text-indent: 144px;
+    font-size: 30px;
+    .￥ {
+      font-size: 36px;
+    }
+    .price {
+      font-size: 48px;
+    }
+  }
+  .topaid {
+    padding-top: 44px;
+    font-size: 30px;
+    text-indent: 144px;
+    .￥ {
+      font-size: 36px;
+    }
+    .price {
+      font-size: 60px;
+      font-weight: bold;
+    }
+  }
+  .footer {
+    height: 96px;
+    background-color: #fff;
+    .btns {
+      padding: 14px 20px;
+    }
+  }
+</style>
+
+<style lang="less">
+  .offline-pay {
+    input {
+      padding: 0;
+    }
+  }
+</style>

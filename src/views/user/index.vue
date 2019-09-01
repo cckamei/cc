@@ -20,6 +20,12 @@
           <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
         </div>
       </div>
+      <div class="panel-header" @click="$router.push({ name: 'offlinemoney'})">
+        <span>线下补款</span>
+        <div class="more">
+          <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
+        </div>
+      </div>
     </div>
     <div class="footer">
       <v-footer></v-footer>

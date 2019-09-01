@@ -1,7 +1,7 @@
 <template>
   <div class="pt pb add-old">
     <v-header class="header">添加旧品
-      <div slot="headright" @click="deleteConfirmVisible = true">删除</div>
+      <div slot="headright" v-if="this.$route.params.index >= 0" @click="deleteConfirmVisible = true">删除</div>
     </v-header>
     <div class="content">
       <ul class="filter-content">

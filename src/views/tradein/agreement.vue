@@ -104,7 +104,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex';
+  import { mapActions, mapMutations } from 'vuex';
 
   export default {
     data() {
@@ -112,9 +112,14 @@
       };
     },
     methods: {
+      ...mapMutations(['setCommon']),
       ...mapActions(['ajax']),
       handleConfirm() {
-        this.$router.push({ name: 'tradeinorderdetail' });
+        this.ajax({ name: 'tradeinAddOld', data: this.$route.params.reqData }).then(res => {
+          this.setCommon({ orderId: res.order_id });
+          // this.$router.push({ name: 'tradeinagreement' });
+          this.$router.replace({ name: 'tradeinorderdetail' });
+        });
       }
     }
   };

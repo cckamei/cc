@@ -155,6 +155,21 @@ const router = [{
     }
   },
   {
+    name: 'offlinemoney',
+    path: '/mypage/offlinemoney',
+    component: () => import('@/views/offlinemoney/index')
+  },
+  {
+    name: 'offlinemoneypay',
+    path: '/mypage/offlinemoney/pay',
+    component: () => import('@/views/offlinemoney/pay')
+  },
+  {
+    name: 'offlinemoneypaysuccess',
+    path: '/mypage/offlinemoney/pay/paysuccess',
+    component: () => import('@/views/offlinemoney/paysuccess')
+  },
+  {
     name: 'commissions',
     path: '/commissions',
     component: () => import('@/views/commissions'),

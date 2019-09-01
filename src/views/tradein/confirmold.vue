@@ -151,10 +151,7 @@
           return false;
         }
 
-        this.ajax({ name: 'tradeinAddOld', data: reqData }).then(res => {
-          this.setCommon({ orderId: res.order_id });
-          this.$router.push({ name: 'tradeinagreement' });
-        });
+        this.$router.push({ name: 'tradeinagreement', params: { reqData } });
       },
       _getOldGoods() {
         const { brands, golds, stones, wears } = this.getTradeinOptions;
