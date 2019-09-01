@@ -124,6 +124,7 @@
         this.$router.push({ name: 'addappointment' });
       },
       goGoodsDetail() {
+        this.setCommon({ isTradein: false });
         this.$router.push({ name: 'goodslist' });
       },
       typename(type) {
@@ -150,7 +151,7 @@
       },
       parOrder(order) {
         this.setPayOrder(order);
-        this.$router.push({ name: 'pay' });
+        this.$router.replace({ name: 'pay' });
       }
     }
   };

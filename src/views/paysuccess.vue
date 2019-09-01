@@ -30,7 +30,7 @@
     },
     data() {
       return {
-        nextList: ['wechatgroup', 'index', 'orderdetail']
+        nextList: ['wechatgroup', 'index', 'orderdetail', 'tradeinorderdetail']
       };
     },
     computed: {
@@ -41,7 +41,11 @@
       ...mapMutations(['setCommon']),
       goOrderDetail() {
         this.setCommon({ orderId: this.getPayOrder.order_id });
-        this.$router.push({ name: 'orderdetail' });
+        if(this.$route.params.isTradein) {
+          this.$router.replace({ name: 'tradeinorderdetail' });
+        } else {
+          this.$router.replace({ name: 'orderdetail' });
+        }
       }
     }
   };

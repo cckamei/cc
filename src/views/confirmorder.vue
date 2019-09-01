@@ -104,15 +104,15 @@
 
   export default {
     mixins: [orderMixins],
-    beforeRouteEnter(to, from, next) {
-      if(from.name === 'pay') {
-        next(vm => {
-          vm.$router.go(-1);
-        });
-      } else {
-        next();
-      }
-    },
+    // beforeRouteEnter(to, from, next) {
+    //   if(from.name === 'pay') {
+    //     next(vm => {
+    //       vm.$router.go(-1);
+    //     });
+    //   } else {
+    //     next();
+    //   }
+    // },
     beforeRouteLeave(to, from, next) {
       if(['goodsdetail', 'cart'].includes(to.name)) {
         next();
@@ -294,7 +294,7 @@
             }
             Object.assign(res, this.reqData);
             this.setPayOrder(res);
-            this.$router.push({ name: 'pay' });
+            this.$router.replace({ name: 'pay' });
           }).catch(() => {
             this.setGoodsStock();
           });
@@ -317,7 +317,7 @@
             }
             Object.assign(res, this.reqData);
             this.setPayOrder(res);
-            this.$router.push({ name: 'pay' });
+            this.$router.replace({ name: 'pay' });
           });
         }
       }

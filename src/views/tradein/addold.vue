@@ -1,6 +1,8 @@
 <template>
   <div class="pt pb add-old">
-    <v-header class="header">添加旧品</v-header>
+    <v-header class="header">添加旧品
+      <div slot="headright" @click="deleteConfirmVisible = true">删除</div>
+    </v-header>
     <div class="content">
       <ul class="filter-content">
         <li>
@@ -50,6 +52,11 @@
         <button class="btn" :class="{active: isActive}" @click="isActive && handleConfirm()">确定</button>
       </div>
     </div>
+    <v-popup-confirm title="" v-model="deleteConfirmVisible" @confirm="handleDelete">
+      <div class="txt-center">
+        确定删除此商品？
+      </div>
+    </v-popup-confirm>
   </div>
 </template>
 
@@ -71,15 +78,15 @@
         wears: [], //佩戴分类
         goodsPicList: [], //商品照片
         certifyPicList: [], //鉴定证书
-        otherPicList: [] //其他票据
+        otherPicList: [], //其他票据
+        deleteConfirmVisible: false
       };
     },
     computed: {
       ...mapState(['stoneMade']),
       ...mapGetters(['getTradeinOld']),
       isActive() {
-        return this.brandIndex !== -1 && this.goldIndex !== -1 && this.stoneIndex !== -1 && this.wearIndex !== -1 && this.goodsPicList.length >= 1 && this.certifyPicList.length >= 1 && this.otherPicList.length >= 1;
-        // this.goodsPicList.length >= 3 && this.certifyPicList.length >= 3 && this.otherPicList.length >= 3 #TODO 3个
+        return this.brandIndex !== -1 && this.goldIndex !== -1 && this.stoneIndex !== -1 && this.wearIndex !== -1 && this.goodsPicList.length >= 3 && this.certifyPicList.length >= 3 && this.otherPicList.length >= 3;
       }
     },
     created() {
@@ -107,12 +114,33 @@
           this.golds = res.jlx;
           this.stones = res.stones;
           this.setTradeinOptions({ brands: this.brands, wears: this.wears, golds: this.golds, stones: this.stones });
+          const index = this.$route.params.index;
+          if(index >= 0) {
+            const currentGoods = this.getTradeinOld[index];
+            this.brandIndex = currentGoods.brandIndex;
+            this.stoneIndex = currentGoods.stoneIndex;
+            this.wearIndex = currentGoods.wearIndex;
+            this.goldIndex = currentGoods.goldIndex;
+            this.goodsPicList = currentGoods.goodsPicList.map((item, index) => ({ name: '1', status: 'done', uid: index, url: item }));
+            this.certifyPicList = currentGoods.certifyPicList.map((item, index) => ({ name: '1', status: 'done', uid: index, url: item }));
+            this.otherPicList = currentGoods.otherPicList.map((item, index) => ({ name: '1', status: 'done', uid: index, url: item }));
+          }
         });
       },
       handleConfirm() {
-        if(this.$route.params.index >= 0) {
+        const index = this.$route.params.index;
+        if(index >= 0) {
           // 编辑
-
+          const tradeinOld = this.getTradeinOld;
+          tradeinOld.splice(index, 1, {
+            brandIndex: this.brandIndex,
+            goldIndex: this.goldIndex,
+            stoneIndex: this.stoneIndex,
+            wearIndex: this.wearIndex,
+            goodsPicList: this.goodsPicList.map(item => item.url || item.response.url),
+            certifyPicList: this.certifyPicList.map(item => item.url || item.response.url),
+            otherPicList: this.otherPicList.map(item => item.url || item.response.url)
+          });
         } else {
           // 新增
           const tradeinOld = this.getTradeinOld;
@@ -137,6 +165,13 @@
       },
       handleOtherPicChange({ file, fileList }) {
         this.otherPicList = fileList;
+      },
+      handleDelete() {
+        const index = this.$route.params.index;
+        const tradeinOld = this.getTradeinOld;
+        tradeinOld.splice(index, 1);
+        this.setTradeinOld(tradeinOld);
+        this.$router.go(-1);
       }
     }
   };

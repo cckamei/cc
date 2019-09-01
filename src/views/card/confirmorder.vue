@@ -76,7 +76,7 @@
         this.ajax({ name: 'buyCard', data: this.reqData }).then(res => {
           this.clearPayOrder();
           this.setPayOrder(res);
-          this.$router.push({ name: 'pay' });
+          this.$router.replace({ name: 'pay' });
         });
       }
     }

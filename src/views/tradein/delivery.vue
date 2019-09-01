@@ -34,7 +34,6 @@
       }
     },
     created() {
-      console.log(this.$route.params);
       const { brand, orderId } = this.$route.params;
       this.brand = brand || '';
       this.orderId = orderId || '';

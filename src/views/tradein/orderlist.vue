@@ -4,7 +4,7 @@
     <tabs :type="getOrderType" @search-orders="getOrders"></tabs>
     <div class="content">
       <div class="order-list">
-        <div class="item" v-for="(order,i) in orders" :key="i" v-if="order.kind === 1">
+        <div class="item" v-for="(order,i) in orders" :key="i">
           <div class="item-title" @click="goDetail(order.order_id)">
             <div class="titleleft">
               <img src="@/assets/mypage/icon_shop.png" alt="">
@@ -12,47 +12,47 @@
             </div>
             <div class="listright">{{typename(order.status)}}</div>
           </div>
-          <goods-old :goods="order.goods"></goods-old>
+          <goods-old :goods="order.old_goods"></goods-old>
           <div class="item-price">
-            共{{order.goods.length}}件旧品 <template v-if="[2, 3, 4].includes(order.status)">实付款： <span>￥{{order.rest_money}}</span> <span>（含运费￥{{order.logistics_money}}）</span></template>
+            共{{order.old_goods.length}}件旧品 <template v-if="[12, 3, 14].includes(order.status)">实付款： <span>￥{{order.rest_money}}</span> <span>（含运费￥{{order.logistics_money}}）</span></template>
           </div>
           <div class="item-footer">
-            <!-- 待验货 0-->
+            <!-- 待验货 -->
+            <div class="ordertypeDF" v-if="order.status === 11">
+              <button class="btnpink" @click="$router.push({name: 'tradeindelivery', params: {orderId: order.logistics.old_id, brand: order.logistics.old_name}})">填写快递</button>
+            </div>
+            <!-- 待付款 -->
             <div class="ordertypeDF" v-if="order.status === 0">
-              <button class="btnpink" @click="$router.push({name: 'tradeindelivery'})">填写快递</button>
-            </div>
-            <!-- 待付款 1-->
-            <div class="ordertypeDF" v-if="order.status === 1">
               <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
-              <button class="btngrey" @click="$router.push({name: 'tradeinaddnew'})">选择新品</button>
+              <button class="btngrey" @click="goTradeinNew(order)">选择新品</button>
             </div>
-            <!-- 新品待发货 2-->
-            <div class="ordertypeWC" v-if="order.status === 2">
+            <!-- 新品待发货 -->
+            <div class="ordertypeWC" v-if="order.status === 12">
               <button class="btngrey" @click="serviceVisible = true">联系客服</button>
             </div>
-            <!-- 新品待收货 3-->
-            <div class="ordertypeDF" v-if="order.status === 3">
+            <!-- 新品待收货 -->
+            <div class="ordertypeDF" v-if="order.status === 14">
               <button class="btngrey btnleft" @click="gotLogistics(order.order_id)">查看物流</button>
               <button class="btnpink" @click="isConform = true;orderId = order.order_id; ">确认收货</button>
             </div>
-            <!-- 已完成 4-->
-            <div class="ordertypeDF" v-if="order.status === 4">
+            <!-- 已完成 -->
+            <div class="ordertypeDF" v-if="order.status === 3">
               <button class="btngrey" @click="serviceVisible = true">联系客服</button>
             </div>
-            <!-- 旧品待发货 5-->
-            <div class="ordertypeDF" v-if="order.status === 5">
+            <!-- 旧品待发货 -->
+            <div class="ordertypeDF" v-if="order.status === 13">
               <button class="btngrey" @click="serviceVisible = true">联系客服</button>
             </div>
-            <!-- 旧品待收货 6-->
-            <div class="ordertypeDF" v-if="order.status === 6">
+            <!-- 旧品待收货 -->
+            <div class="ordertypeDF" v-if="order.status === 15">
               <button class="btngrey" @click="serviceVisible = true">联系客服</button>
             </div>
-            <!-- 已取消 7-->
-            <div class="ordertypeDF" v-if="order.status === 7">
-              <button class="btngrey" @click="serviceVisible = true">联系客服</button>
-            </div>
-            <!-- 已关闭 8-->
+            <!-- 已取消 -->
             <div class="ordertypeDF" v-if="order.status === 8">
+              <button class="btngrey" @click="serviceVisible = true">联系客服</button>
+            </div>
+            <!-- 已关闭 -->
+            <div class="ordertypeDF" v-if="order.status === 7">
               <button class="btngrey" @click="serviceVisible = true">联系客服</button>
             </div>
           </div>
@@ -96,23 +96,23 @@
       this.getOrders();
     },
     methods: {
+      ...mapMutations(['setCommon', 'setTradeinNew']),
       ...mapActions(['ajax']),
-      ...mapMutations(['setCommon']),
       getOrders() {
         this.ajax({
           name: 'getOrders'
         }).then(res => {
-          this.orders = res;
+          this.orders = res.filter(item => item.kind === 5);
           this.orders.forEach(item => {
-            item.status = 8;
+            // item.status = 0;
           });
           if(this.getOrderType != -1) {
             this.orders = this.orders.filter(order => {
               switch(this.getOrderType) {
-                case 0: return order.status === 0; break;
-                case 1: return order.status === 1; break;
-                case 2: return [2, 3, 5, 6].includes(order.status); break;
-                case 3: return [4, 7].includes(order.status); break;
+                case 0: return order.status === 11; break;
+                case 1: return order.status === 0; break;
+                case 2: return [12, 13, 15, 14].includes(order.status); break;
+                case 3: return [3, 8].includes(order.status); break;
                 default: return true;
               };
             });
@@ -124,7 +124,7 @@
         this.$router.push({ name: 'tradeinorderdetail' });
       },
       typename(type) {
-        let _typenames = ['待验货', '待付款', '新品待发货', '新品待收货', '已完成', '旧品待发货', '旧品待收货', '已取消', '已关闭'];
+        let _typenames = ['待付款', '待发货', '待收货', '已完成', '退款中', '', '已退款', '已关闭', '已取消', '定制中', '待取货', '待验货', '新品待发货', '旧品待发货', '新品待收货', '旧品待收货'];
         return _typenames[type];
       },
       gotLogistics(orderId) {
@@ -133,17 +133,39 @@
       },
       handleSConfirm() {
         this.ajax({
-          name: 'changeOrder',
+          name: 'tradeinUpdateOrder',
           data: {
-            order_id: this.orderId,
             action: 'affirm'
-          }
+          },
+          id: this.orderId
         }).then(res => {
           window.location.reload();
         });
       },
       goCustomService() {
         window.wx.closeWindow();
+      },
+      goTradeinNew(order) {
+        const tradeinNew = order.goods.map(item => {
+          let skuLabel = '';
+          if(item.good_kind === '0') {
+            skuLabel = `${item.zhuzuanfenshu};${item.zuanshijingdu};${item.color};${item.guige}`;
+          } else if(item.good_kind === '1') {
+            skuLabel = `${item.zhushimingcheng};${item.zhushipingji};${item.color};${item.guige}`;
+          } else {
+            skuLabel = `${item.s_jinleixing};${item.s_jinzhong};${item.guige}`;
+          }
+          return {
+            skuId: item.sku_id,
+            goods_title: item.goods_name,
+            img: item.goods_img,
+            price: item.goods_price,
+            skuLabel
+          }
+        });
+
+        this.setTradeinNew(tradeinNew);
+        this.$router.push({ name: 'tradeinaddnew' });
       }
     }
   };

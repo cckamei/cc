@@ -73,6 +73,9 @@
             });
           });
         });
+        // setTimeout(() => {
+        //   this.$router.replace({ name: 'paysuccess', params: { isTradein: this.$route.params.isTradein } });
+        // }, 500);
       }
     }
   };

@@ -38,8 +38,8 @@
         </div>
       </div>
 
-      <!-- 旧品地址 TODO-->
-      <div class="logistics">
+      <!-- 旧品地址 -->
+      <div class="logistics" v-if="order.status === 11">
         <div class="logisticsInfo">
           <div class="logitem">
             <div>
@@ -50,10 +50,10 @@
         </div>
         <div class="oldReceiverInfo">
           <p>
-            <span>收货人：{{order.address.name}}</span>
-            <span class="phone">{{order.address.phone}}</span>
+            <span>收货人：{{order.yh_address_info.name}}</span>
+            <span class="phone">{{order.yh_address_info.tel}}</span>
           </p>
-          <p>收货地址：{{order.address.province+order.address.city+order.address.district+order.address.street}}</p>
+          <p>收货地址：{{order.yh_address_info.address}}</p>
         </div>
       </div>
 
@@ -66,7 +66,7 @@
           </div>
           <div class="listright">{{typename(order.status)}}</div>
         </div>
-        <goods-old :showTitle="true" :goods="order.old_goods"></goods-old>
+        <goods-old :showTitle="true" :goods="order.old_goods" @click="goViewOld"></goods-old>
         <goods-new :goods="order.goods" v-if="[0, 12, 14, 3].includes(order.status) && order.goods.length"></goods-new>
         <div class="itemprice" v-if="[0, 12, 14, 3].includes(order.status) && order.goods.length">
           <ul>
@@ -95,7 +95,7 @@
             <button class="btngrey btnleft flexleft" @click="cancelOrder">取消换新</button>
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
             <button class="btngrey btnleft" @click="goTradeinNew">选择新品</button>
-            <button :class="order.ok ? 'btnpink' : 'disabled'" @click="order.ok && parOrder(order)">立即付款</button>
+            <button :class="order.goods.length ? 'btnpink' : 'disabled'" @click="order.goods.length && parOrder(order)">立即付款</button>
           </div>
           <!-- 新品待发货 -->
           <div class="ordertypeDF" v-if="order.status === 12">
@@ -136,7 +136,7 @@
           <li><span>下单时间：</span> {{formatDate(order.created_at,'yyyy-MM-dd hh:mm:ss')}}</li>
           <li v-if="order.status === 8"><span>取消时间：</span> {{formatDate(order.finish_at,'yyyy-MM-dd hh:mm:ss')}}</li>
         </ul>
-        <ul class="orderInfoItem" v-if="order.status !== 8">
+        <ul class="orderInfoItem">
           <li><span>配送方式：</span> 快递运输</li>
         </ul>
         <!-- 支付方式 -->
@@ -180,6 +180,7 @@
         isConform: false,
         order: {
           address: {},
+          yh_address_info: {},
           goods: [],
           logistics: {
             info: {
@@ -196,7 +197,7 @@
       ...mapGetters(['getOrderId', 'getTradeinNew'])
     },
     methods: {
-      ...mapMutations(['setCommon', 'setPayOrder', 'setOrderType', 'setAppointment', 'setTradeinNew']),
+      ...mapMutations(['setCommon', 'setPayOrder', 'setOrderType', 'setAppointment', 'setTradeinNew', 'setTradeinViewOld']),
       ...mapActions(['ajax']),
       getOrderDetail() {
         this.ajax({
@@ -205,8 +206,7 @@
         }).then(res => {
           this.order = res;
 
-          this.order.ok = true;
-          this.order.status = 0;
+          // this.order.status = 8;
           //0'待验货', 1'待付款', 2'新品待发货', 3'新品待收货', 4'已完成', 5'旧品待发货', 6'旧品待收货', 7'已取消', 8'已关闭'
           //0: 待付款, 1:'待发货', 2:'待收货', 3:'已完成', 4:'退款中', '', 6:'已退款', 7:'已关闭', 8:'已取消' 9:'定制中' 10:'待取货', 11:'待验货', 12:'新品待发货', 13:'旧品待发货', 14:'新品待收货', 15:'旧品待收货'
 
@@ -235,8 +235,7 @@
           },
           id: this.getOrderId
         }).then(res => {
-          this.setOrderType(3);
-          this.$router.push({ name: 'orderlist' });
+          this.getOrderDetail();
         });
       },
       // 取消订单
@@ -248,7 +247,7 @@
           },
           id: this.getOrderId
         }).then(res => {
-          window.location.reload();
+          this.getOrderDetail();
         });
       },
       goCustomService() {
@@ -257,7 +256,7 @@
       // 立即付款
       parOrder(order) {
         this.setPayOrder(order);
-        this.$router.push({ name: 'pay' });
+        this.$router.replace({ name: 'pay', params: { isTradein: true } });
       },
       goTradeinNew() {
         const tradeinNew = this.order.goods.map(item => {
@@ -280,6 +279,10 @@
 
         this.setTradeinNew(tradeinNew);
         this.$router.push({ name: 'tradeinaddnew' });
+      },
+      goViewOld(val) {
+        this.setTradeinViewOld(val);
+        this.$router.push({ name: 'tradeinviewold' });
       }
     }
   };

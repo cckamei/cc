@@ -768,6 +768,10 @@
           this.autoOpenSKU = true;
           return false;
         }
+        if(this.getTradeinNew.some(g => g.skuId === (this.sku.skuId || this.sku.defaultSKU))) {
+          this.toast('已经选过该商品');
+          return false;
+        }
 
         this.getGoodsStock(this.sku.skuId || this.sku.defaultSKU, stock => {
           const tradeinNew = this.getTradeinNew;

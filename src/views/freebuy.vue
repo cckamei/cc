@@ -6,7 +6,10 @@
     <div class="instalments" @click="goPage">
       <img :src="getUserInfo.fenqi" alt="" srcset="">
     </div>
-    <button class="btn-txt" @click="goTradein">以旧换新</button>
+    <!-- getUserInfo.yjhx TODO -->
+    <div class="instalments" @click="goTradein">
+      <img src="http://img.cc-jewel.com/wyg_huanxin.png" alt="" srcset="">
+    </div>
     <v-footer></v-footer>
   </div>
 </template>

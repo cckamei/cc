@@ -270,6 +270,7 @@
         this.$router.push({ name: 'addappointment' });
       },
       goGoods() {
+        this.setCommon({ isTradein: false });
         this.$router.push({ name: 'goodslist' });
       },
       typename(type) {
@@ -342,7 +343,7 @@
       // 立即付款
       parOrder(order) {
         this.setPayOrder(order);
-        this.$router.push({ name: 'pay' });
+        this.$router.replace({ name: 'pay' });
       }
     }
   };

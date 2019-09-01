@@ -16,7 +16,7 @@
     methods: {
       ...mapMutations(['setCommon']),
       goGoodsList(goodsType = '') {
-        this.setCommon({ goodsType });
+        this.setCommon({ goodsType, isTradein: false });
         this.$router.push({ name: 'goodslist' });
       },
       goMypage() {

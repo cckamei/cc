@@ -47,6 +47,7 @@ export default new Vuex.Store({
     shopList: getSen('shopList') || [],
     tradeinOld: getSen('tradeinOld') || [],
     tradeinNew: getSen('tradeinNew') || [],
+    tradeinViewOld: getSen('tradeinViewOld') || [],
     tradeinOptions: getSen('tradeinOptions') || {}
   },
   getters: {
@@ -155,6 +156,10 @@ export default new Vuex.Store({
     setTradeinOptions(state, data) {
       state.tradeinOptions = data;
       setSen('tradeinOptions', state.tradeinOptions);
+    },
+    setTradeinViewOld(state, data) {
+      state.tradeinViewOld = data;
+      setSen('tradeinViewOld', state.tradeinViewOld);
     }
   },
   actions: {

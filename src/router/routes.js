@@ -313,6 +313,11 @@ const router = [{
     component: () => import('@/views/tradein/addold')
   },
   {
+    name: 'tradeinviewold',
+    path: '/tradein/orderdetail/viewold',
+    component: () => import('@/views/tradein/viewold')
+  },
+  {
     name: 'tradeinagreement',
     path: '/tradein/confirmold/addold/agreement',
     component: () => import('@/views/tradein/agreement')

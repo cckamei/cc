@@ -11,7 +11,7 @@
             <v-form-input v-model="value1" :arrow="true" label="旧品信息" placeholder="添加旧品" @input-click="$router.push({name: 'tradeinaddold'})"></v-form-input>
           </div>
           <ul class="goods">
-            <li v-for="(item, index) in tradeinList" :key="index">
+            <li v-for="(item, index) in tradeinList" :key="index" @click="$router.push({name: 'tradeinaddold', params: {index}})">
               <div class="item-wrapper flex">
                 <div class="img"><img :src="item.goodsPicList[0]" alt=""></div>
                 <div class="detail flex-auto flex">

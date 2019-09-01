@@ -117,10 +117,9 @@
               order_id: this.getOrderId
             }
           }).then(res => {
-            // TODO
-            this.newPrice = 1000;
-            this.diffPrice = 2000;
-            this.isGoodsEnough = true;
+            this.newPrice = res.new_price_total;
+            this.diffPrice = res.need_price;
+            this.isGoodsEnough = res.ok;
           });
         } else {
           this.newPrice = 0;
