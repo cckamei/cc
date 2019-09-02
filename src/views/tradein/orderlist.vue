@@ -12,7 +12,7 @@
             </div>
             <div class="listright">{{typename(order.status)}}</div>
           </div>
-          <goods-old :goods="order.old_goods"></goods-old>
+          <goods-old :goods="order.old_goods" @click="goDetail(order.order_id)"></goods-old>
           <div class="item-price">
             共{{order.old_goods.length}}件旧品 <template v-if="[12, 3, 14].includes(order.status)">实付款： <span>￥{{order.rest_money}}</span> <span>（含运费￥{{order.logistics_money}}）</span></template>
           </div>
