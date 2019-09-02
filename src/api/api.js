@@ -81,7 +81,10 @@ let api = {
   tradeinAddNew: { url: 'api/v1/add_new_goods', method: 'post', isJson: true }, //以旧换新添加新品
   tradeinUpdateOrder: { url: 'api/v1/update_yjhx_order/:id', method: 'post' }, //以旧换新旧品发货订单？？？/以旧换新取消订单/以旧换新确认收货
   tradeinCalOld: { url: 'api/v1/auto_cal_price', method: 'post' }, //估算旧品价格
-  tradeinCalNew: { url: 'api/v1/check_new_goods_price', method: 'post', isJson: true } //估算新品价格
+  tradeinCalNew: { url: 'api/v1/check_new_goods_price', method: 'post', isJson: true }, //估算新品价格
+  omGetPrice: { url: 'api/v1/split_pay', method: 'get' }, //分开付款 获取待付款金额信息
+  omPay1: { url: 'api/v1/split_pay_prepare', method: 'post' }, //分开付款 支付流程第一步
+  omPay2: { url: 'api/v1/split_pay_submit', method: 'post' } //分开付款 向我方服务发起支付
 };
 
 for (var k in api) {

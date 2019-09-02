@@ -1,6 +1,6 @@
 <template>
   <div class="orderdetailpage pt">
-    <v-header>订单详情</v-header>
+    <v-header to="tradeinorderlist">订单详情</v-header>
     <!-- 订单地址、收货人、物流信息 -->
     <div class="content">
       <div class="logistics" @click="gotLogistics()">

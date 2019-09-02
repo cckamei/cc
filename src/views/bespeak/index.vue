@@ -1,6 +1,6 @@
 <template>
   <div class="bespeak">
-    <v-header :mypage="true">我的预约
+    <v-header>我的预约
       <div slot="headright">
         <span class="add-btn" @click="add">新增</span>
       </div>

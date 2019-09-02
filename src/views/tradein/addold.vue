@@ -86,7 +86,8 @@
       ...mapState(['stoneMade']),
       ...mapGetters(['getTradeinOld']),
       isActive() {
-        return this.brandIndex !== -1 && this.goldIndex !== -1 && this.stoneIndex !== -1 && this.wearIndex !== -1 && this.goodsPicList.length >= 3 && this.certifyPicList.length >= 3 && this.otherPicList.length >= 3;
+        //return this.brandIndex !== -1 && this.goldIndex !== -1 && this.stoneIndex !== -1 && this.wearIndex !== -1 && this.goodsPicList.length >= 3 && this.certifyPicList.length >= 3 && this.otherPicList.length >= 3;
+        return true;
       }
     },
     created() {

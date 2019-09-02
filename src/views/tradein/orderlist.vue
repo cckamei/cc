@@ -1,6 +1,6 @@
 <template>
   <div class="order pt">
-    <v-header>订单列表</v-header>
+    <v-header to="mypage">订单列表</v-header>
     <tabs :type="getOrderType" @search-orders="getOrders"></tabs>
     <div class="content">
       <div class="order-list">

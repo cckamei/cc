@@ -16,26 +16,15 @@
       back: {
         type: Boolean,
         default: true
-
       },
-      gocancel: {
-        type: Boolean
-      },
-      godetail: {
-        type: Boolean
-      },
-      mypage: {
-        type: Boolean
+      to: {
+        type: String
       }
     },
     methods: {
       backHandler() {
-        if(this.gocancel) {
-          this.$router.push({ name: 'cancelList' });
-        } else if(this.godetail) {
-          this.$router.push({ name: 'orderdetail' });
-        } else if(this.mypage) {
-          this.$router.push({ name: 'mypage' });
+        if(this.to) {
+          this.$router.push({ name: this.to });
         } else {
           this.$router.go(-1);
         }

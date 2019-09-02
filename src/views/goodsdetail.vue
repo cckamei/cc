@@ -243,8 +243,8 @@
       </div>
       <div class="gap" v-if="!getCommon.isTradein"></div>
       <div class="package-wrapper" v-if="!getCommon.isTradein">
-        <v-split-title>搭配套餐</v-split-title>
-        <div class="package flex" @click="$router.push({name: 'package'});">
+        <v-split-title v-if="res.taocan_biaoti">搭配套餐</v-split-title>
+        <div v-if="res.taocan_biaoti" class="package flex" @click="$router.push({name: 'package'});">
           <div class="img">
             <img :src="res.taocan_fengmian" alt="">
           </div>

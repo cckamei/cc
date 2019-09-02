@@ -26,7 +26,15 @@
     methods: {
       ...mapActions(['ajax']),
       handleConfirm() {
-        this.$router.push({ name: 'offlinemoneypay' });
+        this.ajax({
+          name: 'omGetPrice',
+          data: {
+            bzd_id: this.guaranteeNumber
+          }
+        }).then(res => {
+          console.log(res);
+          // this.$router.push({ name: 'offlinemoneypay' });
+        });
       }
     }
   };
