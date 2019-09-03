@@ -10,7 +10,7 @@
 
       <div class="logisticsTrackTop" v-if="order.logistics.info.data.length">
         <ul>
-          <li><span>运单号：</span>{{order.logistics.id}}</li>
+          <li><span>运单号：</span>{{order.logistics.logistic_num}}</li>
           <li><span>承运公司：</span>{{order.logistics.name}}快递</li>
         </ul>
       </div>

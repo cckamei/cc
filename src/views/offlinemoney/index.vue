@@ -32,8 +32,11 @@
             bzd_id: this.guaranteeNumber
           }
         }).then(res => {
-          console.log(res);
-          // this.$router.push({ name: 'offlinemoneypay' });
+          if(res.msg) {
+            this.toast(res.msg);
+          } else {
+            this.$router.push({ name: 'offlinemoneypay', params: { ...res } });
+          }
         });
       }
     }

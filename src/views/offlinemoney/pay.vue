@@ -3,21 +3,21 @@
     <v-header>线下补款</v-header>
     <div class="content">
       <div class="row">
-        <v-form-input v-model="name" label="姓名" placeholder="请填写姓名"></v-form-input>
+        <v-form-input :value="reqData.user_name" label="姓名" placeholder="请填写姓名" :readonly="true"></v-form-input>
       </div>
       <div class="row">
-        <v-form-input v-model="vipCard" label="VIP卡号" placeholder="请填写VIP卡号"></v-form-input>
+        <v-form-input :value="reqData.vip_code" label="VIP卡号" placeholder="请填写VIP卡号" :readonly="true"></v-form-input>
       </div>
       <div class="row">
-        <v-form-input v-model="phone" label="手机号" placeholder="请填写手机号"></v-form-input>
+        <v-form-input :value="reqData.phone" label="手机号" placeholder="请填写手机号" :readonly="true"></v-form-input>
       </div>
       <div class="tips">请核对您的账户信息，确保无误再付款</div>
-      <div class="paid">已支付额：<span class="￥">￥</span><span class="price">{{paid}}</span></div>
-      <div class="topaid">待支付额：<span class="￥">￥</span><span class="price">{{topaid}}</span></div>
+      <div class="paid">已支付额：<span class="￥">￥</span><span class="price">{{reqData.has_payed}}</span></div>
+      <div class="topaid">待支付额：<span class="￥">￥</span><span class="price">{{reqData.need_pay}}</span></div>
     </div>
     <div class="footer">
       <div class="btns">
-        <button class="btn" :class="{active: isActive}" @click="isActive && handleConfirm()">支付</button>
+        <button class="btn active" @click="handleConfirm()">支付</button>
       </div>
     </div>
   </div>
@@ -28,22 +28,36 @@
   export default {
     data() {
       return {
-        name: '',
-        vipCard: '',
-        phone: '',
-        paid: 2000,
-        topaid: 3000
+        reqData: {}
       };
     },
-    computed: {
-      isActive() {
-        return this.name.length && this.vipCard.length && this.phone.length;
-      }
+    created() {
+      this.reqData = this.$route.params;
+      this.reqData.order_id = '5d6e4c84cba3491ada9b4963';
     },
     methods: {
       ...mapActions(['ajax']),
       handleConfirm() {
-        this.$router.replace({ name: 'offlinemoneypaysuccess', params: { price: this.topaid } });
+        this.ajax({
+          name: 'omPay1',
+          data: {
+            order_id: this.reqData.order_id
+          }
+        }).then(res => {
+          this.ajax({
+            name: 'omPay2',
+            data: {
+              pay_id: res.pay_id,
+              order_id: this.reqData.order_id
+            }
+          }).then(res => {
+            weChatPay(res, () => {
+              setTimeout(() => {
+                this.$router.replace({ name: 'offlinemoneypaysuccess', params: { price: this.reqData.need_pay } });
+              }, 500);
+            });
+          });
+        });
       }
     }
   };

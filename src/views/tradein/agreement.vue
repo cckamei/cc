@@ -112,12 +112,12 @@
       };
     },
     methods: {
-      ...mapMutations(['setCommon']),
+      ...mapMutations(['setCommon', 'setTradeinOld']),
       ...mapActions(['ajax']),
       handleConfirm() {
         this.ajax({ name: 'tradeinAddOld', data: this.$route.params.reqData }).then(res => {
           this.setCommon({ orderId: res.order_id });
-          // this.$router.push({ name: 'tradeinagreement' });
+          this.setTradeinOld([]);
           this.$router.replace({ name: 'tradeinorderdetail' });
         });
       }

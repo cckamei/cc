@@ -251,7 +251,7 @@
           // this.order.status = 1; //0: 待付款, 1:'待发货', 2:'待收货', 3:'已完成', 4:'退款中', '', 6:'已退款', '', 8:'已取消' 9:'定制中' 10:'待取货'
           // this.order.pslx = '0';
 
-          if(!this.order.logistics.info || !this.order.logistics.info.result) {
+          if(!this.order.logistics.info || !this.order.logistics.info.data) {
             this.order.logistics = {
               info: {
                 data: []

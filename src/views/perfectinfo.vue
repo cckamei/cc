@@ -160,7 +160,6 @@
     background-color: #fff;
     li {
       border-bottom: 1px solid #f0f0f0; /*no*/
-      padding: 0 20px;
       height: 96px;
       &:last-child {
         border-bottom: 0;

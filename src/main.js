@@ -1,6 +1,6 @@
 import 'ant-design-vue/dist/antd.css';
 import Vue from 'vue';
-import { Picker, Popup, Spinner, Switch, Swipe, Toast } from 'mint-ui';
+import MintUI from 'mint-ui';
 import { Slider, Upload, Modal, Icon } from 'ant-design-vue';
 import FastClick from 'fastclick';
 import VueClipboard from 'vue-clipboard2';
@@ -18,12 +18,7 @@ if (window.htp.mock) {
 
 Vue.use(VueClipboard);
 
-//mint-ui
-Vue.use(Picker);
-Vue.use(Popup);
-Vue.use(Spinner);
-Vue.use(Switch);
-Vue.use(Swipe);
+Vue.use(MintUI);
 
 //ant-design-vue
 Vue.use(Slider);
@@ -31,7 +26,7 @@ Vue.use(Upload);
 Vue.use(Modal);
 Vue.use(Icon);
 
-Vue.prototype.toast = Toast;
+Vue.prototype.toast = MintUI.Toast;
 Vue.prototype.spread = spread;
 
 if ('addEventListener' in document) {
