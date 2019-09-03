@@ -88,12 +88,8 @@ let api = {
 };
 
 for (var k in api) {
-  let urlHost = window.htp.apihost;
+  let urlHost = process.env.VUE_APP_API_HOST;
   let url = api[k].url;
-
-  if (process.env.NODE_ENV === 'development') {
-    urlHost = '/proxy/';
-  }
   api[k].url = urlHost + url;
 }
 

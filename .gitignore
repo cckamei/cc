@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist*
+*-prod*
+*-test*
 
 # local env files
 .env.local

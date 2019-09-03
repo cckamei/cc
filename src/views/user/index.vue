@@ -12,25 +12,25 @@
           <span>查看全部订单</span>
           <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
         </div>
-      </div>
-      <div class="panel-header" @click="$router.push({ name: 'wechatgroup'})">
-        <span>会员微群</span>
-        <div class="more">
-          <span>查看微群信息</span>
-          <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
         </div>
-      </div>
-      <div class="panel-header" @click="$router.push({ name: 'offlinemoney'})">
-        <span>线下补款</span>
-        <div class="more">
-          <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
+        <div class="panel-header" @click="$router.push({ name: 'wechatgroup'})">
+          <span>会员微群</span>
+          <div class="more">
+            <span>查看微群信息</span>
+            <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
         </div>
-      </div>
-    </div>
-    <div class="footer">
-      <v-footer></v-footer>
-    </div>
-  </div>
+          </div>
+          <div class="panel-header" @click="$router.push({ name: 'offlinemoney'})">
+            <span>线下补款</span>
+            <div class="more">
+              <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
+        </div>
+            </div>
+          </div>
+          <div class="footer">
+            <v-footer></v-footer>
+          </div>
+        </div>
 </template>
 
 <script>
@@ -38,7 +38,7 @@
   import userHeader from './components/header';
   import userTabs from './components/usertabs';
   import orderMenu from './components/ordermenu';
-  import commission from './components/commission';
+  // import commission from './components/commission';
   import mixin from './components/mixin';
   import card from './components/card';
 
@@ -47,7 +47,7 @@
       userHeader,
       userTabs,
       orderMenu,
-      commission,
+      // commission,
       card
     },
     computed: {

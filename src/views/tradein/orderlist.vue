@@ -109,12 +109,12 @@
           if(this.getOrderType != -1) {
             this.orders = this.orders.filter(order => {
               switch(this.getOrderType) {
-                case 0: return order.status === 11; break;
-                case 1: return order.status === 0; break;
-                case 2: return [12, 13, 15, 14].includes(order.status); break;
-                case 3: return [3, 8].includes(order.status); break;
+                case 0: return order.status === 11;
+                case 1: return order.status === 0;
+                case 2: return [12, 13, 15, 14].includes(order.status);
+                case 3: return [3, 8].includes(order.status);
                 default: return true;
-              };
+              }
             });
           }
         });
@@ -161,7 +161,7 @@
             img: item.goods_img,
             price: item.goods_price,
             skuLabel
-          }
+          };
         });
 
         this.setTradeinNew(tradeinNew);

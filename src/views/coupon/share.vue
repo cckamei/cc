@@ -27,7 +27,7 @@
           data: this.shareCard
         }).then(res => {
           // this.src = '.' + res.share_img_url;
-          this.src = window.htp.apihost + res.share_img_url;
+          this.src = process.env.VUE_APP_API_HOST + res.share_img_url;
         });
       }
     }

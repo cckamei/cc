@@ -14,15 +14,15 @@
             <li v-for="(item, index) in tradeinList" :key="index" @click="$router.push({name: 'tradeinaddold', params: {index}})">
               <div class="item-wrapper flex">
                 <div class="img"><img :src="item.goodsPicList[0]" alt=""></div>
-                <div class="detail flex-auto flex">
-                  <div class="detail-row flex">
-                    <div class="col">品牌：{{getTradeinOptions.brands[item.brandIndex].title}}</div>
-                  </div>
-                  <div class="detail-row flex">
-                    <div class="col">预估价：{{item.price === 'UNKNOW' ? '该类型商品仅支持人工估值' :  '￥' + item.price}}</div>
+                  <div class="detail flex-auto flex">
+                    <div class="detail-row flex">
+                      <div class="col">品牌：{{getTradeinOptions.brands[item.brandIndex].title}}</div>
+                    </div>
+                    <div class="detail-row flex">
+                      <div class="col">预估价：{{item.price === 'UNKNOW' ? '该类型商品仅支持人工估值' :  '￥' + item.price}}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
             </li>
           </ul>
         </section>
@@ -132,7 +132,7 @@
               return {
                 ...item,
                 price: res.goods[index].auto_cal_price
-              }
+              };
             });
             this.goodsMoney = res.auto_cal;
           });
@@ -144,7 +144,7 @@
           address_id: this.getAddress.id,
           logitics_id: this.delivery[this.deliveryIndex].id,
           yaoqiu: this.yaoqiu
-        }
+        };
 
         if(!reqData.address_id) {
           this.toast('亲，您还未设置收货地址！');
@@ -164,7 +164,7 @@
             goods_imgs: item.goodsPicList,
             cert_imgs: item.certifyPicList,
             other_imgs_info: item.otherPicList
-          }
+          };
         });
         return JSON.stringify(oldGoods);
       }

@@ -4,24 +4,24 @@
       <div class="logo">
         <img src="@/assets/home/logo.png" alt="">
       </div>
-      <ul class="form">
-        <li>
-          <v-input-text placeholder="请输入手机号码" type="tel" v-model="phone" clear maxlength="16" class="input"></v-input-text>
-        </li>
-        <li>
-          <v-input-pwd placeholder="请输入账户密码" v-model="password" eye maxlength="16" class="input"></v-input-pwd>
-        </li>
-      </ul>
-      <div class="btns">
-        <button class="btn login" :class="{active: isActive}" @click="isActive && login()">登录</button>
-        <button class="btn wechat" :class="{active: isActive}" @click="wxLogin()">使用微信账户登录</button>
-      </div>
-      <div class="links clearfix">
-        <span v-if="0">忘记密码</span>
-        <router-link tag="span" :to="{name: 'register'}" class="right">注册账户</router-link>
+        <ul class="form">
+          <li>
+            <v-input-text placeholder="请输入手机号码" type="tel" v-model="phone" clear maxlength="16" class="input"></v-input-text>
+          </li>
+          <li>
+            <v-input-pwd placeholder="请输入账户密码" v-model="password" eye maxlength="16" class="input"></v-input-pwd>
+          </li>
+        </ul>
+        <div class="btns">
+          <button class="btn login" :class="{active: isActive}" @click="isActive && login()">登录</button>
+          <button class="btn wechat" :class="{active: isActive}" @click="wxLogin()">使用微信账户登录</button>
+        </div>
+        <div class="links clearfix">
+          <span v-if="0">忘记密码</span>
+          <router-link tag="span" :to="{name: 'register'}" class="right">注册账户</router-link>
+        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -155,7 +155,7 @@
           let sco = window.localStorage.getItem('accpet') ? 'snsapi_base' : 'snsapi_userinfo';
 
           //1.没有userId 没有code时进行授权
-          if(window.htp.iswxproxy) {
+          if(process.env.VUE_APP_WXPROXY === '1') {
             window.location.href = window.htp.wxproxy + '?appid=' + window.htp.appid + '&redirect_uri=' + encodeURIComponent(window.location.href) + '&response_type=code&scope=' + sco + '&state=STATE#wechat_redirect';
           } else {
             window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + window.htp.appid + '&redirect_uri=' + encodeURIComponent(window.location.href) + '&response_type=code&scope=' + sco + '&state=STATE#wechat_redirect';

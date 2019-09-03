@@ -1,5 +1,6 @@
 module.exports = {
   productionSourceMap: false,
+  outputDir: process.env.DIST,
   css: {
     loaderOptions: {
       css: {},
@@ -24,10 +25,7 @@ module.exports = {
     proxy: {
       '/api': {
         target: 'http://47.105.53.172',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/proxy': ''
-        }
+        changeOrigin: true
       }
     }
   }

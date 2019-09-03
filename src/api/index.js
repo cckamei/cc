@@ -1,6 +1,6 @@
 import axios from 'axios';
 import api from './api';
-import MintUI from 'mint-ui';
+import { Indicator, Toast } from 'mint-ui';
 import store from '../store';
 import qs from 'qs';
 import router from '../router';
@@ -18,7 +18,7 @@ axios.interceptors.request.use(
   },
   error => {
     loading = false;
-    MintUI.Indicator.close();
+    Indicator.close();
     return Promise.reject(error);
   }
 );
@@ -27,12 +27,12 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => {
     loading = false;
-    MintUI.Indicator.close();
+    Indicator.close();
     return response;
   },
   error => {
     loading = false;
-    MintUI.Indicator.close();
+    Indicator.close();
     let message = '';
     if (error.response) {
       switch (error.response.status) {
@@ -91,19 +91,19 @@ function checkStatus(resolve, reject, response, config) {
       resolve(response.data.data);
     } else {
       if (!config.error) {
-        MintUI.Toast(response.data.msg);
+        Toast(response.data.msg);
       }
       reject(response.data);
     }
   } else if (response.status == 401) {
-    MintUI.Toast('认证失败,请重新登陆');
+    Toast('认证失败,请重新登陆');
     setTimeout(() => {
       router.push({
         name: 'login'
       });
     });
   } else {
-    MintUI.Toast(response.message || '请求失败');
+    Toast(response.message || '请求失败');
     reject(response.message);
   }
 }
@@ -113,7 +113,7 @@ let xhr = config => {
   clearTimeout(timer);
   timer = setTimeout(() => {
     if (loading) {
-      MintUI.Indicator.open({
+      Indicator.open({
         text: '加载中',
         spinnerType: 'triple-bounce'
       });
@@ -148,9 +148,9 @@ let xhr = config => {
       case 'get':
         return new Promise((resolve, reject) => {
           axios[method](url, {
-              params: data,
-              headers
-            })
+            params: data,
+            headers
+          })
             .then(res => {
               checkStatus(resolve, reject, res, config);
             })
@@ -161,9 +161,9 @@ let xhr = config => {
       case 'delete':
         return new Promise((resolve, reject) => {
           axios[method](url, {
-              headers,
-              data
-            })
+            headers,
+            data
+          })
             .then(res => {
               checkStatus(resolve, reject, res, config);
             })
@@ -175,8 +175,8 @@ let xhr = config => {
       case 'put':
         return new Promise((resolve, reject) => {
           axios[method](url, data, {
-              headers
-            })
+            headers
+          })
             .then(res => {
               checkStatus(resolve, reject, res, config);
             })

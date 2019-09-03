@@ -5,9 +5,9 @@ var Mock = require('mockjs');
 
 function json(data) {
   return {
-    "data": data,
-    "status": 0,
-    "msg": ""
+    data: data,
+    status: 0,
+    msg: ''
   };
 }
 
@@ -15,9 +15,6 @@ const list = [].concat(card, cusstone, goods);
 
 list.forEach(({ path, type, active, method = 'get', data }) => {
   if (active) {
-    if (typeof path === 'string') {
-      path = '/proxy' + path;
-    }
     if (type !== undefined) {
       Mock.mock(path, method, ({ body }) => {
         if (typeof body === 'string') {
