@@ -66,34 +66,20 @@
       };
     },
     created() {
-      this.fetchLogitics();
       this.reqTradeinCalNew();
     },
     computed: {
       ...mapState(['stoneMade']),
       ...mapGetters(['getAddress', 'getTradeinNew', 'getOrderId']),
-      totalMoney() {
-        let deliveryMoney = 0;
-        if(this.delivery.length) {
-          deliveryMoney = this.delivery[this.deliveryIndex].price;
-        }
-
-        return this.goodsMoney + deliveryMoney;
-      }
     },
     methods: {
       ...mapMutations(['clearPayOrder', 'setPayOrder', 'setCommon', 'setTradeinNew']),
       ...mapActions(['ajax']),
-      fetchLogitics() {
-        this.ajax({ name: 'getLogitics' }).then(res => {
-          this.delivery = res;
-        });
-      },
       handleOpenDelete(index) {
         this.deleteConfirmVisible = true;
         this.deleteIndex = index;
       },
-      handleConfirm() {
+      reqTradeinCalNew() {
         this.ajax({
           name: 'tradeinAddNew',
           data: {
@@ -101,31 +87,19 @@
             order_id: this.getOrderId
           }
         }).then(res => {
-          this.$router.go(-1);
+          this.newPrice = res.auto_cal_price_total;
+          this.diffPrice = res.all_money;
+          this.isGoodsEnough = res.pay_flag;
+        }).catch(e => {
+          this.isGoodsEnough = false;
         });
       },
       handleAddNew() {
         this.setCommon({ isTradein: true });
         this.$router.push({ name: 'goodslist' });
       },
-      reqTradeinCalNew() {
-        if(this.getTradeinNew.length) {
-          this.ajax({
-            name: 'tradeinCalNew',
-            data: {
-              skus: this.getTradeinNew.map(item => item.skuId),
-              order_id: this.getOrderId
-            }
-          }).then(res => {
-            this.newPrice = res.new_price_total;
-            this.diffPrice = res.need_price;
-            this.isGoodsEnough = res.ok;
-          });
-        } else {
-          this.newPrice = 0;
-          this.diffPrice = 0;
-          this.isGoodsEnough = false;
-        }
+      handleConfirm() {
+        this.$router.go(-1);
       },
       handleDelete() {
         const tradeinNew = this.getTradeinNew;
