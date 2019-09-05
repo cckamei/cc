@@ -87,8 +87,8 @@
             order_id: this.getOrderId
           }
         }).then(res => {
-          this.newPrice = res.auto_cal_price_total;
-          this.diffPrice = res.all_money;
+          this.newPrice = res.all_money;
+          this.diffPrice = res.rest_money;
           this.isGoodsEnough = res.pay_flag;
         }).catch(e => {
           this.isGoodsEnough = false;
