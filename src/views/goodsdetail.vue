@@ -368,7 +368,7 @@
       }, 1000);
     },
     computed: {
-      ...mapGetters(['getCommon', 'token', 'userId', 'getUserInfo', 'getTradeinNew']),
+      ...mapGetters(['getCommon', 'token', 'userId', 'getUserInfo', 'getTradeinNew', 'getOrderId']),
       placeholder() {
         if(this.res.good_kind === '0') {
           return '选择 主钻分数；钻石净度；颜色；规格；数量';
@@ -773,7 +773,13 @@
           return false;
         }
 
-        this.getGoodsStock(this.sku.skuId || this.sku.defaultSKU, stock => {
+        this.ajax({
+          name: 'tradeinAddNew',
+          data: {
+            skus: this.getTradeinNew.map(item => item.skuId).concat(this.sku.skuId || this.sku.defaultSKU),
+            order_id: this.getOrderId
+          }
+        }).then(res => {
           const tradeinNew = this.getTradeinNew;
           tradeinNew.push({
             skuId: this.sku.skuId || this.sku.defaultSKU,
@@ -784,6 +790,8 @@
           });
           this.setTradeinNew(tradeinNew);
           this.$router.go(-2);
+        }).catch(e => {
+          this.toast(e.msg);
         });
       }
     }
