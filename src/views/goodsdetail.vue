@@ -799,7 +799,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .header {
     background-color: transparent !important;
     &.shadow {
@@ -1149,7 +1148,6 @@
 </style>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   /*popup内部的里面元素的样式直接放到该页面的根部 否则样式在手机上无效*/
   .activity-btn {
     border-radius: 12px;

@@ -176,7 +176,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .pt {
     .header {
       box-shadow: none;

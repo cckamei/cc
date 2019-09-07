@@ -21,7 +21,6 @@
 </template>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .section {
     background-color: #fff;
     margin-bottom: 20px;

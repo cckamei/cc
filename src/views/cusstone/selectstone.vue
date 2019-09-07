@@ -236,7 +236,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .pt {
     padding-top: 192px;
     background-color: #fff;
@@ -451,7 +450,7 @@
   .ant-slider {
     height: 36px;
     &:hover .ant-slider-track {
-      background-color: #ffb4b4;
+      background-color: @color5;
     }
     .ant-slider-rail {
       height: 16px;
@@ -460,7 +459,7 @@
     .ant-slider-track {
       top: 10px;
       height: 16px;
-      background-color: #ffb4b4;
+      background-color: @color5;
     }
     .ant-slider-handle {
       width: 36px;

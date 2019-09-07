@@ -84,7 +84,6 @@
 
 
 <style lang="less" >
-  @import "~@/style/vars.less";
   .bespeak {
     .header {
       box-shadow: 0 0 0 0 rgba(170, 170, 170, 0.5) !important;

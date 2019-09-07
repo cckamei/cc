@@ -78,7 +78,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .myaddress {
     overflow-y: auto;
     .addresslist {

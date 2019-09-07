@@ -168,7 +168,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .pt {
     padding-top: 192px;
   }

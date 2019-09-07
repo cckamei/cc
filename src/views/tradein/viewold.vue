@@ -113,7 +113,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .pt {
     background-color: #fff;
   }

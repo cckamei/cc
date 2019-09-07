@@ -62,7 +62,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .recommend-content {
     padding: 8px 15px;
     background-color: #f0f0f0;

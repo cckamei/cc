@@ -46,7 +46,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .item-content {
     display: flex;
     flex-flow: row nowrap;

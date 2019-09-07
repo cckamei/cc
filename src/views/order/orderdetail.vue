@@ -349,7 +349,6 @@
   };
 </script>
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .txt-center {
     padding: 30px 0;
   }

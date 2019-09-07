@@ -86,7 +86,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .flex {
     width: 100%;
     input {

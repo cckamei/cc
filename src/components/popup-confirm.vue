@@ -68,7 +68,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .popup-confirm {
     border-radius: 20px;
     overflow: hidden;

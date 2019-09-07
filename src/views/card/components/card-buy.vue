@@ -60,7 +60,7 @@
   }
 
   .bought {
-    background-color: #fff0f0;
+    background-color: @color3;
     border: none;
   }
 </style>

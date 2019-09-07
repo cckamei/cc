@@ -14,15 +14,15 @@
             <li v-for="(item, index) in tradeinList" :key="index" @click="$router.push({name: 'tradeinaddold', params: {index}})">
               <div class="item-wrapper flex">
                 <div class="img"><img :src="item.goodsPicList[0]" alt=""></div>
-                  <div class="detail flex-auto flex">
-                    <div class="detail-row flex">
-                      <div class="col">品牌：{{getTradeinOptions.brands[item.brandIndex].title}}</div>
-                    </div>
-                    <div class="detail-row flex">
-                      <div class="col">预估价：{{item.price === 'UNKNOW' ? '该类型商品仅支持人工估值' :  '￥' + item.price}}</div>
-                    </div>
+                <div class="detail flex-auto flex">
+                  <div class="detail-row flex">
+                    <div class="col">品牌：{{getTradeinOptions.brands[item.brandIndex].title}}</div>
+                  </div>
+                  <div class="detail-row flex">
+                    <div class="col">预估价：{{item.price === 'UNKNOW' ? '该类型商品仅支持人工估值' :  '￥' + item.price}}</div>
                   </div>
                 </div>
+              </div>
             </li>
           </ul>
         </section>
@@ -173,7 +173,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .content-wrapper {
     position: relative;
     margin: 20px;
@@ -259,7 +258,6 @@
 </style>
 
 <style lang="less">
-  @import "~@/style/vars.less";
   .confirm-old {
     .row {
       &.old-title .label {

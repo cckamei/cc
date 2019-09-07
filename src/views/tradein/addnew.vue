@@ -70,7 +70,7 @@
     },
     computed: {
       ...mapState(['stoneMade']),
-      ...mapGetters(['getAddress', 'getTradeinNew', 'getOrderId']),
+      ...mapGetters(['getAddress', 'getTradeinNew', 'getOrderId'])
     },
     methods: {
       ...mapMutations(['clearPayOrder', 'setPayOrder', 'setCommon', 'setTradeinNew']),
@@ -112,7 +112,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .content-wrapper {
     position: relative;
     margin: 20px;
@@ -197,7 +196,6 @@
 </style>
 
 <style lang="less">
-  @import "~@/style/vars.less";
   .add-new {
     .row {
       &.new-title .label {

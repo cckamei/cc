@@ -41,7 +41,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .content {
     background-color: #fff;
   }

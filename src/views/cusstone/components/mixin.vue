@@ -138,7 +138,6 @@
 
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .gap {
     height: 20px;
     background-color: #f3f3f3;

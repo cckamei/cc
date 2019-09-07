@@ -88,7 +88,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .list {
     position: absolute;
     top: 96px;

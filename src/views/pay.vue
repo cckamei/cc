@@ -82,7 +82,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .pb {
     padding-bottom: 150px;
   }

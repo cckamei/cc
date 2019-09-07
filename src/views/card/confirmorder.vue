@@ -84,7 +84,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .sections {
     position: relative;
     margin: 20px;
@@ -259,7 +258,6 @@
 </style>
 
 <style lang="less">
-  @import "~@/style/vars.less";
   .confirm-order {
     .row > .flex {
       padding-left: 0;

@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   productionSourceMap: false,
   outputDir: process.env.DIST,
@@ -27,6 +29,12 @@ module.exports = {
         target: 'http://47.105.53.172',
         changeOrigin: true
       }
+    }
+  },
+  pluginOptions: {
+    'style-resources-loader': {
+      preProcessor: 'less',
+      patterns: [path.resolve(__dirname, 'src/style/vars.less')]
     }
   }
 };

@@ -21,7 +21,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .agreement {
     font-size: 24px;
     padding: 36px 40px;

@@ -209,7 +209,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .cart-list {
     position: relative;
     margin: 20px;

@@ -116,7 +116,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .addChoice {
     display: flex;
     flex-flow: row nowrap;

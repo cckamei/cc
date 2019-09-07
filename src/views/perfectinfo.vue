@@ -147,7 +147,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .section {
     margin-top: 16px;
     padding: 0 20px;

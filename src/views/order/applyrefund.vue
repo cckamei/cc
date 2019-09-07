@@ -146,7 +146,6 @@
   };
 </script>
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .applyrefundPage {
     .content {
       padding: 0 20px;

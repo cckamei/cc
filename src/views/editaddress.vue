@@ -104,7 +104,6 @@
   };
 </script>
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .deleteAddresss {
     float: right;
     font-size: 28px;

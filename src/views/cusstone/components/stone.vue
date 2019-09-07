@@ -28,7 +28,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .stone {
     align-items: stretch;
     background-color: #fff;

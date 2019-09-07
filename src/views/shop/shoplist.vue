@@ -64,7 +64,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .shoplist {
     .shoplist-item {
       position: relative;

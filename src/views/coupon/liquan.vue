@@ -29,7 +29,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .card {
     background-color: #fff1f1;
     padding: 30px;

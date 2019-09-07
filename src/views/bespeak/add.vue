@@ -288,7 +288,6 @@
 
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .mt-15 {
     margin-top: 15px;
   }

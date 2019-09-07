@@ -68,7 +68,6 @@
 
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .logisticsTrack {
     background: #ffffff;
     .logisticsTrackTop {

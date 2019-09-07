@@ -4,24 +4,24 @@
       <div class="logo">
         <img src="@/assets/home/logo.png" alt="">
       </div>
-        <ul class="form">
-          <li>
-            <v-input-text placeholder="请输入手机号码" type="tel" v-model="phone" clear maxlength="16" class="input"></v-input-text>
-          </li>
-          <li>
-            <v-input-pwd placeholder="请输入账户密码" v-model="password" eye maxlength="16" class="input"></v-input-pwd>
-          </li>
-        </ul>
-        <div class="btns">
-          <button class="btn login" :class="{active: isActive}" @click="isActive && login()">登录</button>
-          <button class="btn wechat" :class="{active: isActive}" @click="wxLogin()">使用微信账户登录</button>
-        </div>
-        <div class="links clearfix">
-          <span v-if="0">忘记密码</span>
-          <router-link tag="span" :to="{name: 'register'}" class="right">注册账户</router-link>
-        </div>
+      <ul class="form">
+        <li>
+          <v-input-text placeholder="请输入手机号码" type="tel" v-model="phone" clear maxlength="16" class="input"></v-input-text>
+        </li>
+        <li>
+          <v-input-pwd placeholder="请输入账户密码" v-model="password" eye maxlength="16" class="input"></v-input-pwd>
+        </li>
+      </ul>
+      <div class="btns">
+        <button class="btn login" :class="{active: isActive}" @click="isActive && login()">登录</button>
+        <button class="btn wechat" :class="{active: isActive}" @click="wxLogin()">使用微信账户登录</button>
+      </div>
+      <div class="links clearfix">
+        <span v-if="0">忘记密码</span>
+        <router-link tag="span" :to="{name: 'register'}" class="right">注册账户</router-link>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -167,7 +167,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .content {
     background-color: #fff;
   }

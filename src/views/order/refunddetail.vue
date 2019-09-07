@@ -134,7 +134,6 @@
   };
 </script>
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .applyrefundPage {
     overflow-y: auto;
     .pagecontent {

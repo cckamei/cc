@@ -90,7 +90,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   ul {
     flex-wrap: wrap;
     margin-left: -15px;

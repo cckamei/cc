@@ -136,7 +136,6 @@
 </script>
 
 <style lang="less" scoped>
-  @import "~@/style/vars.less";
   .package {
     .package-item {
       background-color: #fff;
