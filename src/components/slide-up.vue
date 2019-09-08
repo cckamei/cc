@@ -5,7 +5,9 @@
       <slot></slot>
     </div>
     <div class="btns">
-      <button class="btn" :class="{active: isConfirm}" @click="isConfirm && confirm()">{{confirmText}}</button>
+      <slot name="footer">
+        <button class="btn" :class="{active: isConfirm}" @click="isConfirm && confirm()">{{confirmText}}</button>
+      </slot>
     </div>
   </mt-popup>
 </template>
@@ -89,7 +91,7 @@
       margin: 20px;
       margin-bottom: 0;
       padding-bottom: 20px;
-      max-height: 700px;
+      max-height: 1000px;
       min-height: 600px;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
@@ -98,6 +100,8 @@
 
   .btns {
     padding: 14px 20px;
+    display: flex;
+    justify-content: center;
     .btn {
       height: 68px;
       font-size: 30px;

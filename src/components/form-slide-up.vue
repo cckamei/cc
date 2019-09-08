@@ -8,6 +8,9 @@
     </div>
     <v-slide-up v-model="visible" :title="title" @confirm="$emit('confirm')" :confirmText="confirmText">
       <slot></slot>
+      <template slot="footer">
+        <slot name="footer"></slot>
+      </template>
     </v-slide-up>
   </div>
 </template>

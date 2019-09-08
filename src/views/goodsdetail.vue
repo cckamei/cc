@@ -81,14 +81,14 @@
       <div class="gap"></div>
       <div class="row" v-if="!getCommon.isTradein && res.has_dingzhi">
         <div class="list-item flex arrow" @click="goStoneCusMade">
-          <div class="label">主石定制</div>
+          <div class="label">美钻定制</div>
           <div class="input ellipsis flex">
-            <img class="star" src="@/assets/stone/icon_star.png" alt="">定制你的专属钻戒
+            <img class="star" src="@/assets/stone/icon_star.png" alt="">进入全球美钻库选择
           </div>
         </div>
       </div>
       <div class="row">
-        <v-form-slide-up :open.sync="autoOpenSKU" label="商品规格" v-model="sku.selectedSku" :placeholder="placeholder">
+        <v-form-slide-up :open.sync="autoOpenSKU" label="选择规格" v-model="sku.selectedSku" :placeholder="placeholder">
           <ul class="sku">
             <li class="sku-icon flex">
               <img class="icon" :src="res.img" alt="">
@@ -156,6 +156,10 @@
               </div>
             </li>
           </ul>
+          <template slot="footer">
+            <button class="btn sku-cart" @click="skuAddCart()">加入购物车</button>
+            <button class="btn sku-purchase" @click="skuBuyNow()">立即购买</button>
+          </template>
         </v-form-slide-up>
       </div>
       <div class="row">
@@ -508,8 +512,6 @@
             });
           });
 
-
-
           // 去掉每一个维度的重复项
           dimensions.forEach((item, index) => {
             // item = [...new Set(item)];
@@ -526,10 +528,17 @@
             return d.map(item => ({ label: item, disabled: false }));
           });
 
-          // 初始化选项选中状态
-          dimensions.forEach(item => {
-            skuIndex.push(-1);
-          });
+
+          if(res.skus.length === 1) {
+            dimensions.forEach(item => {
+              skuIndex.push(0);
+            });
+          } else {
+            // 初始化选项选中状态
+            dimensions.forEach(item => {
+              skuIndex.push(-1);
+            });
+          }
           this.skuIndex = skuIndex;
           this.res.bannerList = res.slide_img;
 
@@ -620,7 +629,22 @@
           this.autoOpenSKU = true;
           return false;
         }
+        this.reqBuyNow();
+      },
+      skuBuyNow() {
+        if(!this.token) {
+          this.$router.push({ name: 'login', params: { page: 'goodsdetail', params: { id: this.$route.params.id } } });
+          return false;
+        }
 
+        if(!this.sku.skuId) {
+          this.toast('请选择商品规格');
+          return false;
+        }
+        this.autoOpenSKU = false;
+        this.reqBuyNow();
+      },
+      reqBuyNow() {
         this.getGoodsStock(this.sku.skuId || this.sku.defaultSKU, stock => {
           this.setCart([{
             cart_id: this.sku.skuId || this.sku.defaultSKU,
@@ -696,6 +720,21 @@
           return false;
         }
 
+        this.reqAddCart();
+      },
+      skuAddCart() {
+        if(!this.token) {
+          this.$router.push({ name: 'login', params: { page: 'goodsdetail', params: { id: this.$route.params.id } } });
+          return false;
+        }
+
+        if(!this.sku.skuId) {
+          this.toast('请选择商品规格');
+          return false;
+        }
+        this.reqAddCart();
+      },
+      reqAddCart() {
         this.ajax({
           name: 'addCart',
           data: {
@@ -1278,6 +1317,16 @@
         width: 100% !important;
         height: auto !important;
       }
+    }
+    .sku-cart {
+      background: url("~@/assets/goods/button_gold_l_sku.png") no-repeat;
+      background-size: 100% 100%;
+      border-radius: 0;
+    }
+    .sku-purchase {
+      background: url("~@/assets/goods/button_pink_l_sku.png") no-repeat;
+      background-size: 100% 100%;
+      border-radius: 0;
     }
   }
 </style>

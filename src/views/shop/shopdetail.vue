@@ -13,11 +13,11 @@
         <li v-for="(img, index) in shop.store_imgs" :key="index"><img :src="img.url.url" alt=""></li>
       </ul>
       <div class="gap"></div>
-      <v-split-title>门店地图</v-split-title>
+      <!-- <v-split-title>门店地图</v-split-title>
       <div class="map-container">
         <iframe :src="mapurl" frameborder="0"></iframe>
       </div>
-      <div class="gap"></div>
+      <div class="gap"></div> -->
       <v-split-title>门店资质</v-split-title>
       <ul class="imgs flex">
         <li v-for="(img, index) in shop.store_zizhi_imgs" :key="index"><img :src="img.url.url" alt=""></li>

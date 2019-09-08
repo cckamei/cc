@@ -15,7 +15,8 @@
               合计：&nbsp;<span class="price"><span>￥</span>{{stoneMade[this.ddlx].shouj | currency}}</span>
             </template>
             <template v-else-if="stoneMade[this.ddlx]">
-              <span class="tips">小美暂时无法为您定制此方案，请重新选择~</span>
+              <span class="tips">精品店暂时无法定制该方案</span><br>
+              <span class="tips">拨打<a class="blue" href="tel:400-1691-118">400-1691-118</a>人工客服申请专属定制服务吧！</span>
             </template>
             <template v-else>
               合计：&nbsp;<span class="txt-lightgray">全部选定后显示</span>
@@ -60,7 +61,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row" v-if="0">
         <div class="flex">
           <div class="label">主石价格</div>
           <div class="input ellipsis flex active" v-if="stoneMade[ddlx] && stoneMade[ddlx].shouj">￥{{stoneMade[ddlx].shouj | currency}}</div>

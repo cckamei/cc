@@ -181,6 +181,9 @@
         .tips {
           padding-bottom: 10px;
           color: @color2;
+          .blue {
+            color: #1890ff;
+          }
         }
         .price {
           font-size: 30px;

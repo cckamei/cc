@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pb">
     <div class="content">
       <mt-swipe :auto="4000" class="banner">
         <mt-swipe-item v-for="(item, index) in bannerList" :key="index">
