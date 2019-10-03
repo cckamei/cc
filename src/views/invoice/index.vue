@@ -7,24 +7,24 @@
           <div class="title">发票抬头</div>
           <v-button-radio className="fixwidth" v-model="reqData.invoiceType" :list="['个人', '单位']"></v-button-radio>
           <div v-if="reqData.invoiceType === 0" class="input-wrapper flex">
-            <input v-model="reqData.ticketName" placeholder="购票人姓名"/>
+            <input v-model="reqData.ticketName" placeholder="购票人姓名" />
           </div>
-            <template v-else>
-              <div class="input-wrapper flex">
-                <input v-model="reqData.ticketCompanyName" placeholder="购票单位名称"/>
+          <template v-else>
+            <div class="input-wrapper flex">
+              <input v-model="reqData.ticketCompanyName" placeholder="购票单位名称" />
             </div>
-                <div class="input-wrapper flex">
-                  <input v-model="reqData.ticketId" placeholder="纳税人识别编号"/>
+            <div class="input-wrapper flex">
+              <input v-model="reqData.ticketId" placeholder="纳税人识别编号" />
             </div>
-            </template>
+          </template>
         </li>
         <li>
           <div class="title">收票人信息</div>
           <div class="input-wrapper flex">
-            <input v-model="reqData.invoiceName" placeholder="收票人姓名"/>
+            <input v-model="reqData.invoiceName" placeholder="收票人姓名" />
           </div>
-            <div class="input-wrapper flex">
-              <input type="tel" v-model="reqData.invoicePhone" placeholder="收票人手机号码">
+          <div class="input-wrapper flex">
+            <input type="tel" v-model="reqData.invoicePhone" placeholder="收票人手机号码">
           </div>
         </li>
         <li>
@@ -35,7 +35,7 @@
           <template v-if="reqData.address">
             <div class="title">收票地址</div>
             <div class="input-wrapper flex arrow" @click="selectAddress">
-              <input v-model="reqData.address" readonly placeholder="收票人姓名"/>
+              <input v-model="reqData.address" readonly placeholder="收票人姓名" />
             </div>
           </template>
           <v-form-input class="address" v-else v-model="reqData.address" label="收票地址" placeholder="进入地址列表选择" :arrow="true" @input-click="selectAddress"></v-form-input>

@@ -1,8 +1,8 @@
 <template>
   <div class="buttons flex">
     <div class="btn home" :class="{active: $route.name === 'index'}" @click="$router.push({name:'index'})"></div>
-    <button class="btn-txt btn-txt1" @click="goGoodsList()">全部作品</button>
-    <button class="btn-txt btn-txt2" :class="{active: $route.name === 'freebuy'}" @click="$router.push({name:'freebuy'})">无忧购</button>
+    <button class="btn-txt btn-txt1" @click="goGoodsList()">线上精品</button>
+    <button class="btn-txt btn-txt2" :class="{active: $route.name === 'freebuy'}" @click="$router.push({name:'freebuy'})">超级服务</button>
     <div class="btn mine" @click="goMypage()"><img :src="getUserInfo.avatar" alt=""></div>
   </div>
 </template>
@@ -42,6 +42,7 @@
       height: 60px;
       border-radius: 50%;
       overflow: hidden;
+      box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.3);
       &.home {
         background: url("~@/assets/home/button_home_b.png");
         background-size: 100%;
@@ -61,6 +62,8 @@
       border: 0;
       color: #333;
       background-color: #fff;
+      box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.3);
+      font-size: 24px;
       &1 {
         margin: 0 24px 0 91px;
       }

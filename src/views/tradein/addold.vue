@@ -6,23 +6,49 @@
     <div class="content">
       <ul class="filter-content">
         <li>
-          <div class="title">品牌</div>
+          <div class="title">旧品品牌</div>
           <v-button-radio v-if="brands.length" className="fixwidth" v-model="brandIndex" :cancel="true" :list="brands" keyName="title"></v-button-radio>
+          <div class="input-wrapper flex">
+            <input v-model="brandName" placeholder="填写品牌名称" />
+          </div>
         </li>
         <li>
-          <div class="title">金信息</div>
+          <div class="title">旧品金品类</div>
           <v-button-radio v-if="golds.length" className="fixwidth" v-model="goldIndex" :cancel="true" :list="golds" keyName="title"></v-button-radio>
+          <div class="input-wrapper flex">
+            <input v-model="goldName" placeholder="填写金重量 （单位：克）" />
+          </div>
         </li>
         <li>
-          <div class="title">石信息</div>
-          <v-button-radio v-if="stones.length" :smallFS="4" className="fixwidth" v-model="stoneIndex" :cancel="true" :list="stones" keyName="title"></v-button-radio>
+          <div class="title">旧品宝石种类</div>
+          <button :class="['stone-btn', 'fixwidth', {active: stoneType === 0}]" @click="stoneType = 0">钻石</button>
+          <div class="input-wrapper flex">
+            <input type="number" v-model="diamondMax" placeholder="填写最大一粒钻石重量 （单位：克拉）" />
+          </div>
+          <div class="input-wrapper flex">
+            <input type="number" v-model="diamondOther" placeholder="填写其他钻石合计重量 （单位：克拉）" />
+          </div>
+          <button :class="['stone-btn', 'fixwidth', {active: stoneType === 1}]" @click="stoneType = 1">宝石</button>
+          <div class="input-wrapper flex">
+            <input type="number" v-model="stoneRed" placeholder="填写红宝石重量 （单位：克拉）" />
+          </div>
+          <div class="input-wrapper flex">
+            <input type="number" v-model="stoneBlue" placeholder="填写蓝宝石重量 （单位：克拉）" />
+          </div>
+          <div class="input-wrapper flex">
+            <input type="number" v-model="stoneOther" placeholder="填写其他石重量 （单位：克拉）" />
+          </div>
+          <button :class="['stone-btn', 'fixwidth', {active: stoneType === 2}]" @click="stoneType = 2">无宝石</button>
         </li>
         <li>
-          <div class="title">佩戴分类</div>
+          <div class="title">旧品佩戴小类</div>
           <v-button-radio v-if="wears.length" className="fixwidth" v-model="wearIndex" :cancel="true" :list="wears" keyName="title"></v-button-radio>
+          <div class="input-wrapper flex">
+            <input v-model="wearName" placeholder="填写佩戴小类" />
+          </div>
         </li>
         <li>
-          <div class="title">商品照片</div>
+          <div class="title">旧品照片</div>
           <a-upload ref="goods-pic" class="picture" accept="image/*" action="/api/v1/img_upload_v2" listType="picture-card" :fileList="goodsPicList" @change="handleGoodsPicChange">
             <div v-if="goodsPicList.length <= 9">
               <div class="pic_add"></div>
@@ -30,7 +56,7 @@
           </a-upload>
         </li>
         <li>
-          <div class="title">鉴定证书</div>
+          <div class="title">旧品鉴定证书照片</div>
           <a-upload ref="certify-pic" class="picture" accept="image/*" action="/api/v1/img_upload_v2" listType="picture-card" :fileList="certifyPicList" @change="handleCertifyPicChange">
             <div v-if="certifyPicList.length <= 9">
               <div class="pic_add"></div>
@@ -38,7 +64,7 @@
           </a-upload>
         </li>
         <li>
-          <div class="title">其他票据<span class="txt-lightgray">（保证单/发票/标签）</span></div>
+          <div class="title">旧品票据照片<span class="txt-lightgray">（保证单/发票/标签）</span></div>
           <a-upload ref="other-pic" class="picture" accept="image/*" action="/api/v1/img_upload_v2" listType="picture-card" :fileList="otherPicList" @change="handleOtherPicChange">
             <div v-if="otherPicList.length <= 9">
               <div class="pic_add"></div>
@@ -68,14 +94,21 @@
   export default {
     data() {
       return {
-        brandIndex: 0,
         brands: [], //品牌
-        goldIndex: 0,
+        brandIndex: 0,
+        brandName: '', //品牌名称
         golds: [], //金信息
-        stoneIndex: 0,
-        stones: [], //石信息
-        wearIndex: 0,
+        goldIndex: 0,
+        goldName: '',
+        stoneType: 0, //宝石种类
+        diamondMax: '',
+        diamondOther: '',
+        stoneRed: '',
+        stoneBlue: '',
+        stoneOther: '',
         wears: [], //佩戴分类
+        wearIndex: 0,
+        wearName: '',
         goodsPicList: [], //商品照片
         certifyPicList: [], //鉴定证书
         otherPicList: [], //其他票据
@@ -86,7 +119,6 @@
       ...mapState(['stoneMade']),
       ...mapGetters(['getTradeinOld']),
       isActive() {
-        //return this.brandIndex !== -1 && this.goldIndex !== -1 && this.stoneIndex !== -1 && this.wearIndex !== -1 && this.goodsPicList.length >= 3 && this.certifyPicList.length >= 3 && this.otherPicList.length >= 3;
         return true;
       }
     },
@@ -113,13 +145,11 @@
           this.brands = res.brands;
           this.wears = res.pdlx;
           this.golds = res.jlx;
-          this.stones = res.stones;
-          this.setTradeinOptions({ brands: this.brands, wears: this.wears, golds: this.golds, stones: this.stones });
+          this.setTradeinOptions({ brands: this.brands, wears: this.wears, golds: this.golds });
           const index = this.$route.params.index;
           if(index >= 0) {
             const currentGoods = this.getTradeinOld[index];
             this.brandIndex = currentGoods.brandIndex;
-            this.stoneIndex = currentGoods.stoneIndex;
             this.wearIndex = currentGoods.wearIndex;
             this.goldIndex = currentGoods.goldIndex;
             this.goodsPicList = currentGoods.goodsPicList.map((item, index) => ({ name: '1', status: 'done', uid: index, url: item }));
@@ -130,14 +160,38 @@
       },
       handleConfirm() {
         const index = this.$route.params.index;
+
+        if(this.brands[this.brandIndex].key === '0002' && !this.brandName.length) {
+          this.toast('请填写品牌名称');
+          return false;
+        }
+
+        if(this.stoneType === 0 && !this.diamondMax.length) {
+          this.toast('请填写最大一粒钻石重量');
+          return false;
+        }
+
+        if(this.wears[this.wearIndex].key === '2006' && !this.wearName.length) {
+          this.toast('请填写佩戴小类');
+          return false;
+        }
+
         if(index >= 0) {
           // 编辑
           const tradeinOld = this.getTradeinOld;
           tradeinOld.splice(index, 1, {
             brandIndex: this.brandIndex,
+            brandName: this.brandName,
             goldIndex: this.goldIndex,
-            stoneIndex: this.stoneIndex,
+            goldName: this.goldName,
+            stoneType: this.stoneType,
+            diamondMax: this.diamondMax,
+            diamondOther: this.diamondOther,
+            stoneRed: this.stoneRed,
+            stoneBlue: this.stoneBlue,
+            stoneOther: this.stoneOther,
             wearIndex: this.wearIndex,
+            wearName: this.wearName,
             goodsPicList: this.goodsPicList.map(item => item.url || item.response.url),
             certifyPicList: this.certifyPicList.map(item => item.url || item.response.url),
             otherPicList: this.otherPicList.map(item => item.url || item.response.url)
@@ -147,9 +201,17 @@
           const tradeinOld = this.getTradeinOld;
           tradeinOld.push({
             brandIndex: this.brandIndex,
+            brandName: this.brandName,
             goldIndex: this.goldIndex,
-            stoneIndex: this.stoneIndex,
+            goldName: this.goldName,
+            stoneType: this.stoneType,
+            diamondMax: this.diamondMax,
+            diamondOther: this.diamondOther,
+            stoneRed: this.stoneRed,
+            stoneBlue: this.stoneBlue,
+            stoneOther: this.stoneOther,
             wearIndex: this.wearIndex,
+            wearName: this.wearName,
             goodsPicList: this.goodsPicList.filter(item => item.response).map(item => item.response.url),
             certifyPicList: this.certifyPicList.filter(item => item.response).map(item => item.response.url),
             otherPicList: this.otherPicList.filter(item => item.response).map(item => item.response.url)
@@ -189,7 +251,8 @@
     height: 100%;
     li {
       padding: 40px 16px;
-      border-bottom: 1px solid #f0f0f0; /*no*/
+      // border-bottom: 1px solid #f0f0f0; /*no*/
+      padding-bottom: 0;
       &:last-child {
         border-bottom: 0;
       }
@@ -228,6 +291,30 @@
       padding: 14px 20px;
     }
     box-shadow: 0 -10px 50px 10px rgba(170, 170, 170, 0.5);
+  }
+  .input-wrapper {
+    border-bottom: 1px solid #f0f0f0; /*no*/
+    height: 84px;
+    input {
+      color: #999;
+      width: 100%;
+    }
+  }
+
+  .stone-btn {
+    border-radius: 40px;
+    background-color: #eee;
+    font-size: 24px;
+    color: #666;
+    border: 1px solid #eee; /*no*/
+    padding: 0 10px;
+    height: 40px;
+    margin-top: 30px;
+    &.active {
+      background-color: @color3;
+      color: @color2;
+      border: 1px solid @color2; /*no*/
+    }
   }
 </style>
 

@@ -75,7 +75,7 @@
     .label {
       flex-shrink: 0;
       min-width: 30%;
-      color: #999;
+      color: #666;
       font-size: 24px;
     }
     input {
@@ -83,7 +83,7 @@
       width: 100%;
       padding: 0 10px;
       font-size: 24px;
-      color: #666;
+      color: #333;
     }
   }
 </style>

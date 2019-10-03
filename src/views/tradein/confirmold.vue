@@ -156,15 +156,43 @@
       _getOldGoods() {
         const { brands, golds, stones, wears } = this.getTradeinOptions;
         const oldGoods = this.getTradeinOld.map((item, index) => {
-          return {
-            jlx_key: golds[item.goldIndex].key,
-            pdlx_key: wears[item.goldIndex].key,
-            stone_key: stones[item.wearIndex].key,
+          let params = {
             pp_key: brands[item.brandIndex].key,
+            pp_name: item.brandName,
+
+            jlx_key: golds[item.goldIndex].key,
+            jin_weight: item.goldName,
+
+            stone_kind_key: ['4000', '4001', '4002'][item.stoneType],
+
+            zhus_weight_main: item.zhus_weight_main,
+            zhus_weight_other: item.zhus_weight_other,
+
+            hongbaoshi_weight: item.hongbaoshi_weight,
+            lanbaoshi_weight: item.lanbaoshi_weight,
+            qita_weight: item.qita_weight,
+
+            pdlx_key: wears[item.goldIndex].key,
+            pdlx_name: item.wearName,
+
             goods_imgs: item.goodsPicList,
             cert_imgs: item.certifyPicList,
             other_imgs_info: item.otherPicList
           };
+
+          if(item.stoneType === 0) {
+            const weight = +item.zhus_weight_main;
+            const arr = [-Infinity, 0.5, 1, 2, Infinity];
+            const index = 0;
+            for(let i = 0; i < arr.length - 1; i++) {
+              if(weight >= arr[0] && weight < arr[1]) {
+                index = i;
+                break;
+              }
+            }
+            params.diamond_weight_key = ['3000', '3001', '3002', '3003'][index];
+          }
+          return params;
         });
         return JSON.stringify(oldGoods);
       }

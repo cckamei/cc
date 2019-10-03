@@ -1,13 +1,11 @@
 <template>
-  <div class="pt pb">
-    <v-header>线下补款</v-header>
+  <div class="pt">
+    <v-header>补款</v-header>
     <div class="content">
       <div class="input-wrpper">
-        <input type="text" v-model="guaranteeNumber" placeholder="请填写保证单号">
+        <input type="text" v-model="guaranteeNumber" placeholder="请填写保证单号" />
       </div>
-      </div>
-      <div class="footer">
-        <div class="btns">
+        <div class="check-btn btns">
           <button class="btn" :class="{active: guaranteeNumber.length}" @click="guaranteeNumber.length && handleConfirm()">校验</button>
         </div>
       </div>
@@ -49,13 +47,12 @@
   }
   .input-wrpper {
     position: absolute;
+    top: 360px;
     left: 24px;
     right: 24px;
     border-bottom: 1px solid #f0f0f0; /*no*/
     height: 96px;
     line-height: 96px;
-    top: 50%;
-    margin-top: -48px;
     text-align: center;
     input {
       width: 100%;
@@ -63,6 +60,11 @@
       font-size: 30px;
       color: #666;
     }
+  }
+  .check-btn {
+    position: absolute;
+    top: 622px;
+    width: 100%;
   }
   .footer {
     height: 96px;

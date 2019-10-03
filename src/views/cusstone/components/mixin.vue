@@ -144,7 +144,7 @@
   }
 
   .stone-header {
-    padding: 30px 40px 30px 30px;
+    padding: 30px 40px;
     background-color: #fff;
     align-items: stretch;
     .img {
@@ -227,6 +227,9 @@
         }
       }
     }
+    .remark {
+      padding: 0;
+    }
   }
 
   .bb {
@@ -279,7 +282,7 @@
 
   .stone {
     background-color: #fff;
-    padding: 30px 16px;
+    padding: 30px 40px;
     align-items: stretch;
     border-top: 1px solid #f0f0f0;
     border-bottom: 1px solid #f0f0f0;

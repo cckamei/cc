@@ -1,6 +1,6 @@
 <template>
   <div class="pt selectstone">
-    <v-header class="header">主石选择</v-header>
+    <v-header class="header">钻石选择</v-header>
     <div class="condition">
       <ul class="flex">
         <li class="flex" @click="filterVisible = !filterVisible">
@@ -14,17 +14,19 @@
       </ul>
     </div>
     <div class="content">
-      <ul v-if="stoneList.length" class="list">
-        <li v-for="(item, index) in stoneList" :key="index" class="flex" @click="showStoneConfirm(index)" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="50" infinite-scroll-immediate-check="true">
-          <div class="img"><img src="@/assets/stone/pic_dia.png" alt=""></div>
-          <div class="detail flex-auto flex">
-            <span class="name">{{item.zhusz}}克拉; {{item.zhusjd}}; {{item.zhusys}}; {{item.zslx}}证书; {{item.zhusqg}}切工</span>
-            <!-- <span class="desc">{{item.sub_title}}</span> -->
-            <div class="line3 flex">
-              <div class="price">￥{{item.shouj | currency}}</div>
-              <button class="label btn-txt btn-txt-s">{{labels[item.fhlx]}}</button>
+      <ul v-if="stoneList.length" class="list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="50" infinite-scroll-immediate-check="true">
+        <li v-for="(item, index) in stoneList" :key="index" @click="handleSelectStone(item)" :class="{optimal: item.youx === 'Y'}">
+          <div class="item-wrapper flex">
+            <div class="img"><img src="@/assets/stone/pic_dia.png" alt=""></div>
+            <div class="detail flex-auto flex">
+              <span class="name">{{ item.zhusz >= 1 ? `${item.zhusz}克拉` : `${+item.zhusz * 100}分`}}; {{item.zhusjd}}; {{item.zhusys}}; {{item.zhusqg}}; {{item.zhuslx}}; {{item.zhusxz}}; {{item.qiege}}; {{item.zhengs}}</span>
+              <!-- <span class="desc">{{item.sub_title}}</span> -->
+              <div class="line3 flex">
+                <div class="price">￥{{item.shouj | currency}}</div>
+                <button class="label btn-txt btn-txt-s">定制{{item.delivery_time}}</button> <span class="count">{{item.count}}件</span>
+              </div>
+              <div class="cart"></div>
             </div>
-            <div class="cart"></div>
           </div>
         </li>
       </ul>
@@ -33,7 +35,7 @@
         <div class="label">没有找到符合您要求的钻石</div>
         <div class="advanced">
           <button class="btn-txt" @click="advanceStone">立即前往</button>
-          <div class="tips">为您推荐<span>高级定制</span>功能，精心打造理想美钻</div>
+          <div class="tips"><span>“高级定制”</span>全球美钻库,更多专属服务</div>
         </div>
       </div>
       <p v-if="pageInfo.currentPage < pageInfo.totalPage" v-show="loading" class="loading">
@@ -47,42 +49,67 @@
     </v-popup-confirm2>
     <div v-show="filterVisible" class="filter-wrapper">
       <ul class="filter-content">
-        <li>
-          <div class="title">价位</div>
-          <a-slider range v-model="price" :defaultValue="[priceMin, priceMax]" :min="priceMin" :max="priceMax" :step="priceStep"></a-slider>
-          <div class="range-value">
-            <button>￥{{price[0]}}</button>
-            <button class="txt-right">￥{{price[1]}}</button>
-          </div>
-        </li>
-        <li>
-          <div class="title">重量</div>
-          <a-slider range v-model="weight" :defaultValue="[weightMin, weightMax]" :min="weightMin" :max="weightMax" :step="weightStep" />
-          <div class="range-value">
-            <button>{{weight[0]}}克拉</button>
-            <button class="txt-right">{{weight[1]}}克拉</button>
-          </div>
-        </li>
-        <li>
-          <div class="title">净度</div>
-          <v-button-radio v-model="cleanessIndex" :multiple="true" :list="cleaness" className="fixwidth"></v-button-radio>
-        </li>
-        <li>
-          <div class="title">颜色</div>
-          <v-button-radio v-model="colorIndex" :multiple="true" :list="colors" className="fixwidth"></v-button-radio>
-        </li>
-        <li>
-          <div class="title">切工</div>
-          <v-button-radio v-model="cutIndex" :multiple="true" :list="cuts" className="fixwidth"></v-button-radio>
-        </li>
-        <li>
-          <div class="title">证书类型</div>
-          <v-button-radio v-model="certificateIndex" :cancel="true" :list="certificates" className="fixwidth"></v-button-radio>
-        </li>
+        <template v-if="selectType === 0">
+          <li>
+            <div class="title">价格区间</div>
+            <v-button-radio v-model="simPriceIndex" keyName="name" :list="simPrices" className="fixwidth3"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">石重区间</div>
+            <v-button-radio v-model="simWeightIndex" keyName="name" :list="simWeights" className="fixwidth3"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">钻石优选</div>
+            <v-button-radio v-model="simOptimalIndex" :list="simOptimals" className="fixwidth3"></v-button-radio>
+          </li>
+        </template>
+        <template v-else>
+          <li>
+            <div class="title">价位</div>
+            <a-slider range v-model="price" :defaultValue="[priceMin, priceMax]" :min="priceMin" :max="priceMax" :step="priceStep"></a-slider>
+            <div class="range-value">
+              <button>￥{{price[0]}}</button>
+              <button class="txt-right">￥{{price[1]}}</button>
+            </div>
+          </li>
+          <li>
+            <div class="title">石重区间</div>
+            <v-button-radio v-model="weightIndex" keyName="name" :list="weights" className="fixwidth3"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">净度</div>
+            <v-button-radio v-model="cleanessIndex" :multiple="true" :list="cleaness" className="fixwidth4"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">颜色</div>
+            <v-button-radio v-model="colorIndex" :multiple="true" :list="colors" className="fixwidth4"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">切工</div>
+            <v-button-radio v-model="cutIndex" :multiple="true" :list="cuts" className="fixwidth4"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">类型</div>
+            <v-button-radio v-model="typeIndex" :list="types" className="fixwidth4"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">形状</div>
+            <v-button-radio v-model="shapeIndex" :list="shapes" className="fixwidth3"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">圆钻切割</div>
+            <v-button-radio v-model="roundCutIndex" :list="roundCuts" className="fixwidth3"></v-button-radio>
+          </li>
+          <li>
+            <div class="title">钻石证书</div>
+            <v-button-radio v-model="certificateIndex" :cancel="true" :list="certificates" className="fixwidth3"></v-button-radio>
+          </li>
+        </template>
       </ul>
       <div class="filter-footer">
         <div class="btns">
-          <button class="btn" :class="{active: isActive}" @click="handleConfirmFilter">确定</button>
+          <button class="btn" :class="{active: isActive}" @click="selectType = Number(!selectType)">{{selectType ? '快捷筛选' : '更多条件'}}</button>
+          <button class="btn" :class="{active: isActive}" @click="handleConfirmFilter">立即查找</button>
         </div>
       </div>
     </div>
@@ -105,30 +132,41 @@
         sorts: [
           { label: '价格从低到高', value: 'shouj asc' },
           { label: '价格从高到低', value: 'shouj desc' },
-          { label: '主石重量从低到高', value: 'zhusz asc' },
-          { label: '主石重量从高到低', value: 'zhusz desc' }
+          { label: '钻石重量从低到高', value: 'zhusz asc' },
+          { label: '钻石重量从高到低', value: 'zhusz desc' }
         ],
-        priceStep: 100,
+        selectType: 0, //0快捷选项，1高级选项
+        price: [0, 0],//价格
         priceMin: 0,
         priceMax: 0,
-        price: [0, 0],
-        weightStep: 0.01,
-        weightMin: 0,
-        weightMax: 0,
-        weight: [0, 0],
-        cleanessIndex: [],
-        cleaness: [],
-        colorIndex: [],
-        colors: [],
-        cutIndex: [],
-        cuts: [],
+        priceStep: 100,
+        weights: [],//重量
+        weightIndex: 0,
+        cleaness: [], //净度
+        cleanessIndex: [], //（多选）
+        colors: [], //颜色
+        colorIndex: [], //（多选）
+        cuts: [], //切工
+        cutIndex: [], //（多选）
+        types: [], //类型
+        typeIndex: 0,
+        shapes: [], //形状
+        shapeIndex: 0,
+        roundCuts: [], //圆钻切割
+        roundCutIndex: 0,
+        certificates: [], //证书
         certificateIndex: -1,
-        certificates: [],
         labels: {
           'A': '现货',
           'B': '定制15天',
           'C': '定制45天'
-        }
+        },
+        simPrices: [], //快捷价格
+        simPriceIndex: 0,
+        simWeights: [], //快捷重量
+        simWeightIndex: 0,
+        simOptimals: [{ label: '全部', value: 'Y' }, { label: '只看优选', value: 'N' }], //快捷优选
+        simOptimalIndex: 0
       };
     },
     computed: {
@@ -139,6 +177,7 @@
     },
     async created() {
       await this.getStoneOptions();
+      await this.getStoneSimOptions();
       this.getStoneList();
     },
     methods: {
@@ -147,6 +186,18 @@
       loadMore() {
         this.loading = true;
         this.getStoneList();
+      },
+      getStoneSimOptions() {
+        return this.ajax({
+          name: 'getStoneSimOptions',
+          data: {
+            gsmh: this.stoneMade.gsmh
+          }
+        }).then(res => {
+          this.simPrices = res.prices;
+          this.simWeights = res.weights;
+          // this.simOptimals = res.youx;
+        });
       },
       getStoneOptions() {
         return this.ajax({
@@ -158,37 +209,84 @@
           this.priceMin = parseInt(res.min_price);
           this.priceMax = parseInt(res.max_price);
           this.price = [this.priceMin, this.priceMax];
-          this.weightMin = res.min_weight;
-          this.weightMax = res.max_weight;
-          this.weight = [this.weightMin, this.weightMax];
+          this.weights = res.weights;
           this.cleaness = res.zhus_jd;
           this.colors = res.zhus_color;
           this.cuts = res.zhus_qg;
+          this.types = res.zhuslx;
+          this.shapes = res.zhusxz;
+          this.roundCuts = res.qiege;
           this.certificates = res.zslx;
         });
       },
       getStoneList() {
-        const cleaness = this.cleanessIndex.length ? this.cleaness.filter((item, i) => this.cleanessIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
-        const color = this.colorIndex.length ? this.colors.filter((item, i) => this.colorIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
-        const cut = this.cutIndex.length ? this.cuts.filter((item, i) => this.cutIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
-        const certificate = this.certificateIndex === -1 ? '' : this.certificates[this.certificateIndex];
+        let params = {
+          page: (this.pageInfo.currentPage || 0) + 1,
+          gsmh: this.stoneMade.gsmh,
+          jinys: this.stoneMade.jinys,//金类型
+          shouc: this.stoneMade.shouc,//手寸
+          orderBy: this.sortIndex === -1 ? '' : this.sorts[this.sortIndex].value//排序
+        };
+
+        let minPrice, maxPrice, minZhusz, maxZhusz;
+        if(this.selectType === 0) {
+          {
+            const { min, max } = this.simPrices[this.simPriceIndex];
+            [minPrice, maxPrice] = [min, max];
+          }
+          {
+            const { min, max } = this.simWeights[this.simWeightIndex];
+            [minZhusz, maxZhusz] = [min, max];
+          }
+          const simOptimal = this.simOptimalIndex === -1 ? '' : this.simOptimals[this.simOptimalIndex].value;
+          params.youx = simOptimal;
+        } else {
+          [minPrice, maxPrice] = this.price;
+          const { min, max } = this.weights[this.weightIndex];
+          [minZhusz, maxZhusz] = [min, max];
+          const cleaness = this.cleanessIndex.length ? this.cleaness.filter((item, i) => this.cleanessIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
+          const color = this.colorIndex.length ? this.colors.filter((item, i) => this.colorIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
+          const cut = this.cutIndex.length ? this.cuts.filter((item, i) => this.cutIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
+          const type = this.typeIndex === -1 ? '' : this.types[this.typeIndex];
+          const shape = this.shapeIndex === -1 ? '' : this.shapes[this.shapeIndex];
+          const roundCut = this.roundCutIndex === -1 ? '' : this.roundCuts[this.roundCutIndex];
+          const certificate = this.certificateIndex === -1 ? '' : this.certificates[this.certificateIndex];
+
+          params.zhusjd = cleaness;//主石净度
+          params.shusys = color;//主石颜色
+          params.zhusqg = cut;//主石切工
+          params.zhuslx = type;//主石类型
+          params.zhusxz = shape;//主石形状
+          params.qiege = roundCut;//圆钻切割
+          params.zhengs = certificate;//证书类型
+        }
+
+        params.minPrice = minPrice;
+        params.maxPrice = maxPrice;
+        params.minZhusz = minZhusz;
+        params.maxZhusz = maxZhusz;
 
         this.ajax({
           name: 'getStoneList',
           data: {
-            page: (this.pageInfo.currentPage || 0) + 1,
-            gsmh: this.stoneMade.gsmh,
-            jinys: this.stoneMade.jinys,//金类型
-            shouc: this.stoneMade.shouc,//手寸
-            minPrice: this.price[0],//最小价格
-            maxPrice: this.price[1],//最大价格
-            minZhusz: this.weight[0],//最小主石重
-            maxZhusz: this.weight[1],//最大主石重
-            zhusjd: cleaness,//主石净度
-            shusys: color,//主石颜色
-            zhusqg: cut,//主石切工
-            zslx: certificate,//证书类型
-            orderBy: this.sortIndex === -1 ? '' : this.sorts[this.sortIndex].value//排序
+            ...params
+            // page: (this.pageInfo.currentPage || 0) + 1,
+            // gsmh: this.stoneMade.gsmh,
+            // jinys: this.stoneMade.jinys,//金类型
+            // shouc: this.stoneMade.shouc,//手寸
+            // minPrice, //最小价格
+            // maxPrice, //最大价格
+            // minZhusz,//最小主石重
+            // maxZhusz,//最大主石重
+            // zhusjd: cleaness,//主石净度
+            // shusys: color,//主石颜色
+            // zhusqg: cut,//主石切工
+            // zhuslx: type,//主石类型
+            // zhusxz: shape,//主石形状
+            // qiege: roundCut,//圆钻切割
+            // zslx: certificate,//证书类型
+            // youx: simOptimal,//优选
+            // orderBy: this.sortIndex === -1 ? '' : this.sorts[this.sortIndex].value//排序
           }
         }).then(res => {
           this.pageInfo = {
@@ -223,8 +321,9 @@
         this.stoneIndex = index;
         this.$refs['stone-confirm'].open();
       },
-      handleSelectStone() {
-        this.setStoneMade({ N: this.stoneList[this.stoneIndex] });
+      handleSelectStone(item) {
+        item.zslx = item.zhengs; //接口字段有变化
+        this.setStoneMade({ N: item });
         this.$router.go(-1);
       },
       advanceStone() {
@@ -281,57 +380,67 @@
   .list {
     background-color: #fff;
     position: relative;
-    padding: 0 24px;
     li {
-      padding: 30px 16px;
-      align-items: stretch;
-      border-bottom: 1px solid #f0f0f0;
-      .img {
-        width: 120px;
-        height: 120px;
-        margin-right: 40px;
-        flex-shrink: 0;
-        background-color: #f5f5f5;
-        img {
-          height: 100%;
-        }
+      padding: 0 24px;
+      &.optimal {
+        background: url("~@/assets/stone/chosen.png") no-repeat right top/80px
+          80px;
       }
-      .detail {
-        flex-direction: column;
-        align-items: flex-start;
-        position: relative;
-        .name {
-          font-size: 24px;
-          color: #666;
-          padding-top: 10px;
-        }
-        .desc {
-          font-size: 20px;
-          color: #999;
-          padding-top: 24px;
-        }
-        .line3 {
-          position: absolute;
-          width: 100%;
-          bottom: 10px;
-          left: 0;
-          align-items: center;
-          .price {
-            font-size: 24px;
-            color: @color4;
-            span {
-              font-size: 20px;
-            }
+      .item-wrapper {
+        padding: 30px 16px;
+        align-items: stretch;
+        border-bottom: 1px solid #f0f0f0;
+        .img {
+          width: 120px;
+          height: 120px;
+          margin-right: 40px;
+          flex-shrink: 0;
+          background-color: #f5f5f5;
+          img {
+            height: 100%;
           }
         }
-        .cart {
-          position: absolute;
-          top: 68px;
-          right: 16px;
-          width: 40px;
-          height: 40px;
-          background: url("~@/assets/goods/icon_cart.png") no-repeat;
-          background-size: 100%;
+        .detail {
+          flex-direction: column;
+          align-items: flex-start;
+          position: relative;
+          .name {
+            font-size: 24px;
+            color: #666;
+            padding-top: 10px;
+          }
+          .desc {
+            font-size: 20px;
+            color: #999;
+            padding-top: 24px;
+          }
+          .line3 {
+            position: absolute;
+            width: 100%;
+            bottom: 10px;
+            left: 0;
+            align-items: center;
+            .price {
+              font-size: 24px;
+              color: @color4;
+              span {
+                font-size: 20px;
+              }
+            }
+            .count {
+              color: #999;
+              padding-left: 20px;
+            }
+          }
+          .cart {
+            position: absolute;
+            top: 68px;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: url("~@/assets/goods/icon_cart.png") no-repeat;
+            background-size: 100%;
+          }
         }
       }
     }
@@ -358,21 +467,24 @@
       margin-bottom: 40px;
     }
     .label {
-      font-size: 30px;
+      font-size: 24px;
       color: #999;
     }
     .advanced {
-      position: absolute;
+      padding-top: 106px;
       width: 100%;
       bottom: 90px;
       text-align: center;
       .btn-txt {
-        width: 220px;
+        width: 400px;
+        background-color: @color2;
+        color: #fff;
         height: 68px;
         font-size: 30px;
         margin-bottom: 40px;
       }
       .tips {
+        font-size: 30px;
         color: #999;
         span {
           color: @color2;
@@ -435,6 +547,19 @@
       height: 96px;
       .btns {
         padding: 14px 20px;
+        display: flex;
+        .btn {
+          &:first-child {
+            background: url("~@/assets/goods/button_gold_l_sku.png") no-repeat;
+            background-size: 100% 100%;
+            border-radius: 0;
+          }
+          &:last-child {
+            background: url("~@/assets/goods/button_pink_l_sku.png") no-repeat;
+            background-size: 100% 100%;
+            border-radius: 0;
+          }
+        }
       }
       box-shadow: 0 -10px 50px 10px rgba(170, 170, 170, 0.5);
     }
@@ -443,7 +568,10 @@
 
 <style lang="less">
   .selectstone {
-    .fixwidth {
+    .fixwidth3 {
+      min-width: 198px;
+    }
+    .fixwidth4 {
       min-width: 144px;
     }
   }

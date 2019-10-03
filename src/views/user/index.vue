@@ -12,25 +12,28 @@
           <span>查看全部订单</span>
           <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
         </div>
+      </div>
+      <div class="panel-header" @click="$router.push({ name: 'wechatgroup'})">
+        <span>关联微信</span>
+        <div class="more">
+          <span>查看微群信息</span>
+          <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
         </div>
-        <div class="panel-header" @click="$router.push({ name: 'wechatgroup'})">
-          <span>会员微群</span>
-          <div class="more">
-            <span>查看微群信息</span>
-            <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
+      </div>
+      <!-- <div class="panel-header" @click="$router.push({ name: 'offlinemoney'})">
+        <span>线下补款</span>
+        <div class="more">
+          <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
         </div>
-          </div>
-          <div class="panel-header" @click="$router.push({ name: 'offlinemoney'})">
-            <span>线下补款</span>
-            <div class="more">
-              <img src="@/assets/mypage/icon_arrow_r_s.png" alt="">
-        </div>
-            </div>
-          </div>
-          <div class="footer">
-            <v-footer></v-footer>
-          </div>
-        </div>
+      </div> -->
+      <div class="pay-btn">
+        <button @click="$router.push({ name: 'offlinemoney'})">付款</button>
+      </div>
+    </div>
+    <div class="footer">
+      <v-footer></v-footer>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -69,6 +72,17 @@
       margin: 20px;
       background-color: #fff;
       border-radius: 10px;
+    }
+    .pay-btn {
+      padding: 0 20px;
+      button {
+        width: 100%;
+        height: 80px;
+        color: #fff;
+        background-color: @color5;
+        border-radius: 10px;
+        font-size: 30px;
+      }
     }
   }
 </style>

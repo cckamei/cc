@@ -1,6 +1,6 @@
 <template>
   <div class="pt pb">
-    <v-header>{{ddlx === 'S' ? '高级' : '主石'}}定制</v-header>
+    <v-header>我的定制</v-header>
     <div class="content">
       <div class="gap"></div>
       <div class="stone-header flex">
@@ -10,16 +10,15 @@
           <span class="desc"></span>
           <div class="line3">
             <template v-if="stoneMade[this.ddlx] && stoneMade[this.ddlx].shouj">
-              <div class="tips" v-if="stoneMade[this.ddlx].fhlx == 1">{{labels[stoneMade[this.ddlx].fhlx]}}</div>
-              <div class="tips" v-else>当前方案需{{labels[stoneMade[this.ddlx].fhlx]}}完成定制</div>
-              合计：&nbsp;<span class="price"><span>￥</span>{{stoneMade[this.ddlx].shouj | currency}}</span>
+              <div class="tips">预计您{{stoneMade[this.ddlx].delivery_time}}后收到作品</div>
+              品牌价：&nbsp;<span class="price"><span>￥</span>{{stoneMade[this.ddlx].shouj | currency}}</span>
             </template>
             <template v-else-if="stoneMade[this.ddlx]">
               <span class="tips">精品店暂时无法定制该方案</span><br>
               <span class="tips">拨打<a class="blue" href="tel:400-1691-118">400-1691-118</a>人工客服申请专属定制服务吧！</span>
             </template>
             <template v-else>
-              合计：&nbsp;<span class="txt-lightgray">全部选定后显示</span>
+              品牌价：&nbsp;<span class="txt-lightgray">全部选定后显示</span>
             </template>
           </div>
         </div>
@@ -27,52 +26,71 @@
       <div class="gap"></div>
       <div class="row">
         <div class="flex" :class="{arrow: ddlx === 'N'}" @click="ddlx === 'N' && $refs.material.open()">
-          <div class="label">戒托材质</div>
-          <div class="input ellipsis flex" :class="{active: !!material(materialIndex)}">{{material(materialIndex) || '请选择戒托材质'}}</div>
+          <div class="label">选择戒托</div>
+          <div class="input ellipsis flex" :class="{active: !!material(materialIndex)}">{{material(materialIndex) || '请选择戒托'}}</div>
         </div>
       </div>
       <div class="row">
         <div class="flex" :class="{arrow: ddlx === 'N'}" @click="ddlx === 'N' && handleOpenSize()">
-          <div class="label">戒托手寸</div>
-          <div class="input ellipsis flex" :class="{active: !!ringName}">{{ringName || '请选择戒托手寸'}}</div>
+          <div class="label">选择手寸</div>
+          <div class="input ellipsis flex" :class="{active: !!ringName}">{{ringName || '请选择手寸'}}</div>
         </div>
       </div>
       <div class="gap"></div>
       <div class="row bb">
         <div class="flex arrow" @click="selectStone">
-          <div class="label">选择主石</div>
-          <div class="input ellipsis flex"><span v-if="!stoneMade[this.ddlx]">请选择主石</span></div>
+          <div class="label">选择钻石</div>
+          <div class="input ellipsis flex"><span v-if="!stoneMade[this.ddlx]">美钻规格</span></div>
         </div>
       </div>
       <div v-if="stoneMade[this.ddlx]" class="stone flex">
         <div class="img"><img src="@/assets/stone/pic_dia.png" alt=""></div>
         <div class="detail flex-auto flex">
           <div class="detail-row flex">
-            <div class="col">重量：{{stoneMade[this.ddlx].zhusz}}克拉</div>
+            <div class="col">重量：{{ stoneMade[this.ddlx].zhusz >= 1 ? `${stoneMade[this.ddlx].zhusz}克拉` : `${+stoneMade[this.ddlx].zhusz * 100}分`}}</div>
             <div class="col">净度：{{stoneMade[this.ddlx].zhusjd}}</div>
           </div>
           <div class="detail-row flex">
             <div class="col">颜色：{{stoneMade[this.ddlx].zhusys}}</div>
-            <div class="col">证书：{{stoneMade[this.ddlx].zslx}}证书</div>
-          </div>
-          <div class="detail-row flex">
             <div class="col">切工：{{stoneMade[this.ddlx].zhusqg}}</div>
-            <div class="col"></div>
           </div>
+          <template v-if="ddlx === 'N'">
+            <div class="detail-row flex">
+              <div class="col">类型：{{stoneMade[this.ddlx].zhuslx}}</div>
+              <div class="col">形状：{{stoneMade[this.ddlx].zhusxz}}</div>
+            </div>
+            <div class="detail-row flex">
+              <div class="col">切割：{{stoneMade[this.ddlx].qiege}}</div>
+              <div class="col">证书：{{stoneMade[this.ddlx].zslx}}</div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="detail-row flex">
+              <div class="col">证书：{{stoneMade[this.ddlx].zslx}}</div>
+              <div class="col"></div>
+            </div>
+          </template>
         </div>
       </div>
-      <div class="row" v-if="0">
+      <div class="row">
         <div class="flex">
-          <div class="label">主石价格</div>
+          <div class="label">钻石品牌价</div>
           <div class="input ellipsis flex active" v-if="stoneMade[ddlx] && stoneMade[ddlx].shouj">￥{{stoneMade[ddlx].shouj | currency}}</div>
           <div class="input ellipsis flex" v-else-if="stoneMade[ddlx]">当前钻石方案暂无商品</div>
           <div v-else class="input ellipsis flex">全部选定后显示</div>
         </div>
       </div>
       <div class="gap"></div>
-      <div class="row">
-        <v-form-input class="remark" label="留言" v-model="remark" placeholder="（选填）请填写您的要求"></v-form-input>
-      </div>
+      <template v-if="ddlx === 'N'">
+      </template>
+      <template v-else>
+        <div class="row">
+          <v-form-input class="remark" label="高级定制" v-model="remark" placeholder="（选填）请填写您的要求留言"></v-form-input>
+        </div>
+        <div class="row">
+          <v-form-input class="remark" label="客服热线" value="400-169-1118"></v-form-input>
+        </div>
+      </template>
     </div>
     <div class="footer">
       <div class="btns">

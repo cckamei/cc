@@ -4,7 +4,7 @@
       <mt-swipe :auto="4000" class="banner">
         <mt-swipe-item v-for="(item, index) in bannerList" :key="index">
           <a :href="item.url" v-if="item.type == 1">
-            <img :src="item.img" />
+            <img class="img" :src="item.img" />
           </a>
           <img v-else :src="item.img" alt="" @click="goGoodsDetail(item.id)">
         </mt-swipe-item>
@@ -85,7 +85,11 @@
 
 <style lang="less" scoped>
   .banner {
-    height: 450px;
+    height: 550px;
+  }
+
+  .pb {
+    padding-bottom: 108px;
   }
 
   .activity {
@@ -100,7 +104,15 @@
 
   li {
     img {
-      height: 220px;
+      height: 300px;
+    }
+  }
+</style>
+
+<style lang="less">
+  .banner {
+    .mint-swipe-item img {
+      height: 100%;
     }
   }
 </style>

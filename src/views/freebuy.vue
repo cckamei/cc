@@ -1,14 +1,16 @@
 <template>
   <div class="freebuy">
-    <div class="appointment" @click="$router.push({'name':'bespeak'})">
-      <img :src="getUserInfo._YUYUE" alt="" srcset="">
-    </div>
-    <div class="instalments" @click="goPage">
-      <img :src="getUserInfo.fenqi" alt="" srcset="">
-    </div>
-    <!-- getUserInfo.yjhx TODO -->
-    <div class="instalments" @click="goTradein">
-      <img src="http://img.cc-jewel.com/wyg_huanxin.png" alt="" srcset="">
+    <div class="content">
+      <div class="appointment" @click="goTradein">
+        <img src="http://img.cc-jewel.com/wyg_huanxin.png" alt="" srcset="">
+      </div>
+      <div class="appointment" @click="$router.push({'name':'bespeak'})">
+        <img :src="getUserInfo._YUYUE" alt="" srcset="">
+      </div>
+      <div class="appointment" @click="goPage">
+        <img :src="getUserInfo.fenqi" alt="" srcset="">
+      </div>
+      <!-- getUserInfo.yjhx TODO -->
     </div>
     <v-footer></v-footer>
   </div>
@@ -46,7 +48,8 @@
     .appointment {
       img {
         width: 100%;
-        height: 100%;
+        height: 300px;
+        display: block;
       }
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="pt offline-pay">
-    <v-header>线下补款</v-header>
+    <v-header>补款</v-header>
     <div class="content">
       <div class="row">
         <v-form-input :value="reqData.user_name" label="姓名" placeholder="请填写姓名" :readonly="true"></v-form-input>

@@ -24,7 +24,16 @@
       <div class="info">
         <div class="price">
           <i>￥</i>{{(sku.price || res.price) | currency}}
-          <img v-if="getUserInfo.is_distributor && userId" @click="clickShare" class="right" src="@/assets/goods/icon_qrcode.png" alt="">
+          <div class="price-right flex right">
+            <div class="qrcode" @click="clickShare">
+              <img v-if="true || getUserInfo.is_distributor && userId" src="@/assets/goods/icon_qrcode.png" alt="">
+              <p>分享</p>
+            </div>
+            <div class="params" @click="paramsVisible = true">
+              <img src="@/assets/goods/icon_para.png" alt="">
+              <p>参数</p>
+            </div>
+          </div>
         </div>
         <div class="flex tag" v-if="res.tag">
           <button class="tag-btn" v-for="(item, index) in res.tag.split(',')" :key="index">{{item}}</button>
@@ -59,7 +68,7 @@
       <template></template>
       <template v-if="!getCommon.isTradein && activity.length">
         <div class="row">
-          <v-form-slide-up label="优惠活动" title="店铺优惠">
+          <v-form-slide-up label="促销活动" title="店铺优惠">
             <template slot="value">
               <button class="activity-btn">{{activity[0].active_type === '1' ? '满减优惠' : '限时折扣'}}</button>{{activity[0].name}}
             </template>
@@ -79,16 +88,8 @@
         </div>
       </template>
       <div class="gap"></div>
-      <div class="row" v-if="!getCommon.isTradein && res.has_dingzhi">
-        <div class="list-item flex arrow" @click="goStoneCusMade">
-          <div class="label">美钻定制</div>
-          <div class="input ellipsis flex">
-            <img class="star" src="@/assets/stone/icon_star.png" alt="">进入全球美钻库选择
-          </div>
-        </div>
-      </div>
       <div class="row">
-        <v-form-slide-up :open.sync="autoOpenSKU" label="选择规格" v-model="sku.selectedSku" :placeholder="placeholder">
+        <v-form-slide-up :open.sync="autoOpenSKU" label="优选推荐" labelClass="label-highlight" placeholderClass="label-highlight" value="更多规格..." placeholder="更多规格...">
           <ul class="sku">
             <li class="sku-icon flex">
               <img class="icon" :src="res.img" alt="">
@@ -162,7 +163,15 @@
           </template>
         </v-form-slide-up>
       </div>
-      <div class="row">
+      <div class="row" v-if="!getCommon.isTradein && res.has_dingzhi">
+        <div class="list-item flex arrow" @click="goStoneCusMade">
+          <div class="label label-highlight">美钻定制</div>
+          <div class="input ellipsis flex">
+            <img class="star" src="@/assets/stone/icon_star.png" alt=""><span class="label-highlight"> 全球美钻库可选...</span>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row">
         <v-form-slide-up label="商品参数" title="商品参数" :placeholder="placeholder2">
           <ul class="goods-param">
             <li class="flex">
@@ -209,10 +218,10 @@
             </li>
           </ul>
         </v-form-slide-up>
-      </div>
+      </div> -->
       <div class="gap"></div>
       <div class="row" v-if="res.service.length">
-        <v-form-slide-up label="基础服务" title="基础服务" :placeholder="res.service.map(i => i.name).join(';')">
+        <v-form-slide-up label="贴心服务" title="基础服务" placeholder="保障条款...">
           <ul class="service">
             <li v-for="(item, index) in res.service" :key="index">
               <div class="flex"><img src="@/assets/goods/icon_hook_mini.png" alt=""><span>{{item.name}}</span></div>
@@ -303,6 +312,52 @@
     <v-popup-confirm2 class="qrcode-popup" title="请向顾客出示二维码" :confirm-btn="false" cancel-text="关闭" ref="qrcode-popup">
       <div class="qrcode" ref="qrcode" alt="" />
     </v-popup-confirm2>
+    <v-slide-up v-model="paramsVisible" title="商品参数">
+      <ul class="goods-param">
+        <li class="flex">
+          <span class="label">商品货号</span>
+          <span class="value">{{res.merchant_code}}</span>
+        </li>
+        <li class="flex">
+          <span class="label">套系</span>
+          <span class="value">{{res.series}}</span>
+        </li>
+        <li class="flex">
+          <span class="label">款式</span>
+          <span class="value">{{res.kuanshi}}</span>
+        </li>
+        <template v-if="res.good_kind === '0'">
+          <li class="flex">
+            <span class="label">钻石切工</span>
+            <span class="value">{{res.zuanshiqiegong}}</span>
+          </li>
+          <li class="flex">
+            <span class="label">主钻形状</span>
+            <span class="value">{{res.zhuzuanxingzhuang}}</span>
+          </li>
+          <li class="flex">
+            <span class="label">副钻形状</span>
+            <span class="value">{{res.fuzuanxingzhuang || '无副钻'}}</span>
+          </li>
+          <li class="flex">
+            <span class="label">副钻分数</span>
+            <span class="value">{{res.fuzuanfenshu || '无副钻'}}</span>
+          </li>
+        </template>
+        <li v-if="res.good_kind === '2'" class="flex">
+          <span class="label">贵金属成色</span>
+          <span class="value">{{res.guijinshuchengse}}</span>
+        </li>
+        <li class="flex">
+          <span class="label">镶嵌材质</span>
+          <span class="value">{{res.xiangqiancaizhi}}</span>
+        </li>
+        <li class="flex">
+          <span class="label">镶嵌方式</span>
+          <span class="value">{{res.xiangqianfangshi}}</span>
+        </li>
+      </ul>
+    </v-slide-up>
   </div>
 </template>
 
@@ -359,7 +414,8 @@
         emp_id: getParams().emp_id || '',
         goodsId: '',
         cards: [],
-        qrcode: ''
+        qrcode: '',
+        paramsVisible: false
       };
     },
     created() {
@@ -883,11 +939,6 @@
       span {
         font-size: 30px;
       }
-      img {
-        width: 40px;
-        height: 40px;
-        margin-top: 10px;
-      }
     }
     .tag {
       flex-wrap: wrap;
@@ -990,8 +1041,8 @@
   }
 
   .star {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     margin-right: 12px;
   }
 
@@ -1184,9 +1235,7 @@
       }
     }
   }
-</style>
 
-<style lang="less" scoped>
   /*popup内部的里面元素的样式直接放到该页面的根部 否则样式在手机上无效*/
   .activity-btn {
     border-radius: 12px;
@@ -1286,9 +1335,21 @@
     }
   }
 
-  .qrcode {
-    margin: 0 auto;
-    padding: 40px;
+  .price-right {
+    margin-right: -20px;
+    .qrcode,
+    .params {
+      margin: 0 20px;
+      text-align: center;
+      img {
+        width: 40px;
+        height: 40px;
+      }
+      p {
+        font-size: 20px;
+        color: #999;
+      }
+    }
   }
 </style>
 
@@ -1327,6 +1388,10 @@
       background: url("~@/assets/goods/button_pink_l_sku.png") no-repeat;
       background-size: 100% 100%;
       border-radius: 0;
+    }
+    .label-highlight {
+      color: @color2 !important;
+      font-size: 30px !important;
     }
   }
 </style>

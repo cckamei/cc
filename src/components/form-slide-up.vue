@@ -1,9 +1,9 @@
 <template>
   <div class="flex arrow">
-    <div class="label">{{label}}</div>
+    <div :class="[labelClass, 'label']">{{label}}</div>
     <div class="input ellipsis flex" @click="visible = true">
       <slot name="value">
-        <div class="input ellipsis">{{value || placeholder || '　'}}</div>
+        <div :class="['input', 'ellipsis', placeholderClass]">{{value || placeholder || '　'}}</div>
       </slot>
     </div>
     <v-slide-up v-model="visible" :title="title" @confirm="$emit('confirm')" :confirmText="confirmText">
@@ -31,6 +31,14 @@
       title: '',
       open: {
         default: false
+      },
+      labelClass: {
+        type: String,
+        default: ''
+      },
+      placeholderClass: {
+        type: String,
+        default: ''
       }
     },
     data() {
@@ -68,14 +76,14 @@
     .label {
       flex-shrink: 0;
       min-width: 30%;
-      color: #999;
+      color: #666;
       font-size: 24px;
     }
     .input {
       text-align: right;
       width: 100%;
       font-size: 24px;
-      color: #666;
+      color: #333;
       justify-content: flex-end;
     }
   }

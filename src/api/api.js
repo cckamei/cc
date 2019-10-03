@@ -58,7 +58,8 @@ let api = {
   cardShareURL: { url: 'api/v1/share/pic' }, //优惠券购物卡生成分享图片地址
   getEmptyRing: { url: 'api/v1/kt/info', method: 'get' }, //主石定制空托列表
   getStoneList: { url: 'api/v1/zhus/info', method: 'get' }, //获取钻石列表
-  getStoneOptions: { url: 'api/v1/zhus/options', method: 'get' }, //获取钻石选项
+  getStoneSimOptions: { url: 'api/v1/zhus/simple_options', method: 'get' }, //获取钻石快捷筛选选项
+  getStoneOptions: { url: 'api/v1/zhus/options', method: 'get' }, //获取钻石高级筛选选项
   addDIYStoneOrder: { url: 'api/v1/buy_diyproduct_now', method: 'post' }, //提交托石分离订单
   getActivity: { url: 'api/v1/active/list', method: 'get' }, //获取商品详情优惠活动列表
   getBrandGift: { url: 'api/v1/order/liquan', method: 'get' }, //获取品牌礼遇列表
