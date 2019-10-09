@@ -25,6 +25,10 @@
               </div>
             </li>
           </ul>
+          <div v-if="tradeinList.length" class="tips">
+            当前价格为预估起步价，仅供参考。<br/>
+            旧品经检验后将根据实物情况（材质、实重等）调整价值、价格，优质旧品将获得更高估值。
+          </div>
         </section>
         <section class="summary">
           <div class="row pre-price">
@@ -107,25 +111,6 @@
         });
       },
       reqTradeinCalOld() {
-        // jlx_key
-        // pdlx_key
-        // stone_key
-        // pp_key
-        // goods_imgs
-        // cert_imgs
-        // other_imgs_info
-
-        // brandIndex: 0,
-        // brands: [], //品牌
-        // goldIndex: 0,
-        // golds: [], //金信息
-        // stoneIndex: 0,
-        // stones: [], //石信息
-        // wearIndex: 0,
-        // wears: [], //佩戴分类
-        // goodsPicList: [], //商品照片
-        // certifyPicList: [], //鉴定证书
-        // otherPicList: [] //其他票据
         if(this.getTradeinOld.length) {
           this.ajax({ name: 'tradeinCalOld', data: { old_goods: this._getOldGoods() } }).then(res => {
             this.tradeinList = this.getTradeinOld.map((item, index) => {
@@ -156,6 +141,24 @@
       _getOldGoods() {
         const { brands, golds, stones, wears } = this.getTradeinOptions;
         const oldGoods = this.getTradeinOld.map((item, index) => {
+
+          // "jlx_key": "1000", 
+          // "pdlx_key": "2000", 
+          // "pdlx_name": "", #非必填
+          // "diamond_weight_key": "3000",  # 钻石重分类
+          // "stone_kind_key": "4000"     # 石头分类   4000 钻石  4001 宝石  4002 无宝石  
+          // "pp_key":"0000", 
+          // "pp_name": "", 非必填
+          // "jin_weight": "30",
+          // "zhus_weight_main": "1.2",
+          // "zhus_weight_other": "",    # 用户没有填值，默认传空
+          // "hongbaoshi_weight": "0.2",
+          // "lanbaoshi_weight": "",
+          // "qita_weight": "",
+          // "goods_imgs":["http://xxxx", "http://xxxxx"], 
+          // "cert_imgs":["http://xxxx"], 
+          // "other_imgs_info":["http://xxxx"]  #票据
+
           let params = {
             pp_key: brands[item.brandIndex].key,
             pp_name: item.brandName,
@@ -165,12 +168,12 @@
 
             stone_kind_key: ['4000', '4001', '4002'][item.stoneType],
 
-            zhus_weight_main: item.zhus_weight_main,
-            zhus_weight_other: item.zhus_weight_other,
+            zhus_weight_main: item.diamondMax,
+            zhus_weight_other: item.diamondOther,
 
-            hongbaoshi_weight: item.hongbaoshi_weight,
-            lanbaoshi_weight: item.lanbaoshi_weight,
-            qita_weight: item.qita_weight,
+            hongbaoshi_weight: item.stoneRed,
+            lanbaoshi_weight: item.stoneBlue,
+            qita_weight: item.stoneOther,
 
             pdlx_key: wears[item.goldIndex].key,
             pdlx_name: item.wearName,
@@ -240,7 +243,7 @@
       .goods {
         .item-wrapper {
           background-color: #fff;
-          padding: 30px 40px;
+          padding: 30px 24px;
           align-items: stretch;
           border-top: 1px solid #f0f0f0;
           border-bottom: 1px solid #f0f0f0;
@@ -274,6 +277,11 @@
         }
       }
     }
+  }
+
+  .tips {
+    color: @color2;
+    padding: 30px 24px;
   }
 
   .footer {

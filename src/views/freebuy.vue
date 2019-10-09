@@ -10,6 +10,9 @@
       <div class="appointment" @click="goPage">
         <img :src="getUserInfo.fenqi" alt="" srcset="">
       </div>
+      <div class="appointment" @click="goBareStone">
+        <img src="http://img.cc-jewel.com/wyg_huanxin.png" alt="" srcset="">
+      </div>
       <!-- getUserInfo.yjhx TODO -->
     </div>
     <v-footer></v-footer>
@@ -30,6 +33,9 @@
       goTradein() {
         this.setTradeinOld([]);
         this.$router.push({ name: 'tradeinconfirmold' });
+      },
+      goBareStone() {
+        this.$router.push({ name: 'selectstone', query: { type: 1 } });
       }
     }
   };

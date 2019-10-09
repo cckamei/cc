@@ -1,6 +1,6 @@
 <template>
   <div class="pt pb advanced">
-    <v-header class="header">主石选择</v-header>
+    <v-header class="header">钻石选择</v-header>
     <div class="content">
       <ul class="filter-content">
         <li>

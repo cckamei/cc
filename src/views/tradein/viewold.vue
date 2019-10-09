@@ -4,31 +4,31 @@
     <div class="content">
       <ul class="filter-content">
         <li>
-          <span class="title">品牌：</span><span>{{tradeinViewOld.pp_info.title}}</span>
+          <span class="title">旧品品牌：</span><span>{{tradeinViewOld.pp_info.title}}</span>
         </li>
         <li>
           <div class="item">
-            <span class="title">金信息：</span><span>{{tradeinViewOld.jlx_info.title}}</span>
+            <span class="title">旧品金品类：</span><span>{{tradeinViewOld.jlx_info.title}}</span>
           </div>
           <div class="item">
-            <span class="title">石信息：</span><span>{{tradeinViewOld.stone_info.title}}</span>
+            <span class="title">旧品宝石种类：</span><span>{{tradeinViewOld.stone_info.title}}</span>
           </div>
           <div class="item">
-            <span class="title">佩戴分类：</span><span>{{tradeinViewOld.pdlx_info.title}}</span>
+            <span class="title">旧品佩戴小类：</span><span>{{tradeinViewOld.pdlx_info.title}}</span>
           </div>
         </li>
         <li>
-          <div class="title">商品照片</div>
+          <div class="title">旧品照片</div>
           <a-upload ref="goods-pic" class="picture" accept="image/*" action="/api/v1/img_upload_v2" listType="picture-card" @change="handleGoodsPicChange" :showUploadList="{showPreviewIcon: false, showRemoveIcon: false}" :fileList="goodsPicList">
           </a-upload>
         </li>
         <li>
-          <div class="title">鉴定证书</div>
+          <div class="title">旧品鉴定证书照片</div>
           <a-upload ref="certify-pic" class="picture" accept="image/*" action="/api/v1/img_upload_v2" listType="picture-card" :fileList="certifyPicList" :showUploadList="{showPreviewIcon: false, showRemoveIcon: false}" @change="handleCertifyPicChange">
           </a-upload>
         </li>
         <li>
-          <div class="title">其他票据</div>
+          <div class="title">旧品票据照片</div>
           <a-upload ref="other-pic" class="picture" accept="image/*" action="/api/v1/img_upload_v2" listType="picture-card" :fileList="otherPicList" :showUploadList="{showPreviewIcon: false, showRemoveIcon: false}" @change="handleOtherPicChange">
           </a-upload>
         </li>

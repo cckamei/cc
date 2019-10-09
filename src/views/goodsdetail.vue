@@ -9,7 +9,7 @@
     <v-header-menus back shadow v-show="top > 10">
       <span class="sub-title" :class="{active: top < offsetTops[1]}" @click="setTop(0)">商品</span>
       <span class="sub-title" :class="{active: top >= offsetTops[1] && top < offsetTops[2]}" @click="setTop(1)">详情</span>
-      <span class="sub-title" :class="{active: top >= offsetTops[2]}" @click="setTop(2)">推荐</span>
+      <span v-if="!getCommon.isTradein" class="sub-title" :class="{active: top >= offsetTops[2]}" @click="setTop(2)">推荐</span>
       <div v-if="!getCommon.isTradein" slot="menus" class="menus">
         <div @click="goCart" class="menu"><img src="@/assets/goods/button_cart_g.png" alt=""></div>
         <div class="menu" @click.stop="menusVisible = !menusVisible"><img src="@/assets/goods/button_option_g.png" alt=""></div>
@@ -118,11 +118,11 @@
             </template>
             <template v-else-if="res.good_kind === '1' && skuList.length">
               <li>
-                <div class="title">主石名称</div>
+                <div class="title">钻石名称</div>
                 <v-button-radio v-model="skuIndex[0]" :list="skuList[0]" :cancel="true"></v-button-radio>
               </li>
               <li>
-                <div class="title">主石评级</div>
+                <div class="title">钻石评级</div>
                 <v-button-radio v-model="skuIndex[1]" :list="skuList[1]" :cancel="true"></v-button-radio>
               </li>
               <li>
@@ -157,7 +157,10 @@
               </div>
             </li>
           </ul>
-          <template slot="footer">
+          <template v-if="getCommon.isTradein" slot="footer">
+            <button class="btn active" @click="autoOpenSKU = false">确定</button>
+          </template>
+          <template v-else slot="footer">
             <button class="btn sku-cart" @click="skuAddCart()">加入购物车</button>
             <button class="btn sku-purchase" @click="skuBuyNow()">立即购买</button>
           </template>
@@ -424,7 +427,11 @@
     mounted() {
       setTimeout(() => {
         let headerHeight = 96 / window.htp.designWidth * window.screen.width;
-        this.offsetTops = [0, Math.trunc(this.$refs['image-text'].offsetTop - headerHeight), Math.trunc(this.$refs['recommend'].$el.offsetTop - headerHeight)];
+
+        this.offsetTops = [0, Math.trunc(this.$refs['image-text'].offsetTop - headerHeight)];
+        if(this.$refs['recommend']) {
+          this.offsetTops.push(Math.trunc(this.$refs['recommend'].$el.offsetTop - headerHeight));
+        }
       }, 1000);
     },
     computed: {
@@ -434,7 +441,7 @@
           return '选择 主钻分数；钻石净度；颜色；规格；数量';
         }
         if(this.res.good_kind === '1') {
-          return '选择 主石名称；主石评级；颜色；规格；数量';
+          return '选择 钻石名称；钻石评级；颜色；规格；数量';
         }
         if(this.res.good_kind === '2') {
           return '选择 金类型；金重；规格；数量';

@@ -58,6 +58,7 @@
         <goods-card v-if="order.kind === 2" :goods="order.goods"></goods-card>
         <goods-stone v-else-if="order.kind === 3" :goods="order.goods"></goods-stone>
         <goods-package v-else-if="order.kind === 4" :goods="order.goods[0]"></goods-package>
+        <bare-stone v-else-if="order.kind === 6" :goods="order.goods"></bare-stone>
         <div class="itemprice">
           <ul>
             <li v-if="order.kind !== 2" class="priceType">
@@ -96,20 +97,20 @@
           <!-- 待发货 -->
           <div class="ordertypeWC" v-if="order.status==1">
             <button class="btngrey btnleft flexleft" @click="goApplyRefund">申请退款</button>
-            <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button v-if="![2, 6].includes(order.kind)" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
           </div>
           <!-- 待收货 -->
           <div class="ordertypeDS" v-if="order.status == 2">
             <button class="btngrey btnleft flexleft" @click="goApplyRefund()">申请退款</button>
-            <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button v-if="![2, 6].includes(order.kind)" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
             <button class="btnpink" @click="isConform = true">确认收货</button>
           </div>
           <!-- 已完成 -->
           <div class="ordertypeQX" v-if="order.status==3">
             <button v-if="order.return_flag !== 0" class="btngrey flexleft" @click="applyReturnDiff">退差价</button>
-            <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button v-if="![2, 6].includes(order.kind)" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
             <!-- <button class="btngrey" @click="tradeIn">以旧换新</button> -->
           </div>
@@ -131,13 +132,13 @@
           <!-- 定制中 -->
           <div class="ordertypeQX" v-if="order.status == 9">
             <button class="btngrey btnleft flexleft" @click="goApplyRefund">申请退款</button>
-            <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button v-if="![2, 6].includes(order.kind)" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
             <button class="btngrey" @click="serviceVisible = true">联系客服</button>
           </div>
           <!-- 待取货 -->
           <div class="ordertypeQH" v-if="order.status == 10">
             <button class="btngrey btnleft flexleft" @click="goApplyRefund()">申请退款</button>
-            <button v-if="order.kind !== 2" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
+            <button v-if="![2, 6].includes(order.kind)" class="btngrey btnleft" @click="applyInvoice">申请开票</button>
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
             <button class="btnpink" @click="isConform = true">确认收货</button>
           </div>
@@ -186,12 +187,14 @@
   import goodsCard from './components/card.vue';
   import goodsNormal from './components/normal.vue';
   import goodsStone from './components/stone.vue';
+  import bareStone from './components/bare.vue';
   export default {
     components: {
       goodsPackage,
       goodsCard,
       goodsNormal,
-      goodsStone
+      goodsStone,
+      bareStone
     },
     data() {
       return {

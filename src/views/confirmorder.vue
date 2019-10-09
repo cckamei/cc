@@ -541,9 +541,9 @@
     .row > .flex {
       padding-left: 0;
     }
-    .summary .label,
-    .remark .label {
-      color: #999 !important;
+    .summary .flex,
+    .remark {
+      padding-right: 0;
     }
     .option {
       .activity,

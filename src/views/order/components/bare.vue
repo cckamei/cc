@@ -1,19 +1,18 @@
 <template>
   <div>
-    <v-split-title>新品统计</v-split-title>
     <div class="item-content" v-for="(item, index) in goods" :key="index">
       <div class="contentleft">
-        <img :src="item.goods_img" alt="">
+        <img src="@/assets/stone/pic_dia.png" alt="">
       </div>
       <div class="contentright">
         <div class="contenttitle">
-          <span>{{item.goods_name}}</span>
-          <span>￥{{item.goods_price}}</span>
+          <span>钻石</span>
+          <span>￥{{item.price}}</span>
         </div>
         <div class="contentmessage">
-          <p>{{skuLabel(item)}}</p>
+          <p>{{ item.zhusz >= 1 ? `${item.zhusz}克拉` : `${+item.zhusz * 100}分`}}; {{item.zhusjd}}; {{item.zhusys}}; {{item.zhusqg}}; {{item.zhuslx}}; {{item.zhusxz}}; {{item.qiege}}; {{item.zhengs}}</p>
           <div class="messageright">
-            <span>X{{item.goods_count}}</span>
+            <span>X{{item.shl}}</span>
           </div>
         </div>
       </div>
@@ -27,10 +26,6 @@
       goods: {
         type: Array,
         default: () => []
-      },
-      orderlist: {
-        type: Boolean,
-        default: false
       }
     },
     computed: {
@@ -80,11 +75,6 @@
         font-size: 24px;
         span:nth-child-of(2) {
           text-align: right;
-        }
-        .lettering {
-          width: 30px;
-          height: 30px;
-          float: right;
         }
       }
       .contentmessage {

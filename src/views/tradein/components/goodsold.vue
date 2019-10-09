@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-split-title v-if="showTitle">旧品信息</v-split-title>
+    <v-split-title v-if="showTitle">旧品统计</v-split-title>
     <ul class="goods">
       <li v-for="(item, index) in goods" :key="index" @click="$emit('click', item)">
         <div class="item-wrapper flex">

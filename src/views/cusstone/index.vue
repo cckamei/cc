@@ -15,7 +15,7 @@
             </template>
             <template v-else-if="stoneMade[this.ddlx]">
               <span class="tips">精品店暂时无法定制该方案</span><br>
-              <span class="tips">拨打<a class="blue" href="tel:400-1691-118">400-1691-118</a>人工客服申请专属定制服务吧！</span>
+              <span class="tips">拨打<a class="blue" :href="'tel:' + tel">{{tel}}</a>人工客服申请专属定制服务吧！</span>
             </template>
             <template v-else>
               品牌价：&nbsp;<span class="txt-lightgray">全部选定后显示</span>
@@ -85,10 +85,10 @@
       </template>
       <template v-else>
         <div class="row">
-          <v-form-input class="remark" label="高级定制" v-model="remark" placeholder="（选填）请填写您的要求留言"></v-form-input>
+          <v-form-input class="remark" label="高级定制" v-model="remark" placeholder="（选填）请填写您的需求留言"></v-form-input>
         </div>
         <div class="row">
-          <v-form-input class="remark" label="客服热线" value="400-169-1118"></v-form-input>
+          <v-form-input class="remark" label="客服热线" :value="tel"></v-form-input>
         </div>
       </template>
     </div>
@@ -162,7 +162,8 @@
     },
     data() {
       return {
-        remark: ''
+        remark: '',
+        tel: window.htp.tel
       };
     },
     computed: {

@@ -85,7 +85,9 @@ let api = {
   tradeinCalNew: { url: 'api/v1/check_new_goods_price', method: 'post', isJson: true }, //估算新品价格
   omGetPrice: { url: 'api/v1/split_pay', method: 'get' }, //分开付款 获取待付款金额信息
   omPay1: { url: 'api/v1/split_pay_prepare', method: 'post' }, //分开付款 支付流程第一步
-  omPay2: { url: 'api/v1/split_pay_submit', method: 'post' } //分开付款 向我方服务发起支付
+  omPay2: { url: 'api/v1/split_pay_submit', method: 'post' }, //分开付款 向我方服务发起支付
+  getBareStoneList: { url: 'api/v1/ls/info', method: 'get' }, //获取裸钻列表
+  addBareStoneOrder: { url: 'api/v1/buy_luoshi_now', method: 'post' } //提交裸石订单
 };
 
 for (var k in api) {

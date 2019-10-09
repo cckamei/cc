@@ -8,7 +8,7 @@
         <li>
           <div class="title">旧品品牌</div>
           <v-button-radio v-if="brands.length" className="fixwidth" v-model="brandIndex" :cancel="true" :list="brands" keyName="title"></v-button-radio>
-          <div class="input-wrapper flex">
+          <div v-if="brands.length && brands[brandIndex].key === '0002'" class="input-wrapper flex">
             <input v-model="brandName" placeholder="填写品牌名称" />
           </div>
         </li>
@@ -22,28 +22,30 @@
         <li>
           <div class="title">旧品宝石种类</div>
           <button :class="['stone-btn', 'fixwidth', {active: stoneType === 0}]" @click="stoneType = 0">钻石</button>
-          <div class="input-wrapper flex">
+          <div v-if="stoneType === 0" class="input-wrapper flex">
             <input type="number" v-model="diamondMax" placeholder="填写最大一粒钻石重量 （单位：克拉）" />
           </div>
-          <div class="input-wrapper flex">
+          <div v-if="stoneType === 0" class="input-wrapper flex">
             <input type="number" v-model="diamondOther" placeholder="填写其他钻石合计重量 （单位：克拉）" />
           </div>
+          <br>
           <button :class="['stone-btn', 'fixwidth', {active: stoneType === 1}]" @click="stoneType = 1">宝石</button>
-          <div class="input-wrapper flex">
+          <div v-if="stoneType === 1" class="input-wrapper flex">
             <input type="number" v-model="stoneRed" placeholder="填写红宝石重量 （单位：克拉）" />
           </div>
-          <div class="input-wrapper flex">
+          <div v-if="stoneType === 1" class="input-wrapper flex">
             <input type="number" v-model="stoneBlue" placeholder="填写蓝宝石重量 （单位：克拉）" />
           </div>
-          <div class="input-wrapper flex">
+          <div v-if="stoneType === 1" class="input-wrapper flex">
             <input type="number" v-model="stoneOther" placeholder="填写其他石重量 （单位：克拉）" />
           </div>
+          <br>
           <button :class="['stone-btn', 'fixwidth', {active: stoneType === 2}]" @click="stoneType = 2">无宝石</button>
         </li>
         <li>
           <div class="title">旧品佩戴小类</div>
           <v-button-radio v-if="wears.length" className="fixwidth" v-model="wearIndex" :cancel="true" :list="wears" keyName="title"></v-button-radio>
-          <div class="input-wrapper flex">
+          <div v-if="wears.length && wears[wearIndex].key === '2006'" class="input-wrapper flex">
             <input v-model="wearName" placeholder="填写佩戴小类" />
           </div>
         </li>
@@ -126,14 +128,16 @@
       this.reqTradeinOptions();
     },
     mounted() {
-      this.$nextTick(() => {
-        const $goodsPic = $(this.$refs['goods-pic'].$el);
-        const $certifyPic = $(this.$refs['certify-pic'].$el);
-        const $otherPic = $(this.$refs['other-pic'].$el);
-        $goodsPic.find('.ant-upload-select').appendTo($goodsPic.find('.ant-upload-list-picture-card'));
-        $certifyPic.find('.ant-upload-select').appendTo($certifyPic.find('.ant-upload-list-picture-card'));
-        $otherPic.find('.ant-upload-select').appendTo($otherPic.find('.ant-upload-list-picture-card'));
-      });
+      setTimeout(() => {
+        this.$nextTick(() => {
+          const $goodsPic = $(this.$refs['goods-pic'].$el);
+          const $certifyPic = $(this.$refs['certify-pic'].$el);
+          const $otherPic = $(this.$refs['other-pic'].$el);
+          $goodsPic.find('.ant-upload-select').appendTo($goodsPic.find('.ant-upload-list-picture-card'));
+          $certifyPic.find('.ant-upload-select').appendTo($certifyPic.find('.ant-upload-list-picture-card'));
+          $otherPic.find('.ant-upload-select').appendTo($otherPic.find('.ant-upload-list-picture-card'));
+        });
+      }, 100);
     },
     methods: {
       ...mapMutations(['setStoneMade', 'setTradeinOld', 'setTradeinOptions']),
@@ -143,15 +147,29 @@
           name: 'tradeinOptions'
         }).then(res => {
           this.brands = res.brands;
-          this.wears = res.pdlx;
           this.golds = res.jlx;
+          this.wears = res.pdlx;
           this.setTradeinOptions({ brands: this.brands, wears: this.wears, golds: this.golds });
           const index = this.$route.params.index;
           if(index >= 0) {
             const currentGoods = this.getTradeinOld[index];
+
             this.brandIndex = currentGoods.brandIndex;
-            this.wearIndex = currentGoods.wearIndex;
+            this.brandName = currentGoods.brandName;
+
             this.goldIndex = currentGoods.goldIndex;
+            this.goldName = currentGoods.goldName;
+
+            this.stoneType = currentGoods.stoneType;
+            this.diamondMax = currentGoods.diamondMax;
+            this.diamondOther = currentGoods.stoneRed;
+            this.stoneRed = currentGoods.diamondOther;
+            this.stoneBlue = currentGoods.stoneBlue;
+            this.stoneOther = currentGoods.stoneOther;
+
+            this.wearIndex = currentGoods.wearIndex;
+            this.wearName = currentGoods.wearName;
+
             this.goodsPicList = currentGoods.goodsPicList.map((item, index) => ({ name: '1', status: 'done', uid: index, url: item }));
             this.certifyPicList = currentGoods.certifyPicList.map((item, index) => ({ name: '1', status: 'done', uid: index, url: item }));
             this.otherPicList = currentGoods.otherPicList.map((item, index) => ({ name: '1', status: 'done', uid: index, url: item }));
@@ -173,6 +191,19 @@
 
         if(this.wears[this.wearIndex].key === '2006' && !this.wearName.length) {
           this.toast('请填写佩戴小类');
+          return false;
+        }
+
+        if(!this.goodsPicList.length) {
+          this.toast('请选择旧品照片');
+          return false;
+        }
+        if(!this.certifyPicList.length) {
+          this.toast('请选择旧品鉴定证书照片');
+          return false;
+        }
+        if(!this.otherPicList.length) {
+          this.toast('请选择旧品票据照片');
           return false;
         }
 

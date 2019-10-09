@@ -8,12 +8,27 @@
         </div>
         <div class="listright">{{typename(order.status)}}</div>
       </div>
+      <!-- 正常商品 -->
       <goods-normal :orderlist="true" v-if="order.kind === 1" :goods="order.goods"></goods-normal>
+      <!-- 购物卡 -->
       <goods-card v-if="order.kind === 2" :goods="order.goods"></goods-card>
+      <!-- 钻石定制 -->
       <goods-stone v-else-if="order.kind === 3" :goods="order.goods"></goods-stone>
+      <!-- 套餐 -->
       <goods-package :orderlist="true" v-else-if="order.kind === 4" :goods="order.goods[0]"></goods-package>
+      <!-- 裸石 -->
+      <bare-stone v-else-if="order.kind === 6" :goods="order.goods"></bare-stone>
       <div class="item-price">
-        共{{order.kind === 4 ? order.goods[0].goods_list.length : order.goods.length}}件商品 实付款： <span>￥{{order.rest_money}}</span> <span v-if="order.kind !== 2">（含运费￥{{order.logistics_money}}）</span>
+        <template v-if="order.kind === 4">
+          共 {{order.goods[0].goods_list.length}}
+        </template>
+        <template v-else-if="order.kind === 6">
+          共 {{order.goods[0].shl}}
+        </template>
+        <template v-else>
+          共 {{order.goods.length}}
+        </template>
+        件商品 实付款： <span>￥{{order.rest_money}}</span> <span v-if="order.kind !== 2">（含运费￥{{order.logistics_money}}）</span>
       </div>
       <div class="item-footer">
         <!-- 待付款 0-->
@@ -80,13 +95,15 @@
   import goodsCard from './card.vue';
   import goodsNormal from './normal.vue';
   import goodsStone from './stone.vue';
+  import bareStone from './bare.vue';
 
   export default {
     components: {
       goodsPackage,
       goodsCard,
       goodsNormal,
-      goodsStone
+      goodsStone,
+      bareStone
     },
     data() {
       return {

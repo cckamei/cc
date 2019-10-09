@@ -351,7 +351,7 @@
     }
     .summary .label,
     .remark .label {
-      color: #999 !important;
+      // color: #999 !important;
     }
     .freight {
       input {

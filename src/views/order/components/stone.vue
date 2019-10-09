@@ -10,7 +10,7 @@
           <span>￥{{item.shouj}}</span>
         </div>
         <div class="contentmessage">
-          <p>{{item.zhusz}}克拉; {{item.zhusjd}}; {{item.zhusys}}; {{item.zslx}}证书; {{item.zhusqg}}切工</p>
+          <p>{{ item.zhusz >= 1 ? `${item.zhusz}克拉` : `${+item.zhusz * 100}分`}}; {{item.zhusjd}}; {{item.zhusys}}; {{item.zhusqg}}; {{item.zhuslx}}; {{item.zhusxz}}; {{item.qiege}}; {{item.zhengs}}</p>
           <div class="messageright">
             <span>X1</span>
           </div>

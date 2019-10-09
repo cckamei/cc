@@ -48,11 +48,11 @@
         </template>
         <template v-else-if="goods.good.good_kind === '1' && skuList.length">
           <li>
-            <div class="title">主石名称</div>
+            <div class="title">钻石名称</div>
             <v-button-radio :disabled="true" v-model="value" :list="skuList[0]" :cancel="true"></v-button-radio>
           </li>
           <li>
-            <div class="title">主石评级</div>
+            <div class="title">钻石评级</div>
             <v-button-radio :disabled="true" v-model="value" :list="skuList[1]" :cancel="true"></v-button-radio>
           </li>
           <li>

@@ -318,6 +318,11 @@ const router = [{
     component: () => import('@/views/freebuy')
   },
   {
+    name: 'bareorder',
+    path: '/freebuy/bareorder',
+    component: () => import('@/views/cusstone/confirmorderbare')
+  },
+  {
     name: 'tradeinconfirmold',
     path: '/tradein/confirmold',
     component: () => import('@/views/tradein/confirmold')

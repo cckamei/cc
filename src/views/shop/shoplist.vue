@@ -2,9 +2,9 @@
   <div class="shoplist pt">
     <v-header-menus back shadow>
       选择门店
-      <div slot="menus" class="menus">
+      <!-- <div slot="menus" class="menus">
         <div class="menu" @click="$refs.address.open()">筛选</div>
-      </div>
+      </div> -->
     </v-header-menus>
     <div class="content">
       <ul class="shoplist-list">
@@ -18,7 +18,6 @@
         </li>
       </ul>
     </div>
-    <v-address ref="address" @confirm="handleConfirm"></v-address>
   </div>
 </template>
 
@@ -32,31 +31,22 @@
       };
     },
     created() {
-      this.getShopList();
+      this.getShopList(this.$route.query);
     },
     methods: {
       ...mapMutations(['setShopList']),
       ...mapActions(['ajax']),
-      getShopList() {
+      getShopList({ province, city }) {
         this.ajax({
           name: 'shopList',
           data: {
+            province,
+            // city,
             offline_type: 3
           }
         }).then(res => {
           this.shoplist = res;
           this.setShopList(res);
-        });
-      },
-      handleConfirm({ province }) {
-        this.ajax({
-          name: 'shopList',
-          data: {
-            province,
-            offline_type: 3
-          }
-        }).then(res => {
-          this.shoplist = res;
         });
       }
     }
@@ -74,6 +64,7 @@
         font-size: 30px;
         color: #666;
         font-weight: bold;
+        padding-right: 30px;
       }
       .time,
       .address {

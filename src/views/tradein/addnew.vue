@@ -4,8 +4,9 @@
     <div class="content">
       <div class="content-wrapper">
         <section class="new-goods">
-          <div class="row new-title">
-            <v-form-input v-model="value1" :arrow="true" label="新品信息" placeholder="添加新品" @input-click="handleAddNew"></v-form-input>
+          <div class="new-title">
+            <div class="label">新品信息</div>
+            <button class="btn-txt" @click="handleAddNew">添加新品</button>
           </div>
           <ul class="goods">
             <li class="flex" v-for="(item, index) in getTradeinNew" :key="index">
@@ -21,7 +22,7 @@
                   <span class="desc">{{item.skuLabel}}</span>
                 </div>
                 <div class="line3 flex">
-                  <span class="price">价格：<span>￥</span>{{item.price | currency}}</span>
+                  <span class="price">预估起步价：<span>￥</span>{{item.price | currency}}</span>
                   <div class="number">x1</div>
                 </div>
               </div>
@@ -30,7 +31,7 @@
         </section>
         <section class="summary">
           <div class="row pre-price">
-            <v-form-input class="pr-0" label="新品总额" :value="'￥' + newPrice" :readonly="true"></v-form-input>
+            <v-form-input class="pr-0" label="预估起步价总额" :value="'￥' + newPrice" :readonly="true"></v-form-input>
           </div>
           <div class="row pre-price">
             <v-form-input class="freight pr-0" label="补差价额" :value="isGoodsEnough ? '￥' + diffPrice : '所选商品价值较低，请添加新品'" :readonly="true"></v-form-input>
@@ -193,14 +194,22 @@
       padding: 14px 20px;
     }
   }
+  .new-title {
+    display: flex;
+    height: 84px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    .btn-txt {
+      color: #fff;
+      background-color: @color2;
+    }
+  }
 </style>
 
 <style lang="less">
   .add-new {
     .row {
-      &.new-title .label {
-        color: #666;
-      }
       > .flex {
         padding-left: 0;
       }

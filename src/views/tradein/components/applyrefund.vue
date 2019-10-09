@@ -8,6 +8,7 @@
           <p v-if="order.goods">
             <i v-if="order.kind === 4">{{order.goods[0].name}}{{order.goods[0].goods_list.length > 1 ? '等' : ''}} 共{{order.goods[0].goods_list.length}}件</i>
             <i v-else-if="order.kind === 3">{{order.goods[0].good_name}} 共1件</i>
+            <i v-else-if="order.kind === 6">{{order.goods[0].good_name}} 共{{order.goods[0].shl}}件</i>
             <i v-else>{{order.goods[0].goods_name}}{{order.goods.length > 1 ? '等' : ''}} 共{{order.goods.length}}件</i>
           </p>
         </li>

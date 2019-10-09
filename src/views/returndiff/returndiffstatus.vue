@@ -23,7 +23,7 @@
           <div class="notes">已为您办理退差价</div>
           <div class="notes">请及时查阅您提交的银行账户</div>
         </template>
-        <div class="notes phone">客服热线：400-1691-118</div>
+        <div class="notes phone">客服热线：{{tel}}</div>
         <div class="notes txt-lightgray">（周一至周五09:00 - 18:00）</div>
         <button v-if="type === 1" class="btn-txt" @click="$router.go(-1)">回到订单详情</button>
       </div>
@@ -37,7 +37,8 @@
   export default {
     data() {
       return {
-        type: 1
+        type: 1,
+        tel: window.htp.tel
       };
     },
     created() {

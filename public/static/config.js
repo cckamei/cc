@@ -5,7 +5,8 @@
     mock: false,
     wxproxy: 'http://shop.cc-jewel.com/wx.proxy.html',
     wxconfig: ['hideOptionMenu', 'showOptionMenu', 'checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'openLocation', 'getLocation', 'chooseWXPay', 'addCard', 'chooseCard', 'openCard', 'scanQRCode'],
-    appName: 'CC卡美珠宝'
+    appName: 'CC卡美珠宝',
+    tel: '400-1691-118',
   };
   win.PointerEvent = undefined;
 })(window);

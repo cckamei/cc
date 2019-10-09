@@ -14,8 +14,9 @@
       </ul>
     </div>
     <div class="content">
+      <div class="list-title">推荐精品美钻</div>
       <ul v-if="stoneList.length" class="list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="50" infinite-scroll-immediate-check="true">
-        <li v-for="(item, index) in stoneList" :key="index" @click="handleSelectStone(item)" :class="{optimal: item.youx === 'Y'}">
+        <li v-for="(item, index) in stoneList" :key="index" @click="showStoneConfirm(item, index)" :class="{optimal: item.youx === 'Y'}">
           <div class="item-wrapper flex">
             <div class="img"><img src="@/assets/stone/pic_dia.png" alt=""></div>
             <div class="detail flex-auto flex">
@@ -23,7 +24,7 @@
               <!-- <span class="desc">{{item.sub_title}}</span> -->
               <div class="line3 flex">
                 <div class="price">￥{{item.shouj | currency}}</div>
-                <button class="label btn-txt btn-txt-s">定制{{item.delivery_time}}</button> <span class="count">{{item.count}}件</span>
+                <button v-if="!type" class="label btn-txt btn-txt-s">定制{{item.delivery_time}}</button> <span class="count">{{item.count}}件</span>
               </div>
               <div class="cart"></div>
             </div>
@@ -33,19 +34,29 @@
       <div v-else class="empty">
         <img src="@/assets/stone/icon_dia_n.png" alt=""><br/>
         <div class="label">没有找到符合您要求的钻石</div>
-        <div class="advanced">
+        <div v-if="!type" class="advanced">
           <button class="btn-txt" @click="advanceStone">立即前往</button>
           <div class="tips"><span>“高级定制”</span>全球美钻库,更多专属服务</div>
         </div>
       </div>
-      <p v-if="pageInfo.currentPage < pageInfo.totalPage" v-show="loading" class="loading">
+      <p v-if="pageInfo.currentPage < pageInfo.totalPage && pageInfo.currentPage === 1" v-show="loading" class="loading more-click" @click="getStoneList">
+        <v-split-title>全球美钻库更多选择 点击</v-split-title>
+      </p>
+      <p v-if="pageInfo.currentPage < pageInfo.totalPage && pageInfo.currentPage > 1" v-show="loading" class="loading">
         <mt-spinner type="fading-circle"></mt-spinner>
         <span>加载中...</span>
       </p>
     </div>
     <v-popup-select ref="sort" title="排序" v-model="sortIndex" :list="sorts" :show.sync="sortVisible" @confirm="handleConfirmSort" />
-    <v-popup-confirm2 ref="stone-confirm" @confirm="handleSelectStone">
-      <div class="text">确定选择此枚主石？</div>
+    <v-popup-confirm2 ref="stone-confirm" @confirm="goBareStone">
+      <div class="number flex" v-if="stoneIndex !== -1">
+        <span>选择数量</span>
+        <div class="flex">
+          <div @click="count > 1 && count--" class="btn minus" :class="{active: count > 1}"></div>
+          <input v-model="count" type="text" readonly>
+          <div @click="count < stoneList[stoneIndex].count && count++" class="btn plus" :class="{active: count < stoneList[stoneIndex].count}"></div>
+        </div>
+      </div>
     </v-popup-confirm2>
     <div v-show="filterVisible" class="filter-wrapper">
       <ul class="filter-content">
@@ -135,13 +146,14 @@
           { label: '钻石重量从低到高', value: 'zhusz asc' },
           { label: '钻石重量从高到低', value: 'zhusz desc' }
         ],
+        count: 1,
         selectType: 0, //0快捷选项，1高级选项
         price: [0, 0],//价格
         priceMin: 0,
         priceMax: 0,
         priceStep: 100,
         weights: [],//重量
-        weightIndex: 0,
+        weightIndex: -1,
         cleaness: [], //净度
         cleanessIndex: [], //（多选）
         colors: [], //颜色
@@ -156,17 +168,13 @@
         roundCutIndex: 0,
         certificates: [], //证书
         certificateIndex: -1,
-        labels: {
-          'A': '现货',
-          'B': '定制15天',
-          'C': '定制45天'
-        },
         simPrices: [], //快捷价格
-        simPriceIndex: 0,
+        simPriceIndex: -1,
         simWeights: [], //快捷重量
-        simWeightIndex: 0,
-        simOptimals: [{ label: '全部', value: 'Y' }, { label: '只看优选', value: 'N' }], //快捷优选
-        simOptimalIndex: 0
+        simWeightIndex: -1,
+        simOptimals: [{ label: '全部', value: 'N' }, { label: '只看优选', value: 'Y' }], //快捷优选
+        simOptimalIndex: 0,
+        type: 1, //1购买裸石
       };
     },
     computed: {
@@ -176,6 +184,7 @@
       }
     },
     async created() {
+      this.type = this.$route.query.type;
       await this.getStoneOptions();
       await this.getStoneSimOptions();
       this.getStoneList();
@@ -185,7 +194,9 @@
       ...mapActions(['ajax']),
       loadMore() {
         this.loading = true;
-        this.getStoneList();
+        if(this.pageInfo.currentPage > 1) {
+          this.getStoneList();
+        }
       },
       getStoneSimOptions() {
         return this.ajax({
@@ -227,23 +238,27 @@
           shouc: this.stoneMade.shouc,//手寸
           orderBy: this.sortIndex === -1 ? '' : this.sorts[this.sortIndex].value//排序
         };
+        if(!this.type) {
+          params.gsmh = this.stoneMade.gsmh;
+        }
 
         let minPrice, maxPrice, minZhusz, maxZhusz;
         if(this.selectType === 0) {
-          {
+          if(this.simPriceIndex !== -1) {
             const { min, max } = this.simPrices[this.simPriceIndex];
             [minPrice, maxPrice] = [min, max];
           }
-          {
+          if(this.simWeightIndex !== -1) {
             const { min, max } = this.simWeights[this.simWeightIndex];
             [minZhusz, maxZhusz] = [min, max];
           }
-          const simOptimal = this.simOptimalIndex === -1 ? '' : this.simOptimals[this.simOptimalIndex].value;
-          params.youx = simOptimal;
+          params.youx = this.simOptimals[this.simOptimalIndex].value;
         } else {
           [minPrice, maxPrice] = this.price;
-          const { min, max } = this.weights[this.weightIndex];
-          [minZhusz, maxZhusz] = [min, max];
+          if(this.weightIndex !== -1) {
+            const { min, max } = this.weights[this.weightIndex];
+            [minZhusz, maxZhusz] = [min, max];
+          }
           const cleaness = this.cleanessIndex.length ? this.cleaness.filter((item, i) => this.cleanessIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
           const color = this.colorIndex.length ? this.colors.filter((item, i) => this.colorIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
           const cut = this.cutIndex.length ? this.cuts.filter((item, i) => this.cutIndex.includes(i)).map(item => `'${item}'`).join(',') : '';
@@ -267,7 +282,7 @@
         params.maxZhusz = maxZhusz;
 
         this.ajax({
-          name: 'getStoneList',
+          name: this.type ? 'getBareStoneList' : 'getStoneList',
           data: {
             ...params
             // page: (this.pageInfo.currentPage || 0) + 1,
@@ -297,6 +312,9 @@
             this.stoneList = [];
           }
           setTimeout(() => {
+            res.infos.forEach(item => {
+              item.shouj = item.price;
+            });
             this.stoneList = this.stoneList.concat(res.infos);
 
             if(this.pageInfo.currentPage < this.pageInfo.totalPage) {
@@ -317,14 +335,25 @@
         this.getStoneList();
 
       },
-      showStoneConfirm(index) {
-        this.stoneIndex = index;
-        this.$refs['stone-confirm'].open();
+      showStoneConfirm(item, index) {
+        if(this.type) {
+          this.stoneIndex = index;
+          this.$refs['stone-confirm'].open();
+        } else {
+          this.handleSelectStone(item);
+        }
       },
       handleSelectStone(item) {
         item.zslx = item.zhengs; //接口字段有变化
         this.setStoneMade({ N: item });
         this.$router.go(-1);
+      },
+      goBareStone() {
+        const item = this.stoneList[this.stoneIndex];
+        item.zslx = item.zhengs; //接口字段有变化
+        item.count = this.count;
+        this.setStoneMade({ B: item });
+        this.$router.push({ name: 'bareorder' });
       },
       advanceStone() {
         this.setStoneMade({ S: null });
@@ -342,6 +371,15 @@
 
   .selectstone .header {
     box-shadow: none;
+  }
+
+  .list-title {
+    color: @color2;
+    height: 84px;
+    line-height: 84px;
+    font-size: 30px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0; /*no*/
   }
 
   .condition {
@@ -564,6 +602,40 @@
       box-shadow: 0 -10px 50px 10px rgba(170, 170, 170, 0.5);
     }
   }
+  .number {
+    color: #666;
+    font-size: 30px;
+    justify-content: space-between;
+    padding: 0 45px;
+    height: 310px;
+    .btn {
+      width: 40px;
+      height: 40px;
+      &.plus {
+        background: url("~@/assets/goods/button_plus_l.png") no-repeat;
+        background-size: 100%;
+        &.active {
+          background: url("~@/assets/goods/button_plus_d.png") no-repeat;
+          background-size: 100%;
+        }
+      }
+      &.minus {
+        background: url("~@/assets/goods/button_minus_l.png") no-repeat;
+        background-size: 100%;
+        &.active {
+          background: url("~@/assets/goods/button_minus_d.png") no-repeat;
+          background-size: 100%;
+        }
+      }
+    }
+    input {
+      width: 0;
+      min-width: 120px;
+      color: #666;
+      text-align: center;
+      padding: 0 10px;
+    }
+  }
 </style>
 
 <style lang="less">
@@ -573,6 +645,17 @@
     }
     .fixwidth4 {
       min-width: 144px;
+    }
+    .more-click {
+      .title {
+        border-top: 1px solid #f0f0f0; /*no*/
+        &:after {
+          background-color: @color2;
+        }
+        span {
+          color: @color2;
+        }
+      }
     }
   }
   .ant-slider {

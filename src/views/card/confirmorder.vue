@@ -262,10 +262,6 @@
     .row > .flex {
       padding-left: 0;
     }
-    .summary .label,
-    .remark .label {
-      color: #999 !important;
-    }
     .freight {
       input {
         color: @color2;

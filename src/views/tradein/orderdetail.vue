@@ -55,6 +55,11 @@
           </p>
           <p>收货地址：{{order.yh_address_info.address}}</p>
         </div>
+        <v-split-title>其它方式</v-split-title>
+        <div class="other-ways">
+          <button class="btn-txt" @click="sddVisible = true">送到店</button>
+          <button class="btn-txt" @click="smqVisible = true">上门取</button>
+        </div>
       </div>
 
       <!-- 商品信息 -->
@@ -62,7 +67,7 @@
         <div class="itemtitle">
           <div class="titleleft">
             <img src="@/assets/mypage/icon_shop.png" alt="">
-            <span>以旧换新线上服务</span>
+            <span>以旧换新状态</span>
           </div>
           <div class="listright">{{typename(order.status)}}</div>
         </div>
@@ -95,7 +100,7 @@
             <button class="btngrey btnleft flexleft" @click="cancelOrder">取消换新</button>
             <button class="btngrey btnleft" @click="serviceVisible = true">联系客服</button>
             <button class="btngrey btnleft" @click="goTradeinNew">选择新品</button>
-            <button :class="order.goods.length ? 'btnpink' : 'disabled'" @click="order.goods.length && parOrder(order)">立即付款</button>
+            <button :class="order.pay_flag ? 'btnpink' : 'disabled'" @click="order.pay_flag && parOrder(order)">立即付款</button>
           </div>
           <!-- 新品待发货 -->
           <div class="ordertypeDF" v-if="order.status === 12">
@@ -161,6 +166,16 @@
         即将离开商城，接通您的专属客服。<br>在公众号中回复“人工服务”与客服进行联系与沟通。
       </div>
     </v-popup-confirm>
+    <v-popup-confirm title="" v-model="sddVisible" @confirm="goCustomService">
+      <div class="txt-center">
+        联系客服，咨询门店地址，<br>由门店员工协助您寄回旧品。<br>客服热线：{{tel}}
+      </div>
+    </v-popup-confirm>
+    <v-popup-confirm title="" v-model="smqVisible" @confirm="goCustomService">
+      <div class="txt-center">
+        联系客服，登记地址信息，<br>预约快递上门取件。<br>客服热线：{{tel}}
+      </div>
+    </v-popup-confirm>
   </div>
 </template>
 <script>
@@ -177,6 +192,8 @@
       return {
         cancelVisible: false,
         serviceVisible: false,
+        sddVisible: false,
+        smqVisible: false,
         isConform: false,
         order: {
           address: {},
@@ -187,7 +204,8 @@
               data: []
             }
           }
-        }
+        },
+        tel: window.htp.tel
       };
     },
     created() {
@@ -205,8 +223,7 @@
           id: this.getOrderId
         }).then(res => {
           this.order = res;
-
-          // this.order.status = 8;
+          // this.order.status = 11;
           //0'待验货', 1'待付款', 2'新品待发货', 3'新品待收货', 4'已完成', 5'旧品待发货', 6'旧品待收货', 7'已取消', 8'已关闭'
           //0: 待付款, 1:'待发货', 2:'待收货', 3:'已完成', 4:'退款中', '', 6:'已退款', 7:'已关闭', 8:'已取消' 9:'定制中' 10:'待取货', 11:'待验货', 12:'新品待发货', 13:'旧品待发货', 14:'新品待收货', 15:'旧品待收货'
 
@@ -542,6 +559,17 @@
         padding: 30px;
         border-bottom: 2px solid #cccccc;
       }
+    }
+  }
+
+  .other-ways {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px 30px 40px;
+    button {
+      width: 240px;
+      color: #666;
+      border: 1px solid #999; /*no*/
     }
   }
 </style>

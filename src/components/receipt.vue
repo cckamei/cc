@@ -19,9 +19,10 @@
         <div class="line1 arrow" v-if="address.address" @click="$router.push({name: 'myaddress'})">取货人：{{address.name}} <span class="tel">{{address.phone}}</span></div>
         <div class="line1 arrow empty" v-else @click="$router.push({name: 'myaddress'})">添加取货信息</div>
         <div class="line2 arrow" v-if="address.shopId" @click="$router.push({name: 'shoplist'})">门店地址：{{address.shopAddress}}</div>
-        <div class="line2 arrow empty" v-else @click="$router.push({name: 'shoplist'})">选择自提门店地址</div>
+        <div class="line2 arrow empty" v-else @click="$refs.address.open()">选择自提门店地址</div>
       </div>
     </div>
+    <v-address ref="address" @confirm="handleSelectAddress"></v-address>
   </div>
 </template>
 
@@ -46,6 +47,9 @@
       ...mapMutations(['setAddress']),
       setAddressType(type) {
         this.setAddress({ type });
+      },
+      handleSelectAddress({ province, city }) {
+        this.$router.push({ name: 'shoplist', query: { province, city } })
       }
     }
   };

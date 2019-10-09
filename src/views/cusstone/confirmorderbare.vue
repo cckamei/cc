@@ -8,14 +8,14 @@
         </li>
         <li class="section flex goods">
           <div class="img">
-            <img :src="stoneMade.img" alt="">
+            <img src="@/assets/stone/pic_dia.png" alt="">
           </div>
           <div class="detail flex-auto flex">
-            <span class="name">{{stoneMade.goods_title}}</span>
-            <span class="desc">{{ stoneMade[stoneMade.ddlx].zhusz >= 1 ? `${stoneMade[stoneMade.ddlx].zhusz}克拉` : `${+stoneMade[stoneMade.ddlx].zhusz * 100}分`}}; {{stoneMade[stoneMade.ddlx].zhusjd}}; {{stoneMade[stoneMade.ddlx].zhusys}}; {{stoneMade[stoneMade.ddlx].zhusqg}}; {{stoneMade[stoneMade.ddlx].zhuslx}}; {{stoneMade[stoneMade.ddlx].zhusxz}}; {{stoneMade[stoneMade.ddlx].qiege}}; {{stoneMade[stoneMade.ddlx].zhengs}}</span>
+            <span class="name">钻石</span>
+            <span class="desc">{{ stoneMade.B.zhusz >= 1 ? `${stoneMade.B.zhusz}克拉` : `${+stoneMade.B.zhusz * 100}分`}}; {{stoneMade.B.zhusjd}}; {{stoneMade.B.zhusys}}; {{stoneMade.B.zhusqg}}; {{stoneMade.B.zhuslx}}; {{stoneMade.B.zhusxz}}; {{stoneMade.B.qiege}}; {{stoneMade.B.zhengs}}</span>
             <div class="line3 flex">
-              <span class="price"><span>￥</span>{{stoneMade[stoneMade.ddlx].shouj | currency}}</span>
-              <div class="number">x1</div>
+              <span class="price"><span>￥</span>{{stoneMade.B.shouj | currency}}</span>
+              <div class="number">x{{stoneMade.B.count}}</div>
             </div>
           </div>
         </li>
@@ -36,9 +36,9 @@
               </ul>
             </v-form-slide-up>
           </div>
-          <div class="row">
+          <!-- <div class="row">
             <v-form-input v-model="invoice.use" label="申请开票" placeholder="(选填) 填写开票信息" :arrow="true" @input-click="$router.push({name: 'invoice'})"></v-form-input>
-          </div>
+          </div> -->
           <div class="row">
             <v-form-input class="remark" label="留言" v-model="reqData.yaoqiu" placeholder="（选填）建议留言前先与卖家沟通确认"></v-form-input>
           </div>
@@ -86,22 +86,20 @@
           address_id: '', //地址id
           logitics_id: '', //快递id
           yaoqiu: '', //要求
-          gsmh: '', // 公司模号 必填
-          jinys: '', // 金类型
-          shouc: '', // 手寸
           zhusz: '', // 主石重
           zhusjd: '', // 主石净度
           zhusys: '', // 主石颜色
           zhusqg: '', // 主石切工
-          zhuslx: '', // 主石类型
+          zhengs: '', // 证书类型
           zhusxz: '', // 主石形状
+          zhuslx: '', // 主石类型
           qiege: '', // 圆形切割
           youx: '', // 优选
           fhts: '', // 发货时间
-          zslx: '', // 证书类型
           shouj: '', // 售价
           count: '', // 数量
-          ddlx: '' // 订单类型 # N：普通定制 S：高级定制
+          ddlx: 'N', // 订单类型 # N：普通定制 S：高级定制
+          fhlx: '' //发货类型  # 1：现货   2： 15天  3：45天
         }
       };
     },
@@ -110,9 +108,8 @@
         this.reqData.address_id = this.getAddress.id;
       }
 
-      this.goodsMoney = +this.stoneMade[this.stoneMade.ddlx].shouj;
-      this.reqData.goods_id = this.stoneMade.goods_id;
-      this.reqData.yaoqiu = this.stoneMade.remark || '';
+      this.goodsMoney = +this.stoneMade.B.shouj * this.stoneMade.B.count;
+      // this.reqData.goods_id = this.stoneMade.goods_id;
       this.fetchLogitics();
     },
     computed: {
@@ -136,21 +133,20 @@
         });
       },
       addOrder() {
-        Object.assign(this.reqData, this.stoneMade[this.stoneMade.ddlx]);
+        Object.assign(this.reqData, this.stoneMade.B);
         this.reqData.logitics_id = this.delivery[this.deliveryIndex].id;
         if(this.reqData.delivery_time) {
           this.reqData.fhts = parseInt(this.reqData.delivery_time);
         }
+
+        console.log(this.reqData);
 
         if(!this.reqData.address_id) {
           this.toast('亲，您还未设置收货地址！');
           return false;
         }
 
-        this.ajax({ name: 'addDIYStoneOrder', data: this.reqData }).then(res => {
-          if(this.invoice.use) {
-            this.applyInvock(res.order_id);
-          }
+        this.ajax({ name: 'addBareStoneOrder', data: this.reqData }).then(res => {
           this.clearPayOrder();
           this.setPayOrder(res);
           this.$router.replace({ name: 'pay' });

@@ -1,6 +1,6 @@
 <template>
   <div class="pt">
-    <v-header>以旧换新服务协议</v-header>
+    <v-header>以旧换新状态</v-header>
     <div class="content">
       <p class="title">《CC卡美珠宝微信商城用户注册和使用协议》</p>
       <div class="section">
