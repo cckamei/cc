@@ -14,7 +14,7 @@
     "core-js": "^2.6.5",
     "fastclick": "^1.0.6",
     "hammerjs": "^2.0.8",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "lib-flexible": "^0.3.2",
     "mint-ui": "^2.2.13",
     "mockjs": "^1.0.1-beta3",
